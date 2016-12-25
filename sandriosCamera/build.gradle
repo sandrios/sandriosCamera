@@ -14,12 +14,12 @@ buildscript {
 }
 
 group = 'com.sandrios.android'
-version = '1.0.1'
+version = '1.0.2'
 
 ext {
     PUBLISH_GROUP_ID = 'com.sandrios.android'
     PUBLISH_ARTIFACT_ID = 'sandriosCamera'
-    PUBLISH_VERSION = '1.0.1'
+    PUBLISH_VERSION = '1.0.2'
 }
 
 android {
@@ -29,8 +29,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 2
-        versionName '1.0.1'
+        versionCode 3
+        versionName '1.0.2'
 
         vectorDrawables.useSupportLibrary = true
     }
