@@ -11,8 +11,8 @@ sandrios camera allows developers to integrate image and video capturing without
 
 It includes image picker interface inside the cameraview enabling the user to access recent media from inside the camera module.
 
-<img src="https://github.com/sandrios/sandriosCamera/blob/master/static/with_picker.png" width="200px" />
-<img src="https://github.com/sandrios/sandriosCamera/blob/master/static/without_picker.png" width="200px" />
+<img src="https://github.com/sandrios/sandriosCamera/blob/master/static/with_picker.png" width="300px" />
+<img src="https://github.com/sandrios/sandriosCamera/blob/master/static/without_picker.png" width="300px" />
 
 Download
 --------
@@ -81,10 +81,10 @@ How do I use Sandrios Camera?
 Please check the sample project included for more examples:
 
 ```java
-            SandriosCameraConfiguration.Builder universal = new SandriosCameraConfiguration.Builder(activity, CAPTURE_MEDIA);
-            universal.setMediaQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST);
-            universal.showPicker(true); \\ To show the Image Picker :: Default is true
-            new SandriosCamera(universal.build()).launchCamera();
+ SandriosCameraConfiguration.Builder universal = new SandriosCameraConfiguration.Builder(activity, CAPTURE_MEDIA);
+ universal.setMediaQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST);
+ universal.showPicker(true); \\ To show the Image Picker :: Default is true
+ new SandriosCamera(universal.build()).launchCamera();
 ```
 
 Status
