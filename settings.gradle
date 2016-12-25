@@ -1,1 +1,1 @@
-include ':app', ':sandriosCamera'
+include ':app', ':library'
