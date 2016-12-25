@@ -24,6 +24,7 @@ android {
 
 repositories {
     jcenter()
+    maven { url 'https://dl.bintray.com/sandriosstudios/android' }
 }
 
 dependencies {

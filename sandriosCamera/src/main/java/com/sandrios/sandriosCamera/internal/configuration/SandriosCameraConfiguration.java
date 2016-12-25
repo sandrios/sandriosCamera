@@ -42,8 +42,7 @@ public final class SandriosCameraConfiguration {
     public static final int ORIENTATION_LANDSCAPE = 0x222;
     private Activity activity = null;
     private int requestCode = -1;
-    @MediaAction
-    private int mediaAction = -1;
+    private int mediaAction = 102;
     @MediaQuality
     private int mediaQuality = -1;
     @CameraFace

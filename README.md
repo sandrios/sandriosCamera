@@ -4,3 +4,139 @@
 
 
 Camera Library for Android
+
+![8]
+
+sandrios camera allows developers to integrate image and video capturing without dealing with the complicated camera APIs.
+
+It includes image picker interface inside the cameraview enabling the user to access recent media from inside the camera module.
+
+<img src="https://github.com/sandrios/sandriosCamera/blob/master/static/with_picker.png" width="200px" />
+<img src="https://github.com/sandrios/sandriosCamera/blob/master/static/without_picker.png" width="200px" />
+
+Download
+--------
+You can download a jar from GitHub's [releases page][1].
+
+Or use Gradle:
+
+```gradle
+repositories {
+   maven { url 'https://dl.bintray.com/sandriosstudios/android' }
+   jcenter()
+}
+
+dependencies {
+  compile 'com.sandrios.android:sandriosCamera:1.0.2'
+}
+```
+
+Or Maven:
+
+```xml
+<dependency>
+  <groupId>com.sandrios.android</groupId>
+  <artifactId>sandriosCamera</artifactId>
+  <version>1.0.2</version>
+  <type>pom</type>
+</dependency>
+```
+
+
+ProGuard
+--------
+Depending on your ProGuard (DexGuard) config and usage, you may need to include the following lines in your proguard.cfg
+
+```pro
+
+-keep public class com.sandrios.** { *; }
+
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
+-dontwarn android.support.**
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @com.squareup.otto.Subscribe public *;
+    @com.squareup.otto.Produce public *;
+}
+```
+
+How do I use Sandrios Camera?
+-------------------
+
+Please check the sample project included for more examples:
+
+```java
+            SandriosCameraConfiguration.Builder universal = new SandriosCameraConfiguration.Builder(activity, CAPTURE_MEDIA);
+            universal.setMediaQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST);
+            universal.showPicker(true); \\ To show the Image Picker :: Default is true
+            new SandriosCamera(universal.build()).launchCamera();
+```
+
+Status
+------
+Pending:
+ -- Flash Mode
+
+Comments/bugs/questions/pull requests are always welcome!
+
+Compatibility
+-------------
+
+ * **Android SDK**: Sandrios Camera requires a minimum API level of 14.
+
+Download
+-------
+
+You may also find precompiled aar on the [releases page][1].
+
+Getting Help
+------------
+To report a specific problem or feature request, [open a new issue on Github][4]. For questions, suggestions, or
+anything else, email mailto:github@sandrios.com
+
+Contributing
+------------
+Before submitting pull requests, contributors must sign Google's [individual contributor license agreement][5].
+
+Thanks
+------
+* **Glide** for the [Image Loading Framework][6]
+* **Ted Permission** for the [Permission Management][7] in Android 23+
+* Everyone who has contributed code and reported issues!
+
+Author
+------
+[sandrios studios][3] - @sandrios on GitHub
+
+License
+-------
+MIT. See the [LICENSE][9] file for details.
+
+Disclaimer
+---------
+This is not an official Google product.
+
+[3]: https://www.sandrios.com
+[1]: https://github.com/sandrios/sandriosCamera/releases
+[2]: https://github.com/sandrios/sandriosCamera/wiki
+[4]: https://github.com/sandrios/sandriosCamera/issues
+[5]: https://developers.google.com/open-source/cla/individual
+[6]: https://github.com/bumptech/glide
+[7]: https://github.com/ParkSangGwon/TedPermission
+[8]: https://github.com/sandrios/sandriosCamera/blob/master/static/sandrios_studios.png
+[9]: https://github.com/sandrios/sandriosCamera/blob/master/LICENSE

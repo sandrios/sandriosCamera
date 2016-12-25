@@ -11,4 +11,9 @@
         <item name="android:clickable">true</item>
         <item name="android:textColor">#fafafa</item>
     </style>
+
+
+    <style name="ThemeFullscreen" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>

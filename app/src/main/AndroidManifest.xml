@@ -1,10 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sandrios.sandriosCamera.sample">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,23 +16,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.sandrios.sandriosCamera.internal.ui.camera.Camera1Activity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullscreen" />
-        <activity
-            android:name="com.sandrios.sandriosCamera.internal.ui.camera2.Camera2Activity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullscreen" />
-        <activity
-            android:name="com.sandrios.sandriosCamera.internal.ui.preview.PreviewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullscreen" />
-        <activity
-            android:name="com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullscreen" />
     </application>
-
-
 </manifest>
