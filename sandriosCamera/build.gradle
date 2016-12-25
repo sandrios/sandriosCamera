@@ -20,6 +20,7 @@ ext {
     PUBLISH_GROUP_ID = 'com.sandrios.android'
     PUBLISH_ARTIFACT_ID = 'sandriosCamera'
     PUBLISH_VERSION = '1.0.2'
+    PUBLISH_CODE = 3
 }
 
 android {
@@ -29,8 +30,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 3
-        versionName '1.0.2'
+        versionCode PUBLISH_CODE
+        versionName PUBLISH_VERSION
 
         vectorDrawables.useSupportLibrary = true
     }
