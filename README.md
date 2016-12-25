@@ -22,7 +22,6 @@ Or use Gradle:
 
 ```gradle
 repositories {
-   maven { url 'https://dl.bintray.com/sandriosstudios/android' }
    jcenter()
 }
 
