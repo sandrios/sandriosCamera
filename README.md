@@ -16,7 +16,7 @@ It includes image picker interface inside the cameraview enabling the user to ac
 
 Download
 --------
-You can download a jar from GitHub's [releases page][1].
+You can download an aar from GitHub's [releases page][1].
 
 Or use Gradle:
 
