@@ -41,9 +41,9 @@ public class FlashSwitchView extends ImageButton {
 
     public FlashSwitchView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
-        flashOnDrawable = ContextCompat.getDrawable(context, R.drawable.ic_flash_on_white);
-        flashOffDrawable = ContextCompat.getDrawable(context, R.drawable.ic_flash_off_white);
-        flashAutoDrawable = ContextCompat.getDrawable(context, R.drawable.ic_flash_auto_white);
+        flashOnDrawable = ContextCompat.getDrawable(context, R.drawable.ic_flash_on_white_24dp);
+        flashOffDrawable = ContextCompat.getDrawable(context, R.drawable.ic_flash_off_white_24dp);
+        flashAutoDrawable = ContextCompat.getDrawable(context, R.drawable.ic_flash_auto_white_24dp);
         init();
     }
 
