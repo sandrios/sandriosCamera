@@ -23,16 +23,14 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            SandriosCameraConfiguration.Builder universal = new SandriosCameraConfiguration.Builder(activity, CAPTURE_MEDIA);
-            universal.setMediaQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST);
             switch (view.getId()) {
                 case R.id.withPicker:
-                    universal.showPicker(true);
-                    new SandriosCamera(universal.build()).launchCamera();
+                    new SandriosCamera(activity, CAPTURE_MEDIA, true)
+                            .launchCamera();
                     break;
                 case R.id.withoutPicker:
-                    universal.showPicker(false);
-                    new SandriosCamera(universal.build()).launchCamera();
+                    new SandriosCamera(activity, CAPTURE_MEDIA, false)
+                            .launchCamera();
                     break;
             }
         }

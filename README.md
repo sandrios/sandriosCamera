@@ -80,16 +80,28 @@ How do I use Sandrios Camera?
 Please check the sample project included for more examples:
 
 ```java
- SandriosCameraConfiguration.Builder universal = new SandriosCameraConfiguration.Builder(activity, CAPTURE_MEDIA);
- universal.setMediaQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST);
- universal.showPicker(true); \\ To show the Image Picker :: Default is true
- new SandriosCamera(universal.build()).launchCamera();
+  private static final int CAPTURE_MEDIA = 368;
+
+  // showImagePicker is boolean value: Default is true
+  private void launchCamera() {
+      new SandriosCamera(activity, CAPTURE_MEDIA, showImagePicker)
+                                 .launchCamera();
+  }
+
+  @Override
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         super.onActivityResult(requestCode, resultCode, data);
+
+         if (requestCode == CAPTURE_MEDIA && resultCode == RESULT_OK) {
+             Log.e("File", "" + data.getStringExtra(SandriosCameraConfiguration.Arguments.FILE_PATH));
+             Toast.makeText(this, "Media captured.", Toast.LENGTH_SHORT).show();
+         }
+     }
 ```
 
 Status
 ------
-Pending:
- -- Flash Mode
+- Flash Mode
 
 Comments/bugs/questions/pull requests are always welcome!
 

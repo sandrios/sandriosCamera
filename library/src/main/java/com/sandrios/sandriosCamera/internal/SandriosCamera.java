@@ -19,7 +19,9 @@ import java.util.ArrayList;
  */
 public class SandriosCamera {
 
-    private SandriosCameraConfiguration sandriosCameraConfiguration;
+    private Activity activity;
+    private int requestCode;
+    boolean showPicker;
 
     /***
      * Creates SandriosCamera instance with default configuration set to photo with medium quality.
@@ -27,60 +29,41 @@ public class SandriosCamera {
      * @param activity    - fromList which request was invoked
      * @param requestCode - request code which will return in onActivityForResult
      */
-    public SandriosCamera(Activity activity, @IntRange(from = 0) int requestCode) {
-        SandriosCameraConfiguration.Builder builder = new SandriosCameraConfiguration.Builder(activity, requestCode);
-        sandriosCameraConfiguration = builder.build();
-    }
-
-    /***
-     * Creates SandriosCamera instance with custom camera configuration.
-     *
-     * @param cameraConfiguration
-     */
-    public SandriosCamera(SandriosCameraConfiguration cameraConfiguration) {
-        this.sandriosCameraConfiguration = cameraConfiguration;
+    public SandriosCamera(Activity activity, @IntRange(from = 0) int requestCode, boolean showPicker) {
+        this.activity = activity;
+        this.requestCode = requestCode;
+        this.showPicker = showPicker;
     }
 
     public void launchCamera() {
-        if (sandriosCameraConfiguration == null || sandriosCameraConfiguration.getActivity() == null)
-            return;
-
-        new TedPermission(this.sandriosCameraConfiguration.getActivity())
+        new TedPermission(activity)
                 .setPermissionListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted() {
-                        Intent cameraIntent;
-                        if (CameraHelper.hasCamera2(sandriosCameraConfiguration.getActivity())) {
-                            cameraIntent = new Intent(sandriosCameraConfiguration.getActivity(), Camera2Activity.class);
-                        } else {
-                            cameraIntent = new Intent(sandriosCameraConfiguration.getActivity(), Camera1Activity.class);
-                        }
-                        cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.REQUEST_CODE, sandriosCameraConfiguration.getRequestCode());
-
-                        if (sandriosCameraConfiguration.getMediaAction() > 0)
-                            cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.MEDIA_ACTION, sandriosCameraConfiguration.getMediaAction());
-
-                        if (sandriosCameraConfiguration.getMediaQuality() > 0)
-                            cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.MEDIA_QUALITY, sandriosCameraConfiguration.getMediaQuality());
-
-                        if (sandriosCameraConfiguration.getVideoDuration() > 0)
-                            cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.VIDEO_DURATION, sandriosCameraConfiguration.getVideoDuration());
-
-                        if (sandriosCameraConfiguration.getVideoFileSize() > 0)
-                            cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.VIDEO_FILE_SIZE, sandriosCameraConfiguration.getVideoFileSize());
-
-                        if (sandriosCameraConfiguration.getMinimumVideoDuration() > 0)
-                            cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION, sandriosCameraConfiguration.getMinimumVideoDuration());
-
-                        cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.SHOW_PICKER, sandriosCameraConfiguration.shouldShowPicker());
-                        sandriosCameraConfiguration.getActivity().startActivityForResult(cameraIntent, sandriosCameraConfiguration.getRequestCode());
+                        launchIntent();
                     }
 
                     @Override
                     public void onPermissionDenied(ArrayList<String> deniedPermissions) {
 
                     }
-                }).setPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
+                })
+                .setPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.RECORD_AUDIO)
                 .check();
+    }
+
+    private void launchIntent() {
+        Intent cameraIntent;
+        if (CameraHelper.hasCamera2(activity)) {
+            cameraIntent = new Intent(activity, Camera2Activity.class);
+        } else {
+            cameraIntent = new Intent(activity, Camera1Activity.class);
+        }
+        cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.REQUEST_CODE, requestCode);
+        cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.SHOW_PICKER, showPicker);
+        activity.startActivityForResult(cameraIntent, requestCode);
     }
 }
