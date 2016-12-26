@@ -29,6 +29,8 @@ public interface CameraManager<CameraId, SurfaceListener> {
 
     Size getPhotoSizeForQuality(@SandriosCameraConfiguration.MediaQuality int mediaQuality);
 
+    void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode);
+
     void stopVideoRecord();
 
     void releaseCameraManager();

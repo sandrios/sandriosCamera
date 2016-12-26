@@ -236,6 +236,11 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     }
 
     @Override
+    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+        setFlashModeAndBuildPreviewRequest(flashMode);
+    }
+
+    @Override
     public void takePhoto(File photoFile, CameraPhotoListener cameraPhotoListener) {
         this.outputPath = photoFile;
         this.cameraPhotoListener = cameraPhotoListener;
@@ -581,6 +586,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
         } catch (Exception e) {
             Log.e(TAG, "Error updating preview: ", e);
         }
+        setFlashModeAndBuildPreviewRequest(configurationProvider.getFlashMode());
     }
 
     private void closePreviewSession() {
@@ -657,6 +663,40 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
             previewState = STATE_WAITING_PRE_CAPTURE;
             captureSession.capture(previewRequestBuilder.build(), captureCallback, backgroundHandler);
         } catch (CameraAccessException e) {
+        }
+    }
+
+    private void setFlashModeAndBuildPreviewRequest(@SandriosCameraConfiguration.FlashMode int flashMode) {
+        try {
+
+            switch (flashMode) {
+                case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                    previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                    previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_SINGLE);
+                    break;
+                case SandriosCameraConfiguration.FLASH_MODE_ON:
+                    previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
+                    previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_SINGLE);
+                    break;
+                case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                    previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
+                    previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_OFF);
+                    break;
+                default:
+                    previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                    previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_SINGLE);
+                    break;
+            }
+
+            previewRequest = previewRequestBuilder.build();
+
+            try {
+                captureSession.setRepeatingRequest(previewRequest, captureCallback, backgroundHandler);
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating preview: ", e);
+            }
+        } catch (Exception ignore) {
+            Log.e(TAG, "Error setting flash: ", ignore);
         }
     }
 

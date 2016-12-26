@@ -62,6 +62,9 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
 
+    @SandriosCameraConfiguration.FlashMode
+    protected int flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +162,22 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (bundle.containsKey(SandriosCameraConfiguration.Arguments.SHOW_PICKER)) {
                 showPicker = bundle.getBoolean(SandriosCameraConfiguration.Arguments.SHOW_PICKER);
             }
+
+            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.FLASH_MODE))
+                switch (bundle.getInt(SandriosCameraConfiguration.Arguments.FLASH_MODE)) {
+                    case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                        flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+                        break;
+                    case SandriosCameraConfiguration.FLASH_MODE_ON:
+                        flashMode = SandriosCameraConfiguration.FLASH_MODE_ON;
+                        break;
+                    case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                        flashMode = SandriosCameraConfiguration.FLASH_MODE_OFF;
+                        break;
+                    default:
+                        flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+                        break;
+                }
         }
     }
 
@@ -168,6 +187,19 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
         if (cameraControlPanel != null) {
             cameraControlPanel.setup(getMediaAction());
+
+            switch (flashMode) {
+                case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                    cameraControlPanel.setFlasMode(FlashSwitchView.FLASH_AUTO);
+                    break;
+                case SandriosCameraConfiguration.FLASH_MODE_ON:
+                    cameraControlPanel.setFlasMode(FlashSwitchView.FLASH_ON);
+                    break;
+                case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                    cameraControlPanel.setFlasMode(FlashSwitchView.FLASH_OFF);
+                    break;
+            }
+
             cameraControlPanel.setRecordButtonListener(this);
             cameraControlPanel.setFlashModeSwitchListener(this);
             cameraControlPanel.setOnMediaActionStateChangeListener(this);
@@ -246,10 +278,25 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         getCameraController().switchCamera(cameraFace);
     }
 
+
     @Override
     public void onFlashModeChanged(@FlashSwitchView.FlashMode int mode) {
-
+        switch (mode) {
+            case FlashSwitchView.FLASH_AUTO:
+                flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+                getCameraController().setFlashMode(SandriosCameraConfiguration.FLASH_MODE_AUTO);
+                break;
+            case FlashSwitchView.FLASH_ON:
+                flashMode = SandriosCameraConfiguration.FLASH_MODE_ON;
+                getCameraController().setFlashMode(SandriosCameraConfiguration.FLASH_MODE_ON);
+                break;
+            case FlashSwitchView.FLASH_OFF:
+                flashMode = SandriosCameraConfiguration.FLASH_MODE_OFF;
+                getCameraController().setFlashMode(SandriosCameraConfiguration.FLASH_MODE_OFF);
+                break;
+        }
     }
+
 
     @Override
     public void onMediaActionChanged(int mediaActionState) {
@@ -303,6 +350,10 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         return videoFileSize;
     }
 
+    @Override
+    public int getFlashMode() {
+        return flashMode;
+    }
 
     @Override
     public int getMinimumVideoDuration() {

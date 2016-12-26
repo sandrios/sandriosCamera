@@ -1,6 +1,7 @@
 package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -72,8 +73,8 @@ public class CameraControlPanel extends RelativeLayout
     }
 
     private void init() {
-//        hasFlash = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-        hasFlash = false;
+        hasFlash = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+//        hasFlash = false;
 
         LayoutInflater.from(context).inflate(R.layout.camera_control_panel_layout, this);
         setBackgroundColor(Color.TRANSPARENT);
@@ -159,6 +160,10 @@ public class CameraControlPanel extends RelativeLayout
         if (maxVideoDurationInMillis > 0)
             countDownTimer = new CountdownTask(recordDurationText, maxVideoDurationInMillis);
         else countDownTimer = new TimerTask(recordDurationText);
+    }
+
+    public void setFlasMode(@FlashSwitchView.FlashMode int flashMode) {
+        flashSwitchView.setFlashMode(flashMode);
     }
 
     public void setMediaActionState(@MediaActionSwitchView.MediaActionState int actionState) {

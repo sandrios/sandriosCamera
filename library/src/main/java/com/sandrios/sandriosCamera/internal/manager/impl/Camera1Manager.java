@@ -205,6 +205,11 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
     }
 
     @Override
+    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+        setFlashMode(camera, camera.getParameters(), flashMode);
+    }
+
+    @Override
     protected void prepareCameraOutputs() {
         try {
             if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO) {
@@ -322,6 +327,7 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
 
             Camera.Parameters parameters = camera.getParameters();
             setAutoFocus(camera, parameters);
+            setFlashMode(configurationProvider.getFlashMode());
 
             if (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO
                     || configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED)
@@ -407,6 +413,28 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
         } catch (Exception ignore) {
         }
     }
+
+    private void setFlashMode(Camera camera, Camera.Parameters parameters, @SandriosCameraConfiguration.FlashMode int flashMode) {
+        try {
+            switch (flashMode) {
+                case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+                    break;
+                case SandriosCameraConfiguration.FLASH_MODE_ON:
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+                    break;
+                case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    break;
+                default:
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+                    break;
+            }
+            camera.setParameters(parameters);
+        } catch (Exception ignore) {
+        }
+    }
+
 
     private void setCameraPhotoQuality(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();

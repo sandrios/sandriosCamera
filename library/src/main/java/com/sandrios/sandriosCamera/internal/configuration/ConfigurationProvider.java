@@ -1,5 +1,7 @@
 package com.sandrios.sandriosCamera.internal.configuration;
 
+import com.sandrios.sandriosCamera.internal.ui.view.FlashSwitchView;
+
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
@@ -23,4 +25,8 @@ public interface ConfigurationProvider {
     int getDegrees();
 
     int getMinimumVideoDuration();
+
+    @SandriosCameraConfiguration.FlashMode
+    int getFlashMode();
+
 }

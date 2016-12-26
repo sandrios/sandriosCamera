@@ -77,6 +77,11 @@ public class Camera1Controller implements CameraController<Integer>,
     }
 
     @Override
+    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+        cameraManager.setFlashMode(flashMode);
+    }
+
+    @Override
     public void stopVideoRecord() {
         cameraManager.stopVideoRecord();
     }

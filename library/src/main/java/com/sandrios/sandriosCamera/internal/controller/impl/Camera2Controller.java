@@ -98,6 +98,11 @@ public class Camera2Controller implements CameraController<String>,
     }
 
     @Override
+    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+        camera2Manager.setFlashMode(flashMode);
+    }
+
+    @Override
     public void switchQuality() {
         camera2Manager.closeCamera(this);
     }

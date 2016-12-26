@@ -40,6 +40,11 @@ public final class SandriosCameraConfiguration {
 
     public static final int ORIENTATION_PORTRAIT = 0x111;
     public static final int ORIENTATION_LANDSCAPE = 0x222;
+
+    public static final int FLASH_MODE_ON = 1;
+    public static final int FLASH_MODE_OFF = 2;
+    public static final int FLASH_MODE_AUTO = 3;
+
     private Activity activity = null;
     private int requestCode = -1;
     private int mediaAction = 102;
@@ -101,6 +106,7 @@ public final class SandriosCameraConfiguration {
         String MINIMUM_VIDEO_DURATION = "com.sandrios.sandriosCamera.minimum.video_duration";
         String VIDEO_FILE_SIZE = "com.sandrios.sandriosCamera.camera_video_file_size";
         String FILE_PATH = "com.sandrios.sandriosCamera.camera_video_file_path";
+        String FLASH_MODE = "com.sandrios.sandriosCamera.camera_flash_mode";
         String SHOW_PICKER = "com.sandrios.sandriosCamera.show_picker";
     }
 
@@ -133,6 +139,14 @@ public final class SandriosCameraConfiguration {
     @Retention(RetentionPolicy.SOURCE)
     public @interface DeviceDefaultOrientation {
     }
+
+    @IntDef({FLASH_MODE_ON, FLASH_MODE_OFF, FLASH_MODE_AUTO})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface FlashMode {
+    }
+
+    @FlashMode
+    private int flashMode = FLASH_MODE_AUTO;
 
     public static class Builder {
 
@@ -183,6 +197,11 @@ public final class SandriosCameraConfiguration {
          */
         public Builder setVideoFileSize(@IntRange(from = 1048576, to = Long.MAX_VALUE) long videoSizeInBytes) {
             sandriosCameraConfiguration.videoFileSize = videoSizeInBytes;
+            return this;
+        }
+
+        public Builder setFlashMode(@FlashMode int flashMode) {
+            sandriosCameraConfiguration.flashMode = flashMode;
             return this;
         }
 

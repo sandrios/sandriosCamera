@@ -42,4 +42,7 @@ public interface CameraController<CameraId> {
     File getOutputFile();
 
     CameraManager getCameraManager();
+
+    void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode);
+
 }
