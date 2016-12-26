@@ -101,7 +101,7 @@ Please check the sample project included for more examples:
 
 Status
 ------
-- Flash Mode
+- Flash Mode (WIP)
 
 Comments/bugs/questions/pull requests are always welcome!
 
