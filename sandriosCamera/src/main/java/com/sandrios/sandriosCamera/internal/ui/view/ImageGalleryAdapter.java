@@ -78,7 +78,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
                 .dontAnimate()
                 .centerCrop()
                 .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_gallery))
-                .error(ContextCompat.getDrawable(context, R.drawable.ic_error_black))
+                .error(ContextCompat.getDrawable(context, R.drawable.ic_error))
                 .into(holder.iv_thumbnail);
 
         if (onItemClickListener != null) {

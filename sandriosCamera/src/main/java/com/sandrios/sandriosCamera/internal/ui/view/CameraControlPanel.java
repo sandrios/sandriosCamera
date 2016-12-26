@@ -98,7 +98,7 @@ public class CameraControlPanel extends RelativeLayout
         setFlashModeSwitchListener(flashModeSwitchListener);
         setRecordButtonListener(recordButtonListener);
 
-        settingsButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_settings_white));
+        settingsButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_settings_white_24dp));
         settingsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,7 +272,7 @@ public class CameraControlPanel extends RelativeLayout
         if (fileObserver != null)
             fileObserver.stopWatching();
         countDownTimer.stop();
-
+        recyclerView.setVisibility(VISIBLE);
         recordSizeText.setVisibility(GONE);
         cameraSwitchView.setVisibility(View.VISIBLE);
         settingsButton.setVisibility(VISIBLE);
@@ -289,6 +289,7 @@ public class CameraControlPanel extends RelativeLayout
         cameraSwitchView.setVisibility(View.GONE);
         mediaActionSwitchView.setVisibility(GONE);
         settingsButton.setVisibility(GONE);
+        recyclerView.setVisibility(GONE);
 
         if (recordButtonListener != null)
             recordButtonListener.onStartRecordingButtonPressed();
