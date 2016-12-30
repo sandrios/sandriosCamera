@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.sandrios.sandriosCamera.R;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.lang.annotation.Retention;
@@ -28,7 +28,7 @@ public class RecordButton extends ImageButton {
     public static final int READY_FOR_RECORD_STATE = 1;
     public static final int RECORD_IN_PROGRESS_STATE = 2;
     private Context context;
-    private int mediaAction = SandriosCameraConfiguration.MEDIA_ACTION_PHOTO;
+    private int mediaAction = CameraConfiguration.MEDIA_ACTION_PHOTO;
     private
     @RecordState
     int currentState = TAKE_PHOTO_STATE;
@@ -55,7 +55,7 @@ public class RecordButton extends ImageButton {
         stopRecordDrawable = ContextCompat.getDrawable(context, R.drawable.stop_button_background);
     }
 
-    public void setup(@SandriosCameraConfiguration.MediaAction int mediaAction, @NonNull RecordButtonListener listener) {
+    public void setup(@CameraConfiguration.MediaAction int mediaAction, @NonNull RecordButtonListener listener) {
         setMediaAction(mediaAction);
         this.listener = listener;
 
@@ -76,9 +76,9 @@ public class RecordButton extends ImageButton {
         setPadding(padding, padding, padding, padding);
     }
 
-    public void setMediaAction(@SandriosCameraConfiguration.MediaAction int mediaAction) {
+    public void setMediaAction(@CameraConfiguration.MediaAction int mediaAction) {
         this.mediaAction = mediaAction;
-        if (SandriosCameraConfiguration.MEDIA_ACTION_PHOTO == mediaAction)
+        if (CameraConfiguration.MEDIA_ACTION_PHOTO == mediaAction)
             currentState = TAKE_PHOTO_STATE;
         else currentState = READY_FOR_RECORD_STATE;
         setRecordState(currentState);
@@ -101,7 +101,7 @@ public class RecordButton extends ImageButton {
     }
 
     private void setIcon() {
-        if (SandriosCameraConfiguration.MEDIA_ACTION_VIDEO == mediaAction) {
+        if (CameraConfiguration.MEDIA_ACTION_VIDEO == mediaAction) {
             if (READY_FOR_RECORD_STATE == currentState) {
                 setImageDrawable(startRecordDrawable);
                 setIconPadding(iconPadding);

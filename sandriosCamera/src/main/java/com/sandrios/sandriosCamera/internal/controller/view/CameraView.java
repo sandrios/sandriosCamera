@@ -3,7 +3,7 @@ package com.sandrios.sandriosCamera.internal.controller.view;
 import android.app.Activity;
 import android.view.View;
 
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 
 /**
@@ -15,7 +15,7 @@ public interface CameraView {
 
     void updateCameraPreview(Size size, View cameraPreview);
 
-    void updateUiForMediaAction(@SandriosCameraConfiguration.MediaAction int mediaAction);
+    void updateUiForMediaAction(@CameraConfiguration.MediaAction int mediaAction);
 
     void updateCameraSwitcher(int numberOfCameras);
 

@@ -11,7 +11,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -72,7 +72,7 @@ public final class CameraHelper {
         }
     }
 
-    public static File getOutputMediaFile(Context context, @SandriosCameraConfiguration.MediaAction int mediaAction) {
+    public static File getOutputMediaFile(Context context, @CameraConfiguration.MediaAction int mediaAction) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), context.getPackageName());
 
@@ -85,10 +85,10 @@ public final class CameraHelper {
 
         String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
         File mediaFile;
-        if (mediaAction == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO) {
+        if (mediaAction == CameraConfiguration.MEDIA_ACTION_PHOTO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_" + timeStamp + ".jpg");
-        } else if (mediaAction == SandriosCameraConfiguration.MEDIA_ACTION_VIDEO) {
+        } else if (mediaAction == CameraConfiguration.MEDIA_ACTION_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_" + timeStamp + ".mp4");
         } else {
@@ -99,7 +99,7 @@ public final class CameraHelper {
     }
 
     @SuppressWarnings("deprecation")
-    public static Size getPictureSize(List<Size> choices, @SandriosCameraConfiguration.MediaQuality int mediaQuality) {
+    public static Size getPictureSize(List<Size> choices, @CameraConfiguration.MediaQuality int mediaQuality) {
         if (choices == null || choices.isEmpty()) return null;
         if (choices.size() == 1) return choices.get(0);
 
@@ -109,29 +109,29 @@ public final class CameraHelper {
 
         Collections.sort(choices, new CompareSizesByArea2());
 
-        if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST) {
+        if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGHEST) {
             result = maxPictureSize;
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOW) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOW) {
             if (choices.size() == 2) result = minPictureSize;
             else {
                 int half = choices.size() / 2;
                 int lowQualityIndex = (choices.size() - half) / 2;
                 result = choices.get(lowQualityIndex + 1);
             }
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGH) {
             if (choices.size() == 2) result = maxPictureSize;
             else {
                 int half = choices.size() / 2;
                 int highQualityIndex = (choices.size() - half) / 2;
                 result = choices.get(choices.size() - highQualityIndex - 1);
             }
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_MEDIUM) {
             if (choices.size() == 2) result = minPictureSize;
             else {
                 int mediumQualityIndex = choices.size() / 2;
                 result = choices.get(mediumQualityIndex);
             }
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOWEST) {
             result = minPictureSize;
         }
 
@@ -139,7 +139,7 @@ public final class CameraHelper {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static Size getPictureSize(Size[] sizes, @SandriosCameraConfiguration.MediaQuality int mediaQuality) {
+    public static Size getPictureSize(Size[] sizes, @CameraConfiguration.MediaQuality int mediaQuality) {
         if (sizes == null || sizes.length == 0) return null;
 
         List<Size> choices = Arrays.asList(sizes);
@@ -152,29 +152,29 @@ public final class CameraHelper {
 
         Collections.sort(choices, new CompareSizesByArea2());
 
-        if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST) {
+        if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGHEST) {
             result = maxPictureSize;
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOW) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOW) {
             if (choices.size() == 2) result = minPictureSize;
             else {
                 int half = choices.size() / 2;
                 int lowQualityIndex = (choices.size() - half) / 2;
                 result = choices.get(lowQualityIndex + 1);
             }
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGH) {
             if (choices.size() == 2) result = maxPictureSize;
             else {
                 int half = choices.size() / 2;
                 int highQualityIndex = (choices.size() - half) / 2;
                 result = choices.get(choices.size() - highQualityIndex - 1);
             }
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_MEDIUM) {
             if (choices.size() == 2) result = minPictureSize;
             else {
                 int mediumQualityIndex = choices.size() / 2;
                 result = choices.get(mediumQualityIndex);
             }
-        } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST) {
+        } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOWEST) {
             result = minPictureSize;
         }
 
@@ -372,11 +372,11 @@ public final class CameraHelper {
 
     public static CamcorderProfile getCamcorderProfile(int currentCameraId, long maximumFileSize, int minimumDurationInSeconds) {
         if (maximumFileSize <= 0)
-            return CamcorderProfile.get(currentCameraId, SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST);
+            return CamcorderProfile.get(currentCameraId, CameraConfiguration.MEDIA_QUALITY_HIGHEST);
 
-        int[] qualities = new int[]{SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST,
-                SandriosCameraConfiguration.MEDIA_QUALITY_HIGH, SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM,
-                SandriosCameraConfiguration.MEDIA_QUALITY_LOW, SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST};
+        int[] qualities = new int[]{CameraConfiguration.MEDIA_QUALITY_HIGHEST,
+                CameraConfiguration.MEDIA_QUALITY_HIGH, CameraConfiguration.MEDIA_QUALITY_MEDIUM,
+                CameraConfiguration.MEDIA_QUALITY_LOW, CameraConfiguration.MEDIA_QUALITY_LOWEST};
 
         CamcorderProfile camcorderProfile;
         for (int i = 0; i < qualities.length; ++i) {
@@ -392,11 +392,11 @@ public final class CameraHelper {
                 }
             } else return camcorderProfile;
         }
-        return CameraHelper.getCamcorderProfile(SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST, currentCameraId);
+        return CameraHelper.getCamcorderProfile(CameraConfiguration.MEDIA_QUALITY_LOWEST, currentCameraId);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static CamcorderProfile getCamcorderProfile(@SandriosCameraConfiguration.MediaQuality int mediaQuality, String cameraId) {
+    public static CamcorderProfile getCamcorderProfile(@CameraConfiguration.MediaQuality int mediaQuality, String cameraId) {
         if (TextUtils.isEmpty(cameraId)) {
             return null;
         }
@@ -404,11 +404,11 @@ public final class CameraHelper {
         return getCamcorderProfile(mediaQuality, cameraIdInt);
     }
 
-    public static CamcorderProfile getCamcorderProfile(@SandriosCameraConfiguration.MediaQuality int mediaQuality, int cameraId) {
+    public static CamcorderProfile getCamcorderProfile(@CameraConfiguration.MediaQuality int mediaQuality, int cameraId) {
         if (Build.VERSION.SDK_INT > 10) {
-            if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST) {
+            if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGHEST) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH);
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGH) {
                 if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_1080P)) {
                     return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_1080P);
                 } else if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_720P)) {
@@ -416,7 +416,7 @@ public final class CameraHelper {
                 } else {
                     return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH);
                 }
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_MEDIUM) {
                 if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_720P)) {
                     return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_720P);
                 } else if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_480P)) {
@@ -424,27 +424,27 @@ public final class CameraHelper {
                 } else {
                     return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_LOW);
                 }
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOW) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOW) {
                 if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_480P)) {
                     return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_480P);
                 } else {
                     return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_LOW);
                 }
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOWEST) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_LOW);
             } else {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH);
             }
         } else {
-            if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST) {
+            if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGHEST) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH);
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGH) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH);
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_MEDIUM) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_LOW);
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOW) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOW) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_LOW);
-            } else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST) {
+            } else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOWEST) {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_LOW);
             } else {
                 return CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH);

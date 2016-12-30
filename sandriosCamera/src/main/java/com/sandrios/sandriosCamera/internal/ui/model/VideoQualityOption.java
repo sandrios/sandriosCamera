@@ -2,7 +2,7 @@ package com.sandrios.sandriosCamera.internal.ui.model;
 
 import android.media.CamcorderProfile;
 
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,16 +14,16 @@ public class VideoQualityOption implements CharSequence {
 
     private String title;
 
-    @SandriosCameraConfiguration.MediaQuality
+    @CameraConfiguration.MediaQuality
     private int mediaQuality;
 
-    public VideoQualityOption(@SandriosCameraConfiguration.MediaQuality int mediaQuality, CamcorderProfile camcorderProfile, double videoDuration) {
+    public VideoQualityOption(@CameraConfiguration.MediaQuality int mediaQuality, CamcorderProfile camcorderProfile, double videoDuration) {
         this.mediaQuality = mediaQuality;
 
         long minutes = TimeUnit.SECONDS.toMinutes((long) videoDuration);
         long seconds = ((long) videoDuration) - minutes * 60;
 
-        if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO) {
+        if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_AUTO) {
             title = "Auto " + ", (" + (minutes > 10 ? minutes : ("0" + minutes)) + ":" + (seconds > 10 ? seconds : ("0" + seconds)) + " min)";
         } else {
             title = String.valueOf(camcorderProfile.videoFrameWidth)
@@ -32,7 +32,7 @@ public class VideoQualityOption implements CharSequence {
         }
     }
 
-    @SandriosCameraConfiguration.MediaQuality
+    @CameraConfiguration.MediaQuality
     public int getMediaQuality() {
         return mediaQuality;
     }

@@ -12,7 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraCloseListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraOpenListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraPhotoListener;
@@ -200,19 +200,19 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
     }
 
     @Override
-    public Size getPhotoSizeForQuality(@SandriosCameraConfiguration.MediaQuality int mediaQuality) {
+    public Size getPhotoSizeForQuality(@CameraConfiguration.MediaQuality int mediaQuality) {
         return CameraHelper.getPictureSize(Size.fromList(camera.getParameters().getSupportedPictureSizes()), mediaQuality);
     }
 
     @Override
-    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+    public void setFlashMode(@CameraConfiguration.FlashMode int flashMode) {
         setFlashMode(camera, camera.getParameters(), flashMode);
     }
 
     @Override
     protected void prepareCameraOutputs() {
         try {
-            if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO) {
+            if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_AUTO) {
                 camcorderProfile = CameraHelper.getCamcorderProfile(currentCameraId, configurationProvider.getVideoFileSize(), configurationProvider.getMinimumVideoDuration());
             } else
                 camcorderProfile = CameraHelper.getCamcorderProfile(configurationProvider.getMediaQuality(), currentCameraId);
@@ -230,11 +230,11 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
 
             photoSize = CameraHelper.getPictureSize(
                     (pictureSizes == null || pictureSizes.isEmpty()) ? previewSizes : pictureSizes,
-                    configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO
-                            ? SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST : configurationProvider.getMediaQuality());
+                    configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_AUTO
+                            ? CameraConfiguration.MEDIA_QUALITY_HIGHEST : configurationProvider.getMediaQuality());
 
-            if (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO
-                    || configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED) {
+            if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO
+                    || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH) {
                 previewSize = CameraHelper.getSizeWithClosestRatio(previewSizes, photoSize.getWidth(), photoSize.getHeight());
             } else {
                 previewSize = CameraHelper.getSizeWithClosestRatio(previewSizes, videoSize.getWidth(), videoSize.getHeight());
@@ -329,10 +329,10 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
             setAutoFocus(camera, parameters);
             setFlashMode(configurationProvider.getFlashMode());
 
-            if (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO
-                    || configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED)
+            if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO
+                    || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH)
                 turnPhotoCameraFeaturesOn(camera, parameters);
-            else if (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO)
+            else if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO)
                 turnVideoCameraFeaturesOn(camera, parameters);
 
             int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
@@ -362,15 +362,15 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
             this.camera.setDisplayOrientation(displayRotation);
 
             if (Build.VERSION.SDK_INT > 13
-                    && (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_VIDEO
-                    || configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED)) {
+                    && (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_VIDEO
+                    || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH)) {
 //                parameters.setRecordingHint(true);
             }
 
             if (Build.VERSION.SDK_INT > 14
                     && parameters.isVideoStabilizationSupported()
-                    && (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_VIDEO
-                    || configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED)) {
+                    && (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_VIDEO
+                    || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH)) {
                 parameters.setVideoStabilization(true);
             }
 
@@ -414,16 +414,16 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
         }
     }
 
-    private void setFlashMode(Camera camera, Camera.Parameters parameters, @SandriosCameraConfiguration.FlashMode int flashMode) {
+    private void setFlashMode(Camera camera, Camera.Parameters parameters, @CameraConfiguration.FlashMode int flashMode) {
         try {
             switch (flashMode) {
-                case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                case CameraConfiguration.FLASH_MODE_AUTO:
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
                     break;
-                case SandriosCameraConfiguration.FLASH_MODE_ON:
+                case CameraConfiguration.FLASH_MODE_ON:
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
                     break;
-                case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                case CameraConfiguration.FLASH_MODE_OFF:
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                     break;
                 default:
@@ -441,13 +441,13 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
 
         parameters.setPictureFormat(PixelFormat.JPEG);
 
-        if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_LOW) {
+        if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_LOW) {
             parameters.setJpegQuality(50);
-        } else if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) {
+        } else if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_MEDIUM) {
             parameters.setJpegQuality(75);
-        } else if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) {
+        } else if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_HIGH) {
             parameters.setJpegQuality(100);
-        } else if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST) {
+        } else if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_HIGHEST) {
             parameters.setJpegQuality(100);
         }
         parameters.setPictureSize(photoSize.getWidth(), photoSize.getHeight());
@@ -456,7 +456,7 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
     }
 
     @Override
-    protected int getPhotoOrientation(@SandriosCameraConfiguration.SensorPosition int sensorPosition) {
+    protected int getPhotoOrientation(@CameraConfiguration.SensorPosition int sensorPosition) {
         int rotate;
         if (currentCameraId.equals(faceFrontCameraId)) {
             rotate = (360 + faceFrontCameraOrientation + configurationProvider.getDegrees()) % 360;
@@ -479,19 +479,19 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
     }
 
     @Override
-    protected int getVideoOrientation(@SandriosCameraConfiguration.SensorPosition int sensorPosition) {
+    protected int getVideoOrientation(@CameraConfiguration.SensorPosition int sensorPosition) {
         int degrees = 0;
         switch (sensorPosition) {
-            case SandriosCameraConfiguration.SENSOR_POSITION_UP:
+            case CameraConfiguration.SENSOR_POSITION_UP:
                 degrees = 0;
                 break; // Natural orientation
-            case SandriosCameraConfiguration.SENSOR_POSITION_LEFT:
+            case CameraConfiguration.SENSOR_POSITION_LEFT:
                 degrees = 90;
                 break; // Landscape left
-            case SandriosCameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN:
+            case CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN:
                 degrees = 180;
                 break;// Upside down
-            case SandriosCameraConfiguration.SENSOR_POSITION_RIGHT:
+            case CameraConfiguration.SENSOR_POSITION_RIGHT:
                 degrees = 270;
                 break;// Landscape right
         }

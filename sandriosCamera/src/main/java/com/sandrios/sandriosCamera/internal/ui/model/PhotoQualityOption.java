@@ -1,6 +1,6 @@
 package com.sandrios.sandriosCamera.internal.ui.model;
 
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 
 /**
@@ -9,17 +9,17 @@ import com.sandrios.sandriosCamera.internal.utils.Size;
 
 public class PhotoQualityOption implements CharSequence {
 
-    @SandriosCameraConfiguration.MediaQuality
+    @CameraConfiguration.MediaQuality
     private int mediaQuality;
     private String title;
 
-    public PhotoQualityOption(@SandriosCameraConfiguration.MediaQuality int mediaQuality, Size size) {
+    public PhotoQualityOption(@CameraConfiguration.MediaQuality int mediaQuality, Size size) {
         this.mediaQuality = mediaQuality;
 
         title = String.valueOf(size.getWidth()) + " x " + String.valueOf(size.getHeight());
     }
 
-    @SandriosCameraConfiguration.MediaQuality
+    @CameraConfiguration.MediaQuality
     public int getMediaQuality() {
         return mediaQuality;
     }

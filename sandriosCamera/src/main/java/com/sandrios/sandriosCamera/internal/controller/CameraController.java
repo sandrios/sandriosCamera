@@ -2,7 +2,7 @@ package com.sandrios.sandriosCamera.internal.controller;
 
 import android.os.Bundle;
 
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;
 
 import java.io.File;
@@ -28,13 +28,13 @@ public interface CameraController<CameraId> {
 
     boolean isVideoRecording();
 
-    void switchCamera(@SandriosCameraConfiguration.CameraFace int cameraFace);
+    void switchCamera(@CameraConfiguration.CameraFace int cameraFace);
 
     void switchQuality();
 
     int getNumberOfCameras();
 
-    @SandriosCameraConfiguration.MediaAction
+    @CameraConfiguration.MediaAction
     int getMediaAction();
 
     CameraId getCurrentCameraId();
@@ -43,6 +43,6 @@ public interface CameraController<CameraId> {
 
     CameraManager getCameraManager();
 
-    void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode);
+    void setFlashMode(@CameraConfiguration.FlashMode int flashMode);
 
 }

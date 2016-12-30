@@ -3,7 +3,7 @@ package com.sandrios.sandriosCamera.internal.manager;
 import android.content.Context;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraCloseListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraOpenListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraPhotoListener;
@@ -27,9 +27,9 @@ public interface CameraManager<CameraId, SurfaceListener> {
 
     void startVideoRecord(File videoFile, CameraVideoListener cameraVideoListener);
 
-    Size getPhotoSizeForQuality(@SandriosCameraConfiguration.MediaQuality int mediaQuality);
+    Size getPhotoSizeForQuality(@CameraConfiguration.MediaQuality int mediaQuality);
 
-    void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode);
+    void setFlashMode(@CameraConfiguration.FlashMode int flashMode);
 
     void stopVideoRecord();
 

@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.controller.CameraController;
 import com.sandrios.sandriosCamera.internal.controller.view.CameraView;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;
@@ -66,18 +66,18 @@ public class Camera1Controller implements CameraController<Integer>,
 
     @Override
     public void takePhoto() {
-        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), SandriosCameraConfiguration.MEDIA_ACTION_PHOTO);
+        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), CameraConfiguration.MEDIA_ACTION_PHOTO);
         cameraManager.takePhoto(outputFile, this);
     }
 
     @Override
     public void startVideoRecord() {
-        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), SandriosCameraConfiguration.MEDIA_ACTION_VIDEO);
+        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), CameraConfiguration.MEDIA_ACTION_VIDEO);
         cameraManager.startVideoRecord(outputFile, this);
     }
 
     @Override
-    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+    public void setFlashMode(@CameraConfiguration.FlashMode int flashMode) {
         cameraManager.setFlashMode(flashMode);
     }
 
@@ -92,7 +92,7 @@ public class Camera1Controller implements CameraController<Integer>,
     }
 
     @Override
-    public void switchCamera(@SandriosCameraConfiguration.CameraFace final int cameraFace) {
+    public void switchCamera(@CameraConfiguration.CameraFace final int cameraFace) {
         currentCameraId = cameraManager.getCurrentCameraId().equals(cameraManager.getFaceFrontCameraId()) ?
                 cameraManager.getFaceBackCameraId() : cameraManager.getFaceFrontCameraId();
 

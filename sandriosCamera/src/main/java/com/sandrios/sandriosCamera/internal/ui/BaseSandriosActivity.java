@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.sandrios.sandriosCamera.R;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.ui.model.PhotoQualityOption;
 import com.sandrios.sandriosCamera.internal.ui.model.VideoQualityOption;
 import com.sandrios.sandriosCamera.internal.ui.preview.PreviewActivity;
@@ -41,12 +41,12 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     public static final int ACTION_CANCEL = 902;
     protected static final int REQUEST_PREVIEW_CODE = 1001;
     protected int requestCode = -1;
-    @SandriosCameraConfiguration.MediaAction
-    protected int mediaAction = SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED;
-    @SandriosCameraConfiguration.MediaQuality
-    protected int mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM;
-    @SandriosCameraConfiguration.MediaQuality
-    protected int passedMediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM;
+    @CameraConfiguration.MediaAction
+    protected int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
+    @CameraConfiguration.MediaQuality
+    protected int mediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
+    @CameraConfiguration.MediaQuality
+    protected int passedMediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
     protected CharSequence[] videoQualities;
     protected CharSequence[] photoQualities;
     protected int videoDuration = -1;
@@ -57,13 +57,13 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int currentMediaActionState;
     @CameraSwitchView.CameraType
     protected int currentCameraType = CameraSwitchView.CAMERA_TYPE_REAR;
-    @SandriosCameraConfiguration.MediaQuality
+    @CameraConfiguration.MediaQuality
     protected int newQuality = -1;
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
 
-    @SandriosCameraConfiguration.FlashMode
-    protected int flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+    @CameraConfiguration.FlashMode
+    protected int flashMode = CameraConfiguration.FLASH_MODE_AUTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         super.onProcessBundle(savedInstanceState);
 
         extractConfiguration(getIntent().getExtras());
-        currentMediaActionState = mediaAction == SandriosCameraConfiguration.MEDIA_ACTION_VIDEO ?
+        currentMediaActionState = mediaAction == CameraConfiguration.MEDIA_ACTION_VIDEO ?
                 MediaActionSwitchView.ACTION_VIDEO : MediaActionSwitchView.ACTION_PHOTO;
     }
 
@@ -106,76 +106,76 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     private void extractConfiguration(Bundle bundle) {
         if (bundle != null) {
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.REQUEST_CODE))
-                requestCode = bundle.getInt(SandriosCameraConfiguration.Arguments.REQUEST_CODE);
+            if (bundle.containsKey(CameraConfiguration.Arguments.REQUEST_CODE))
+                requestCode = bundle.getInt(CameraConfiguration.Arguments.REQUEST_CODE);
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.MEDIA_ACTION)) {
-                switch (bundle.getInt(SandriosCameraConfiguration.Arguments.MEDIA_ACTION)) {
-                    case SandriosCameraConfiguration.MEDIA_ACTION_PHOTO:
-                        mediaAction = SandriosCameraConfiguration.MEDIA_ACTION_PHOTO;
+            if (bundle.containsKey(CameraConfiguration.Arguments.MEDIA_ACTION)) {
+                switch (bundle.getInt(CameraConfiguration.Arguments.MEDIA_ACTION)) {
+                    case CameraConfiguration.MEDIA_ACTION_PHOTO:
+                        mediaAction = CameraConfiguration.MEDIA_ACTION_PHOTO;
                         break;
-                    case SandriosCameraConfiguration.MEDIA_ACTION_VIDEO:
-                        mediaAction = SandriosCameraConfiguration.MEDIA_ACTION_VIDEO;
+                    case CameraConfiguration.MEDIA_ACTION_VIDEO:
+                        mediaAction = CameraConfiguration.MEDIA_ACTION_VIDEO;
                         break;
                     default:
-                        mediaAction = SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED;
+                        mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
                         break;
                 }
             }
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.MEDIA_QUALITY)) {
-                switch (bundle.getInt(SandriosCameraConfiguration.Arguments.MEDIA_QUALITY)) {
-                    case SandriosCameraConfiguration.MEDIA_QUALITY_AUTO:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_AUTO;
+            if (bundle.containsKey(CameraConfiguration.Arguments.MEDIA_QUALITY)) {
+                switch (bundle.getInt(CameraConfiguration.Arguments.MEDIA_QUALITY)) {
+                    case CameraConfiguration.MEDIA_QUALITY_AUTO:
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_AUTO;
                         break;
-                    case SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST;
+                    case CameraConfiguration.MEDIA_QUALITY_HIGHEST:
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
                         break;
-                    case SandriosCameraConfiguration.MEDIA_QUALITY_HIGH:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_HIGH;
+                    case CameraConfiguration.MEDIA_QUALITY_HIGH:
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGH;
                         break;
-                    case SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM;
+                    case CameraConfiguration.MEDIA_QUALITY_MEDIUM:
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_MEDIUM;
                         break;
-                    case SandriosCameraConfiguration.MEDIA_QUALITY_LOW:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_LOW;
+                    case CameraConfiguration.MEDIA_QUALITY_LOW:
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_LOW;
                         break;
-                    case SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST;
+                    case CameraConfiguration.MEDIA_QUALITY_LOWEST:
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_LOWEST;
                         break;
                     default:
-                        mediaQuality = SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM;
+                        mediaQuality = CameraConfiguration.MEDIA_QUALITY_MEDIUM;
                         break;
                 }
                 passedMediaQuality = mediaQuality;
             }
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.VIDEO_DURATION))
-                videoDuration = bundle.getInt(SandriosCameraConfiguration.Arguments.VIDEO_DURATION);
+            if (bundle.containsKey(CameraConfiguration.Arguments.VIDEO_DURATION))
+                videoDuration = bundle.getInt(CameraConfiguration.Arguments.VIDEO_DURATION);
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.VIDEO_FILE_SIZE))
-                videoFileSize = bundle.getLong(SandriosCameraConfiguration.Arguments.VIDEO_FILE_SIZE);
+            if (bundle.containsKey(CameraConfiguration.Arguments.VIDEO_FILE_SIZE))
+                videoFileSize = bundle.getLong(CameraConfiguration.Arguments.VIDEO_FILE_SIZE);
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION))
-                minimumVideoDuration = bundle.getInt(SandriosCameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION);
+            if (bundle.containsKey(CameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION))
+                minimumVideoDuration = bundle.getInt(CameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION);
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.SHOW_PICKER)) {
-                showPicker = bundle.getBoolean(SandriosCameraConfiguration.Arguments.SHOW_PICKER);
+            if (bundle.containsKey(CameraConfiguration.Arguments.SHOW_PICKER)) {
+                showPicker = bundle.getBoolean(CameraConfiguration.Arguments.SHOW_PICKER);
             }
 
-            if (bundle.containsKey(SandriosCameraConfiguration.Arguments.FLASH_MODE))
-                switch (bundle.getInt(SandriosCameraConfiguration.Arguments.FLASH_MODE)) {
-                    case SandriosCameraConfiguration.FLASH_MODE_AUTO:
-                        flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+            if (bundle.containsKey(CameraConfiguration.Arguments.FLASH_MODE))
+                switch (bundle.getInt(CameraConfiguration.Arguments.FLASH_MODE)) {
+                    case CameraConfiguration.FLASH_MODE_AUTO:
+                        flashMode = CameraConfiguration.FLASH_MODE_AUTO;
                         break;
-                    case SandriosCameraConfiguration.FLASH_MODE_ON:
-                        flashMode = SandriosCameraConfiguration.FLASH_MODE_ON;
+                    case CameraConfiguration.FLASH_MODE_ON:
+                        flashMode = CameraConfiguration.FLASH_MODE_ON;
                         break;
-                    case SandriosCameraConfiguration.FLASH_MODE_OFF:
-                        flashMode = SandriosCameraConfiguration.FLASH_MODE_OFF;
+                    case CameraConfiguration.FLASH_MODE_OFF:
+                        flashMode = CameraConfiguration.FLASH_MODE_OFF;
                         break;
                     default:
-                        flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
+                        flashMode = CameraConfiguration.FLASH_MODE_AUTO;
                         break;
                 }
         }
@@ -189,13 +189,13 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             cameraControlPanel.setup(getMediaAction());
 
             switch (flashMode) {
-                case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                case CameraConfiguration.FLASH_MODE_AUTO:
                     cameraControlPanel.setFlasMode(FlashSwitchView.FLASH_AUTO);
                     break;
-                case SandriosCameraConfiguration.FLASH_MODE_ON:
+                case CameraConfiguration.FLASH_MODE_ON:
                     cameraControlPanel.setFlasMode(FlashSwitchView.FLASH_ON);
                     break;
-                case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                case CameraConfiguration.FLASH_MODE_OFF:
                     cameraControlPanel.setFlasMode(FlashSwitchView.FLASH_OFF);
                     break;
             }
@@ -258,7 +258,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     @Override
     public void onItemClick(Uri filePath) {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(SandriosCameraConfiguration.Arguments.FILE_PATH,
+        resultIntent.putExtra(CameraConfiguration.Arguments.FILE_PATH,
                 filePath.toString());
         setResult(RESULT_OK, resultIntent);
         finish();
@@ -273,7 +273,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         cameraControlPanel.allowRecord(false);
 
         int cameraFace = cameraType == CameraSwitchView.CAMERA_TYPE_FRONT
-                ? SandriosCameraConfiguration.CAMERA_FACE_FRONT : SandriosCameraConfiguration.CAMERA_FACE_REAR;
+                ? CameraConfiguration.CAMERA_FACE_FRONT : CameraConfiguration.CAMERA_FACE_REAR;
 
         getCameraController().switchCamera(cameraFace);
     }
@@ -283,16 +283,16 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     public void onFlashModeChanged(@FlashSwitchView.FlashMode int mode) {
         switch (mode) {
             case FlashSwitchView.FLASH_AUTO:
-                flashMode = SandriosCameraConfiguration.FLASH_MODE_AUTO;
-                getCameraController().setFlashMode(SandriosCameraConfiguration.FLASH_MODE_AUTO);
+                flashMode = CameraConfiguration.FLASH_MODE_AUTO;
+                getCameraController().setFlashMode(CameraConfiguration.FLASH_MODE_AUTO);
                 break;
             case FlashSwitchView.FLASH_ON:
-                flashMode = SandriosCameraConfiguration.FLASH_MODE_ON;
-                getCameraController().setFlashMode(SandriosCameraConfiguration.FLASH_MODE_ON);
+                flashMode = CameraConfiguration.FLASH_MODE_ON;
+                getCameraController().setFlashMode(CameraConfiguration.FLASH_MODE_ON);
                 break;
             case FlashSwitchView.FLASH_OFF:
-                flashMode = SandriosCameraConfiguration.FLASH_MODE_OFF;
-                getCameraController().setFlashMode(SandriosCameraConfiguration.FLASH_MODE_OFF);
+                flashMode = CameraConfiguration.FLASH_MODE_OFF;
+                getCameraController().setFlashMode(CameraConfiguration.FLASH_MODE_OFF);
                 break;
         }
     }
@@ -374,7 +374,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     }
 
     @Override
-    public void updateUiForMediaAction(@SandriosCameraConfiguration.MediaAction int mediaAction) {
+    public void updateUiForMediaAction(@CameraConfiguration.MediaAction int mediaAction) {
 
     }
 
@@ -417,7 +417,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (requestCode == REQUEST_PREVIEW_CODE) {
                 if (PreviewActivity.isResultConfirm(data)) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra(SandriosCameraConfiguration.Arguments.FILE_PATH,
+                    resultIntent.putExtra(CameraConfiguration.Arguments.FILE_PATH,
                             PreviewActivity.getMediaFilePatch(data));
                     setResult(RESULT_OK, resultIntent);
                     finish();
@@ -446,22 +446,22 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     protected int getVideoOptionCheckedIndex() {
         int checkedIndex = -1;
-        if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO) checkedIndex = 0;
-        else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) checkedIndex = 1;
-        else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) checkedIndex = 2;
-        else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOW) checkedIndex = 3;
+        if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_AUTO) checkedIndex = 0;
+        else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGH) checkedIndex = 1;
+        else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_MEDIUM) checkedIndex = 2;
+        else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOW) checkedIndex = 3;
 
-        if (passedMediaQuality != SandriosCameraConfiguration.MEDIA_QUALITY_AUTO) checkedIndex--;
+        if (passedMediaQuality != CameraConfiguration.MEDIA_QUALITY_AUTO) checkedIndex--;
 
         return checkedIndex;
     }
 
     protected int getPhotoOptionCheckedIndex() {
         int checkedIndex = -1;
-        if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST) checkedIndex = 0;
-        else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_HIGH) checkedIndex = 1;
-        else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM) checkedIndex = 2;
-        else if (mediaQuality == SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST) checkedIndex = 3;
+        if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGHEST) checkedIndex = 0;
+        else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_HIGH) checkedIndex = 1;
+        else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_MEDIUM) checkedIndex = 2;
+        else if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_LOWEST) checkedIndex = 3;
         return checkedIndex;
     }
 

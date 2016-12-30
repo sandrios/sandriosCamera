@@ -2,10 +2,8 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +31,6 @@ public class FlashSwitchView extends ImageButton {
     private Drawable flashOnDrawable;
     private Drawable flashOffDrawable;
     private Drawable flashAutoDrawable;
-    private int tintColor = Color.WHITE;
 
     public FlashSwitchView(@NonNull Context context) {
         this(context, null);
@@ -62,20 +59,13 @@ public class FlashSwitchView extends ImageButton {
 
     }
 
-    private void setIconsTint(@ColorInt int tintColor) {
-        this.tintColor = tintColor;
-        flashOnDrawable.setColorFilter(tintColor, PorterDuff.Mode.MULTIPLY);
-        flashOffDrawable.setColorFilter(tintColor, PorterDuff.Mode.MULTIPLY);
-        flashAutoDrawable.setColorFilter(tintColor, PorterDuff.Mode.MULTIPLY);
-    }
-
     public void setFlashMode(@FlashMode int mode) {
         this.currentMode = mode;
         setIcon();
     }
 
     @FlashMode
-    public int getCurrentFlasMode() {
+    public int getCurrentFlashMode() {
         return currentMode;
     }
 

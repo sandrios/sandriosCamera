@@ -19,11 +19,11 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity;
 import com.sandrios.sandriosCamera.internal.ui.view.AspectFrameLayout;
-import com.sandrios.sandriosCamera.internal.utils.SandriosCameraImageLoader;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.io.File;
@@ -137,7 +137,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     };
 
     public static Intent newIntent(Context context,
-                                   @SandriosCameraConfiguration.MediaAction int mediaAction,
+                                   @CameraConfiguration.MediaAction int mediaAction,
                                    String filePath) {
 
         return new Intent(context, PreviewActivity.class)
@@ -226,9 +226,9 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         mediaAction = args.getInt(MEDIA_ACTION_ARG);
         previewFilePath = args.getString(FILE_PATH_ARG);
 
-        if (mediaAction == SandriosCameraConfiguration.MEDIA_ACTION_VIDEO) {
+        if (mediaAction == CameraConfiguration.MEDIA_ACTION_VIDEO) {
             displayVideo(savedInstanceState);
-        } else if (mediaAction == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO) {
+        } else if (mediaAction == CameraConfiguration.MEDIA_ACTION_PHOTO) {
             displayImage();
         } else {
             String mimeType = Utils.getMimeType(previewFilePath);
@@ -268,8 +268,9 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private void showImagePreview() {
         imagePreview = new ImageView(this);
-        SandriosCameraImageLoader.Builder builder = new SandriosCameraImageLoader.Builder(this);
-        builder.load(previewFilePath).build().into(imagePreview);
+        Glide.with(this)
+                .load(previewFilePath)
+                .into(imagePreview);
         photoPreviewContainer.removeAllViews();
         photoPreviewContainer.addView(imagePreview);
     }

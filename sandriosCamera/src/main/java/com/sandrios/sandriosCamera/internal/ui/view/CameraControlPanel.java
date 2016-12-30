@@ -20,7 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sandrios.sandriosCamera.R;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.utils.DateTimeUtils;
 
 import java.io.File;
@@ -136,14 +136,14 @@ public class CameraControlPanel extends RelativeLayout
 
     public void setup(int mediaAction) {
         this.mediaAction = mediaAction;
-        if (SandriosCameraConfiguration.MEDIA_ACTION_VIDEO == mediaAction) {
+        if (CameraConfiguration.MEDIA_ACTION_VIDEO == mediaAction) {
             recordButton.setup(mediaAction, this);
             flashSwitchView.setVisibility(GONE);
         } else {
-            recordButton.setup(SandriosCameraConfiguration.MEDIA_ACTION_PHOTO, this);
+            recordButton.setup(CameraConfiguration.MEDIA_ACTION_PHOTO, this);
         }
 
-        if (SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED != mediaAction) {
+        if (CameraConfiguration.MEDIA_ACTION_BOTH != mediaAction) {
             mediaActionSwitchView.setVisibility(GONE);
         } else mediaActionSwitchView.setVisibility(VISIBLE);
     }
@@ -169,11 +169,11 @@ public class CameraControlPanel extends RelativeLayout
     public void setMediaActionState(@MediaActionSwitchView.MediaActionState int actionState) {
         if (mediaActionState == actionState) return;
         if (MediaActionSwitchView.ACTION_PHOTO == actionState) {
-            recordButton.setMediaAction(SandriosCameraConfiguration.MEDIA_ACTION_PHOTO);
+            recordButton.setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO);
             if (hasFlash)
                 flashSwitchView.setVisibility(VISIBLE);
         } else {
-            recordButton.setMediaAction(SandriosCameraConfiguration.MEDIA_ACTION_VIDEO);
+            recordButton.setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO);
             flashSwitchView.setVisibility(GONE);
         }
         mediaActionState = actionState;
@@ -277,7 +277,7 @@ public class CameraControlPanel extends RelativeLayout
         cameraSwitchView.setVisibility(View.VISIBLE);
         settingsButton.setVisibility(VISIBLE);
 
-        if (SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED != mediaAction) {
+        if (CameraConfiguration.MEDIA_ACTION_BOTH != mediaAction) {
             mediaActionSwitchView.setVisibility(GONE);
         } else mediaActionSwitchView.setVisibility(VISIBLE);
         recordButton.setRecordState(RecordButton.READY_FOR_RECORD_STATE);

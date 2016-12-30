@@ -7,7 +7,7 @@ import android.support.annotation.IntRange;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.ui.camera.Camera1Activity;
 import com.sandrios.sandriosCamera.internal.ui.camera2.Camera2Activity;
 import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
@@ -62,8 +62,9 @@ public class SandriosCamera {
         } else {
             cameraIntent = new Intent(activity, Camera1Activity.class);
         }
-        cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.REQUEST_CODE, requestCode);
-        cameraIntent.putExtra(SandriosCameraConfiguration.Arguments.SHOW_PICKER, showPicker);
+        cameraIntent.putExtra(CameraConfiguration.Arguments.REQUEST_CODE, requestCode);
+        cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
+        cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, CameraConfiguration.MEDIA_ACTION_BOTH);
         activity.startActivityForResult(cameraIntent, requestCode);
     }
 }

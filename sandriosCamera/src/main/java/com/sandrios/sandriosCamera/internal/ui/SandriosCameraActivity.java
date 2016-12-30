@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.controller.CameraController;
 import com.sandrios.sandriosCamera.internal.controller.view.CameraView;
 import com.sandrios.sandriosCamera.internal.ui.view.AspectFrameLayout;
@@ -30,9 +30,9 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
 
     protected AspectFrameLayout previewContainer;
     protected ViewGroup userContainer;
-    @SandriosCameraConfiguration.SensorPosition
-    protected int sensorPosition = SandriosCameraConfiguration.SENSOR_POSITION_UNSPECIFIED;
-    @SandriosCameraConfiguration.DeviceDefaultOrientation
+    @CameraConfiguration.SensorPosition
+    protected int sensorPosition = CameraConfiguration.SENSOR_POSITION_UNSPECIFIED;
+    @CameraConfiguration.DeviceDefaultOrientation
     protected int deviceDefaultOrientation;
     private SensorManager sensorManager = null;
     private CameraController<CameraId> cameraController;
@@ -49,9 +49,9 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
         int defaultOrientation = Utils.getDeviceDefaultOrientation(this);
 
         if (defaultOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            deviceDefaultOrientation = SandriosCameraConfiguration.ORIENTATION_LANDSCAPE;
+            deviceDefaultOrientation = CameraConfiguration.ORIENTATION_LANDSCAPE;
         } else if (defaultOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            deviceDefaultOrientation = SandriosCameraConfiguration.ORIENTATION_PORTRAIT;
+            deviceDefaultOrientation = CameraConfiguration.ORIENTATION_PORTRAIT;
         }
 
         View decorView = getWindow().getDecorView();
@@ -131,22 +131,22 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
                 if (sensorEvent.values[0] < 4 && sensorEvent.values[0] > -4) {
                     if (sensorEvent.values[1] > 0) {
                         // UP
-                        sensorPosition = SandriosCameraConfiguration.SENSOR_POSITION_UP;
-                        degrees = deviceDefaultOrientation == SandriosCameraConfiguration.ORIENTATION_PORTRAIT ? 0 : 90;
+                        sensorPosition = CameraConfiguration.SENSOR_POSITION_UP;
+                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 0 : 90;
                     } else if (sensorEvent.values[1] < 0) {
                         // UP SIDE DOWN
-                        sensorPosition = SandriosCameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN;
-                        degrees = deviceDefaultOrientation == SandriosCameraConfiguration.ORIENTATION_PORTRAIT ? 180 : 270;
+                        sensorPosition = CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN;
+                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 180 : 270;
                     }
                 } else if (sensorEvent.values[1] < 4 && sensorEvent.values[1] > -4) {
                     if (sensorEvent.values[0] > 0) {
                         // LEFT
-                        sensorPosition = SandriosCameraConfiguration.SENSOR_POSITION_LEFT;
-                        degrees = deviceDefaultOrientation == SandriosCameraConfiguration.ORIENTATION_PORTRAIT ? 90 : 180;
+                        sensorPosition = CameraConfiguration.SENSOR_POSITION_LEFT;
+                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 90 : 180;
                     } else if (sensorEvent.values[0] < 0) {
                         // RIGHT
-                        sensorPosition = SandriosCameraConfiguration.SENSOR_POSITION_RIGHT;
-                        degrees = deviceDefaultOrientation == SandriosCameraConfiguration.ORIENTATION_PORTRAIT ? 270 : 0;
+                        sensorPosition = CameraConfiguration.SENSOR_POSITION_RIGHT;
+                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 270 : 0;
                     }
                 }
                 onScreenRotation(degrees);

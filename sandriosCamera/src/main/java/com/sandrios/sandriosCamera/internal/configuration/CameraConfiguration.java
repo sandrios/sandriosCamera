@@ -1,9 +1,6 @@
 package com.sandrios.sandriosCamera.internal.configuration;
 
-import android.app.Activity;
 import android.support.annotation.IntDef;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-public final class SandriosCameraConfiguration {
+public final class CameraConfiguration {
 
     public static final int MEDIA_QUALITY_AUTO = 10;
     public static final int MEDIA_QUALITY_LOWEST = 15;
@@ -22,7 +19,7 @@ public final class SandriosCameraConfiguration {
 
     public static final int MEDIA_ACTION_VIDEO = 100;
     public static final int MEDIA_ACTION_PHOTO = 101;
-    public static final int MEDIA_ACTION_UNSPECIFIED = 102;
+    public static final int MEDIA_ACTION_BOTH = 102;
 
     public static final int CAMERA_FACE_FRONT = 0x6;
     public static final int CAMERA_FACE_REAR = 0x7;
@@ -62,7 +59,7 @@ public final class SandriosCameraConfiguration {
     public @interface MediaQuality {
     }
 
-    @IntDef({MEDIA_ACTION_VIDEO, MEDIA_ACTION_PHOTO, MEDIA_ACTION_UNSPECIFIED})
+    @IntDef({MEDIA_ACTION_VIDEO, MEDIA_ACTION_PHOTO, MEDIA_ACTION_BOTH})
     @Retention(RetentionPolicy.SOURCE)
     public @interface MediaAction {
     }

@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.TextureView;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.controller.CameraController;
 import com.sandrios.sandriosCamera.internal.controller.view.CameraView;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;
@@ -69,13 +69,13 @@ public class Camera2Controller implements CameraController<String>,
 
     @Override
     public void takePhoto() {
-        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), SandriosCameraConfiguration.MEDIA_ACTION_PHOTO);
+        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), CameraConfiguration.MEDIA_ACTION_PHOTO);
         camera2Manager.takePhoto(outputFile, this);
     }
 
     @Override
     public void startVideoRecord() {
-        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), SandriosCameraConfiguration.MEDIA_ACTION_VIDEO);
+        outputFile = CameraHelper.getOutputMediaFile(cameraView.getActivity(), CameraConfiguration.MEDIA_ACTION_VIDEO);
         camera2Manager.startVideoRecord(outputFile, this);
     }
 
@@ -90,7 +90,7 @@ public class Camera2Controller implements CameraController<String>,
     }
 
     @Override
-    public void switchCamera(final @SandriosCameraConfiguration.CameraFace int cameraFace) {
+    public void switchCamera(final @CameraConfiguration.CameraFace int cameraFace) {
         currentCameraId = camera2Manager.getCurrentCameraId().equals(camera2Manager.getFaceFrontCameraId()) ?
                 camera2Manager.getFaceBackCameraId() : camera2Manager.getFaceFrontCameraId();
 
@@ -98,7 +98,7 @@ public class Camera2Controller implements CameraController<String>,
     }
 
     @Override
-    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+    public void setFlashMode(@CameraConfiguration.FlashMode int flashMode) {
         camera2Manager.setFlashMode(flashMode);
     }
 
@@ -129,7 +129,7 @@ public class Camera2Controller implements CameraController<String>,
 
     @Override
     public void onCameraOpened(String openedCameraId, Size previewSize, TextureView.SurfaceTextureListener surfaceTextureListener) {
-        cameraView.updateUiForMediaAction(SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED);
+        cameraView.updateUiForMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH);
         cameraView.updateCameraPreview(previewSize, new AutoFitTextureView(cameraView.getActivity(), surfaceTextureListener));
         cameraView.updateCameraSwitcher(camera2Manager.getNumberOfCameras());
     }

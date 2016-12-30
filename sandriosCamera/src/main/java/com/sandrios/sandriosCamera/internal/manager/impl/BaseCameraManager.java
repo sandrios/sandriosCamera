@@ -11,7 +11,7 @@ import android.os.Process;
 import android.util.Log;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 
@@ -67,9 +67,9 @@ abstract class BaseCameraManager<CameraId, SurfaceListener>
 
     protected abstract void onMaxFileSizeReached();
 
-    protected abstract int getPhotoOrientation(@SandriosCameraConfiguration.SensorPosition int sensorPosition);
+    protected abstract int getPhotoOrientation(@CameraConfiguration.SensorPosition int sensorPosition);
 
-    protected abstract int getVideoOrientation(@SandriosCameraConfiguration.SensorPosition int sensorPosition);
+    protected abstract int getVideoOrientation(@CameraConfiguration.SensorPosition int sensorPosition);
 
     protected void releaseVideoRecorder() {
         try {

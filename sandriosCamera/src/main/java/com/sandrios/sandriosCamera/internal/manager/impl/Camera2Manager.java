@@ -28,7 +28,7 @@ import android.view.TextureView;
 import android.view.WindowManager;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraCloseListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraOpenListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraPhotoListener;
@@ -236,7 +236,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     }
 
     @Override
-    public void setFlashMode(@SandriosCameraConfiguration.FlashMode int flashMode) {
+    public void setFlashMode(@CameraConfiguration.FlashMode int flashMode) {
         setFlashModeAndBuildPreviewRequest(flashMode);
     }
 
@@ -255,7 +255,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     }
 
     @Override
-    public Size getPhotoSizeForQuality(@SandriosCameraConfiguration.MediaQuality int mediaQuality) {
+    public Size getPhotoSizeForQuality(@CameraConfiguration.MediaQuality int mediaQuality) {
         StreamConfigurationMap map = currentCameraId.equals(faceBackCameraId) ? backCameraStreamConfigurationMap : frontCameraStreamConfigurationMap;
         return CameraHelper.getPictureSize(Size.fromArray2(map.getOutputSizes(ImageFormat.JPEG)), mediaQuality);
     }
@@ -403,27 +403,27 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     }
 
     @Override
-    protected int getPhotoOrientation(@SandriosCameraConfiguration.SensorPosition int sensorPosition) {
+    protected int getPhotoOrientation(@CameraConfiguration.SensorPosition int sensorPosition) {
         return getVideoOrientation(sensorPosition);
     }
 
     @Override
-    protected int getVideoOrientation(@SandriosCameraConfiguration.SensorPosition int sensorPosition) {
+    protected int getVideoOrientation(@CameraConfiguration.SensorPosition int sensorPosition) {
         int degrees = 0;
         switch (sensorPosition) {
-            case SandriosCameraConfiguration.SENSOR_POSITION_UP:
+            case CameraConfiguration.SENSOR_POSITION_UP:
                 degrees = 0;
                 break; // Natural orientation
-            case SandriosCameraConfiguration.SENSOR_POSITION_LEFT:
+            case CameraConfiguration.SENSOR_POSITION_LEFT:
                 degrees = 90;
                 break; // Landscape left
-            case SandriosCameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN:
+            case CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN:
                 degrees = 180;
                 break;// Upside down
-            case SandriosCameraConfiguration.SENSOR_POSITION_RIGHT:
+            case CameraConfiguration.SENSOR_POSITION_RIGHT:
                 degrees = 270;
                 break;// Landscape right
-            case SandriosCameraConfiguration.SENSOR_POSITION_UNSPECIFIED:
+            case CameraConfiguration.SENSOR_POSITION_UNSPECIFIED:
                 break;
         }
 
@@ -476,7 +476,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
                 backCameraStreamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
             StreamConfigurationMap map = currentCameraId.equals(faceBackCameraId) ? backCameraStreamConfigurationMap : frontCameraStreamConfigurationMap;
-            if (configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO) {
+            if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_AUTO) {
                 camcorderProfile = CameraHelper.getCamcorderProfile(currentCameraId, configurationProvider.getVideoFileSize(), configurationProvider.getMinimumVideoDuration());
             } else
                 camcorderProfile = CameraHelper.getCamcorderProfile(configurationProvider.getMediaQuality(), currentCameraId);
@@ -492,15 +492,15 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
                 videoSize = CameraHelper.getSizeWithClosestRatio(Size.fromArray2(map.getOutputSizes(MediaRecorder.class)), camcorderProfile.videoFrameWidth, camcorderProfile.videoFrameHeight);
 
             photoSize = CameraHelper.getPictureSize(Size.fromArray2(map.getOutputSizes(ImageFormat.JPEG)),
-                    configurationProvider.getMediaQuality() == SandriosCameraConfiguration.MEDIA_QUALITY_AUTO
-                            ? SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST : configurationProvider.getMediaQuality());
+                    configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_AUTO
+                            ? CameraConfiguration.MEDIA_QUALITY_HIGHEST : configurationProvider.getMediaQuality());
 
             imageReader = ImageReader.newInstance(photoSize.getWidth(), photoSize.getHeight(),
                     ImageFormat.JPEG, 2);
             imageReader.setOnImageAvailableListener(this, backgroundHandler);
 
-            if (configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_PHOTO
-                    || configurationProvider.getMediaAction() == SandriosCameraConfiguration.MEDIA_ACTION_UNSPECIFIED) {
+            if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO
+                    || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH) {
 
                 if (windowSize.getHeight() * windowSize.getWidth() > photoSize.getWidth() * photoSize.getHeight()) {
                     previewSize = CameraHelper.getOptimalPreviewSize(Size.fromArray2(map.getOutputSizes(SurfaceTexture.class)), photoSize.getWidth(), photoSize.getHeight());
@@ -666,19 +666,19 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
         }
     }
 
-    private void setFlashModeAndBuildPreviewRequest(@SandriosCameraConfiguration.FlashMode int flashMode) {
+    private void setFlashModeAndBuildPreviewRequest(@CameraConfiguration.FlashMode int flashMode) {
         try {
 
             switch (flashMode) {
-                case SandriosCameraConfiguration.FLASH_MODE_AUTO:
+                case CameraConfiguration.FLASH_MODE_AUTO:
                     previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
                     previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_SINGLE);
                     break;
-                case SandriosCameraConfiguration.FLASH_MODE_ON:
+                case CameraConfiguration.FLASH_MODE_ON:
                     previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
                     previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_SINGLE);
                     break;
-                case SandriosCameraConfiguration.FLASH_MODE_OFF:
+                case CameraConfiguration.FLASH_MODE_OFF:
                     previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
                     previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_OFF);
                     break;

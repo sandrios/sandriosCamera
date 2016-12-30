@@ -5,7 +5,7 @@ import android.media.CamcorderProfile;
 import android.os.Build;
 
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
-import com.sandrios.sandriosCamera.internal.configuration.SandriosCameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.controller.CameraController;
 import com.sandrios.sandriosCamera.internal.controller.impl.Camera2Controller;
 import com.sandrios.sandriosCamera.internal.controller.view.CameraView;
@@ -33,20 +33,20 @@ public class Camera2Activity extends BaseSandriosActivity<String> {
         List<CharSequence> videoQualities = new ArrayList<>();
 
         if (getMinimumVideoDuration() > 0)
-            videoQualities.add(new VideoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_AUTO, CameraHelper.getCamcorderProfile(SandriosCameraConfiguration.MEDIA_QUALITY_AUTO, getCameraController().getCurrentCameraId()), getMinimumVideoDuration()));
+            videoQualities.add(new VideoQualityOption(CameraConfiguration.MEDIA_QUALITY_AUTO, CameraHelper.getCamcorderProfile(CameraConfiguration.MEDIA_QUALITY_AUTO, getCameraController().getCurrentCameraId()), getMinimumVideoDuration()));
 
 
-        CamcorderProfile camcorderProfile = CameraHelper.getCamcorderProfile(SandriosCameraConfiguration.MEDIA_QUALITY_HIGH, getCameraController().getCurrentCameraId());
+        CamcorderProfile camcorderProfile = CameraHelper.getCamcorderProfile(CameraConfiguration.MEDIA_QUALITY_HIGH, getCameraController().getCurrentCameraId());
         double videoDuration = CameraHelper.calculateApproximateVideoDuration(camcorderProfile, getVideoFileSize());
-        videoQualities.add(new VideoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_HIGH, camcorderProfile, videoDuration));
+        videoQualities.add(new VideoQualityOption(CameraConfiguration.MEDIA_QUALITY_HIGH, camcorderProfile, videoDuration));
 
-        camcorderProfile = CameraHelper.getCamcorderProfile(SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM, getCameraController().getCurrentCameraId());
+        camcorderProfile = CameraHelper.getCamcorderProfile(CameraConfiguration.MEDIA_QUALITY_MEDIUM, getCameraController().getCurrentCameraId());
         videoDuration = CameraHelper.calculateApproximateVideoDuration(camcorderProfile, getVideoFileSize());
-        videoQualities.add(new VideoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM, camcorderProfile, videoDuration));
+        videoQualities.add(new VideoQualityOption(CameraConfiguration.MEDIA_QUALITY_MEDIUM, camcorderProfile, videoDuration));
 
-        camcorderProfile = CameraHelper.getCamcorderProfile(SandriosCameraConfiguration.MEDIA_QUALITY_LOW, getCameraController().getCurrentCameraId());
+        camcorderProfile = CameraHelper.getCamcorderProfile(CameraConfiguration.MEDIA_QUALITY_LOW, getCameraController().getCurrentCameraId());
         videoDuration = CameraHelper.calculateApproximateVideoDuration(camcorderProfile, getVideoFileSize());
-        videoQualities.add(new VideoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_LOW, camcorderProfile, videoDuration));
+        videoQualities.add(new VideoQualityOption(CameraConfiguration.MEDIA_QUALITY_LOW, camcorderProfile, videoDuration));
 
         CharSequence[] array = new CharSequence[videoQualities.size()];
         videoQualities.toArray(array);
@@ -57,10 +57,10 @@ public class Camera2Activity extends BaseSandriosActivity<String> {
     @Override
     protected CharSequence[] getPhotoQualityOptions() {
         List<CharSequence> photoQualities = new ArrayList<>();
-        photoQualities.add(new PhotoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST, getCameraController().getCameraManager().getPhotoSizeForQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGHEST)));
-        photoQualities.add(new PhotoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_HIGH, getCameraController().getCameraManager().getPhotoSizeForQuality(SandriosCameraConfiguration.MEDIA_QUALITY_HIGH)));
-        photoQualities.add(new PhotoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM, getCameraController().getCameraManager().getPhotoSizeForQuality(SandriosCameraConfiguration.MEDIA_QUALITY_MEDIUM)));
-        photoQualities.add(new PhotoQualityOption(SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST, getCameraController().getCameraManager().getPhotoSizeForQuality(SandriosCameraConfiguration.MEDIA_QUALITY_LOWEST)));
+        photoQualities.add(new PhotoQualityOption(CameraConfiguration.MEDIA_QUALITY_HIGHEST, getCameraController().getCameraManager().getPhotoSizeForQuality(CameraConfiguration.MEDIA_QUALITY_HIGHEST)));
+        photoQualities.add(new PhotoQualityOption(CameraConfiguration.MEDIA_QUALITY_HIGH, getCameraController().getCameraManager().getPhotoSizeForQuality(CameraConfiguration.MEDIA_QUALITY_HIGH)));
+        photoQualities.add(new PhotoQualityOption(CameraConfiguration.MEDIA_QUALITY_MEDIUM, getCameraController().getCameraManager().getPhotoSizeForQuality(CameraConfiguration.MEDIA_QUALITY_MEDIUM)));
+        photoQualities.add(new PhotoQualityOption(CameraConfiguration.MEDIA_QUALITY_LOWEST, getCameraController().getCameraManager().getPhotoSizeForQuality(CameraConfiguration.MEDIA_QUALITY_LOWEST)));
 
         CharSequence[] array = new CharSequence[photoQualities.size()];
         photoQualities.toArray(array);
