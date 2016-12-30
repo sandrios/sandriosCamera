@@ -31,9 +31,8 @@ android {
         targetSdkVersion 25
         versionCode PUBLISH_CODE
         versionName PUBLISH_VERSION
-
-        vectorDrawables.useSupportLibrary = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
