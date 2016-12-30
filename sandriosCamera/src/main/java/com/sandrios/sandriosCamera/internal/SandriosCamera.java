@@ -15,28 +15,41 @@ import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
 import java.util.ArrayList;
 
 /**
+ * Sandrios Camera Builder Class
  * Created by Arpit Gandhi on 7/6/16.
  */
 public class SandriosCamera {
 
-    private Activity activity;
+    private SandriosCamera mInstance = null;
+    private Activity mActivity;
     private int requestCode;
-    boolean showPicker;
+    private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
+    private boolean showPicker = true;
 
     /***
-     * Creates SandriosCamera instance with default configuration set to photo with medium quality.
+     * Creates SandriosCamera instance with default configuration set to both.
      *
-     * @param activity    - fromList which request was invoked
-     * @param requestCode - request code which will return in onActivityForResult
+     * @param activity - fromList which request was invoked
+     * @param code     - request code which will return in onActivityForResult
      */
-    public SandriosCamera(Activity activity, @IntRange(from = 0) int requestCode, boolean showPicker) {
-        this.activity = activity;
-        this.requestCode = requestCode;
+    public SandriosCamera(Activity activity, @IntRange(from = 0) int code) {
+        mInstance = this;
+        mActivity = activity;
+        requestCode = code;
+    }
+
+    public SandriosCamera setShowPicker(boolean showPicker) {
         this.showPicker = showPicker;
+        return mInstance;
+    }
+
+    public SandriosCamera setMediaAction(int mediaAction) {
+        this.mediaAction = mediaAction;
+        return mInstance;
     }
 
     public void launchCamera() {
-        new TedPermission(activity)
+        new TedPermission(mActivity)
                 .setPermissionListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted() {
@@ -57,14 +70,14 @@ public class SandriosCamera {
 
     private void launchIntent() {
         Intent cameraIntent;
-        if (CameraHelper.hasCamera2(activity)) {
-            cameraIntent = new Intent(activity, Camera2Activity.class);
+        if (CameraHelper.hasCamera2(mActivity)) {
+            cameraIntent = new Intent(mActivity, Camera2Activity.class);
         } else {
-            cameraIntent = new Intent(activity, Camera1Activity.class);
+            cameraIntent = new Intent(mActivity, Camera1Activity.class);
         }
         cameraIntent.putExtra(CameraConfiguration.Arguments.REQUEST_CODE, requestCode);
         cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
-        cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, CameraConfiguration.MEDIA_ACTION_BOTH);
-        activity.startActivityForResult(cameraIntent, requestCode);
+        cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
+        mActivity.startActivityForResult(cameraIntent, requestCode);
     }
 }

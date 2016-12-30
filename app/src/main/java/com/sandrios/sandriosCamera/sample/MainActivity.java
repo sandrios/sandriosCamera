@@ -25,11 +25,15 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.withPicker:
-                    new SandriosCamera(activity, CAPTURE_MEDIA, true)
+                    new SandriosCamera(activity, CAPTURE_MEDIA)
+                            .setShowPicker(true)
+                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO)
                             .launchCamera();
                     break;
                 case R.id.withoutPicker:
-                    new SandriosCamera(activity, CAPTURE_MEDIA, false)
+                    new SandriosCamera(activity, CAPTURE_MEDIA)
+                            .setShowPicker(false)
+                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
                             .launchCamera();
                     break;
             }

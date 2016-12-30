@@ -84,8 +84,10 @@ Please check the sample project included for more examples:
 
   // showImagePicker is boolean value: Default is true
   private void launchCamera() {
-      new SandriosCamera(activity, CAPTURE_MEDIA, showImagePicker)
-                                 .launchCamera();
+      new SandriosCamera(activity, CAPTURE_MEDIA)
+                                  .setShowPicker(showImagePicker)
+                                  .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO) // default is CameraConfiguration.MEDIA_ACTION_BOTH
+                                  .launchCamera();
   }
 
   @Override
