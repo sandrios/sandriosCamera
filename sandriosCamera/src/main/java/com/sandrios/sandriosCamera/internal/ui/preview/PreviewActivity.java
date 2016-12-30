@@ -15,13 +15,13 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.imageCropper.CropperView;
 import com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity;
 import com.sandrios.sandriosCamera.internal.ui.view.AspectFrameLayout;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
@@ -48,7 +48,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private SurfaceView surfaceView;
     private FrameLayout photoPreviewContainer;
-    private ImageView imagePreview;
+    private CropperView imagePreview;
     private ViewGroup buttonPanel;
     private AspectFrameLayout videoPreviewContainer;
     private View cropMediaAction;
@@ -188,6 +188,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         videoPreviewContainer = (AspectFrameLayout) findViewById(R.id.previewAspectFrameLayout);
         photoPreviewContainer = (FrameLayout) findViewById(R.id.photo_preview_container);
+        imagePreview = (CropperView) findViewById(R.id.image_view);
         buttonPanel = (ViewGroup) findViewById(R.id.preview_control_panel);
         View confirmMediaResult = findViewById(R.id.confirm_media_result);
         View reTakeMedia = findViewById(R.id.re_take_media);
@@ -267,12 +268,9 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showImagePreview() {
-        imagePreview = new ImageView(this);
         Glide.with(this)
                 .load(previewFilePath)
-                .into(imagePreview);
-        photoPreviewContainer.removeAllViews();
-        photoPreviewContainer.addView(imagePreview);
+                .into(imagePreview.mImageView);
     }
 
     private void displayVideo(Bundle savedInstanceState) {
