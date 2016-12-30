@@ -1,6 +1,6 @@
 general:
     artifacts:
-          - /home/ubuntu/sandriosCamera/app/build/outputs/apk/
+          - /home/ubuntu/sandriosCamera/sandriosCamera/build/outputs/aar/
 
 machine:
     environment:
@@ -23,5 +23,4 @@ dependencies:
         - /usr/local/android-sdk-linux/extras/android/m2repository
 test:
     override:
-        - ./gradlew assemble
-        - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+        - ./gradlew
