@@ -4,7 +4,7 @@
 
 general:
     artifacts:
-        - /home/ubuntu/your-app-name/app/build/outputs/apk/
+        - /home/ubuntu/sandriosCamera/app/build/outputs/apk/
 
 machine:
     environment:
