@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.withPicker:
                     new SandriosCamera(activity, CAPTURE_MEDIA)
                             .setShowPicker(true)
-                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO)
+                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
                             .launchCamera();
                     break;
                 case R.id.withoutPicker:
