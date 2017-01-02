@@ -69,15 +69,17 @@ public class SandriosCamera {
     }
 
     private void launchIntent() {
-        Intent cameraIntent;
-        if (CameraHelper.hasCamera2(mActivity)) {
-            cameraIntent = new Intent(mActivity, Camera2Activity.class);
-        } else {
-            cameraIntent = new Intent(mActivity, Camera1Activity.class);
+        if (CameraHelper.hasCamera(mActivity)) {
+            Intent cameraIntent;
+            if (CameraHelper.hasCamera2(mActivity)) {
+                cameraIntent = new Intent(mActivity, Camera2Activity.class);
+            } else {
+                cameraIntent = new Intent(mActivity, Camera1Activity.class);
+            }
+            cameraIntent.putExtra(CameraConfiguration.Arguments.REQUEST_CODE, requestCode);
+            cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
+            cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
+            mActivity.startActivityForResult(cameraIntent, requestCode);
         }
-        cameraIntent.putExtra(CameraConfiguration.Arguments.REQUEST_CODE, requestCode);
-        cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
-        cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
-        mActivity.startActivityForResult(cameraIntent, requestCode);
     }
 }
