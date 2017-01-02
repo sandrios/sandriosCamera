@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
@@ -52,7 +51,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     private ViewGroup buttonPanel;
     private AspectFrameLayout videoPreviewContainer;
     private View cropMediaAction;
-    private TextView ratioChanger;
 
     private MediaController mediaController;
     private MediaPlayer mediaPlayer;
@@ -194,17 +192,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         View reTakeMedia = findViewById(R.id.re_take_media);
         View cancelMediaAction = findViewById(R.id.cancel_media_action);
         cropMediaAction = findViewById(R.id.crop_image);
-        ratioChanger = (TextView) findViewById(R.id.ratio_image);
-        ratioChanger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentRatioIndex = (currentRatioIndex + 1) % ratios.length;
-                ratioChanger.setText(ratioLabels[currentRatioIndex]);
-            }
-        });
-
-        cropMediaAction.setVisibility(View.GONE);
-        ratioChanger.setVisibility(View.GONE);
 
         if (cropMediaAction != null)
             cropMediaAction.setOnClickListener(new View.OnClickListener() {
@@ -263,11 +250,12 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     private void displayImage() {
         videoPreviewContainer.setVisibility(View.GONE);
         surfaceView.setVisibility(View.GONE);
+        cropMediaAction.setVisibility(View.GONE);
         showImagePreview();
-        ratioChanger.setText(ratioLabels[currentRatioIndex]);
     }
 
     private void showImagePreview() {
+        cropMediaAction.setVisibility(View.VISIBLE);
         Glide.with(this)
                 .load(previewFilePath)
                 .into(imagePreview.mImageView);
@@ -275,7 +263,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private void displayVideo(Bundle savedInstanceState) {
         cropMediaAction.setVisibility(View.GONE);
-        ratioChanger.setVisibility(View.GONE);
         if (savedInstanceState != null) {
             loadVideoParams(savedInstanceState);
         }
