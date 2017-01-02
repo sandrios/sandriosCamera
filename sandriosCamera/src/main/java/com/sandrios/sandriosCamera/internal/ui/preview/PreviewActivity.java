@@ -288,7 +288,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void displayVideo(Bundle savedInstanceState) {
-        findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
+        findViewById(R.id.crop_image).setVisibility(View.GONE);
         if (savedInstanceState != null) {
             loadVideoParams(savedInstanceState);
         }
@@ -359,7 +359,10 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         Intent resultIntent = new Intent();
         if (view.getId() == R.id.confirm_media_result) {
-            resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_CONFIRM).putExtra(FILE_PATH_ARG, previewFilePath);
+            if (isCroppingEnabled)
+                cropperView.cropImage(previewFilePath);
+            resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_CONFIRM);
+            resultIntent.putExtra(FILE_PATH_ARG, previewFilePath);
         } else if (view.getId() == R.id.re_take_media) {
             deleteMediaFile();
             resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_RETAKE);

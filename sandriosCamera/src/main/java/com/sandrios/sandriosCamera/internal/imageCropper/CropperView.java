@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -213,14 +212,11 @@ public class CropperView extends FrameLayout {
         mImageView.setImageBitmap(mBitmap);
     }
 
-    public void cropImage() {
-
+    public void cropImage(String filepath) {
         Bitmap bitmap = mImageView.getCroppedBitmap();
-
         if (bitmap != null) {
-
             try {
-                BitmapUtils.writeBitmapToFile(bitmap, new File(Environment.getExternalStorageDirectory() + "/crop_test.jpg"), 90);
+                BitmapUtils.writeBitmapToFile(bitmap, new File(filepath), 90);
             } catch (IOException e) {
                 e.printStackTrace();
             }
