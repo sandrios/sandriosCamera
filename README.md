@@ -103,7 +103,9 @@ Please check the sample project included for more examples:
 
 Status
 ------
-- Flash Mode (WIP)
+
+- Image Crop Added
+- Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!
 
