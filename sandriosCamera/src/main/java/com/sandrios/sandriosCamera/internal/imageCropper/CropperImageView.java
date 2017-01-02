@@ -130,9 +130,6 @@ public class CropperImageView extends ImageView {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (DEBUG) {
-            Log.i(TAG, "onLayout: " + changed + " [" + left + ", " + top + ", " + right + ", " + bottom + "]");
-        }
 
         if (changed || mFirstRender) {
 
@@ -200,10 +197,6 @@ public class CropperImageView extends ImageView {
             mBitmap = null;
             super.setImageBitmap(null);
             return;
-        }
-
-        if (bm.getHeight() > 1280 || bm.getWidth() > 1280) {
-            Log.w(TAG, "Bitmap size greater than 1280. This might cause memory issues");
         }
 
         mBitmap = bm;

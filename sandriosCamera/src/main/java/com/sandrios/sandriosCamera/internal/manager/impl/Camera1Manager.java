@@ -11,8 +11,8 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
-import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraCloseListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraOpenListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraPhotoListener;
@@ -151,7 +151,6 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
             backgroundHandler.post(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
                         if (videoRecorder != null) videoRecorder.stop();
                     } catch (Exception ignore) {

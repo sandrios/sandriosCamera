@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,7 +16,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
@@ -47,10 +50,12 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private SurfaceView surfaceView;
     private FrameLayout photoPreviewContainer;
-    private CropperView imagePreview;
+    private ImageView imagePreview;
+    private CropperView cropperView;
     private ViewGroup buttonPanel;
     private AspectFrameLayout videoPreviewContainer;
-    private View cropMediaAction;
+    private TextView cropMediaAction;
+    private ImageView cropIcon;
 
     private MediaController mediaController;
     private MediaPlayer mediaPlayer;
@@ -58,9 +63,8 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     private int currentPlaybackPosition = 0;
     private boolean isVideoPlaying = true;
 
-    private int currentRatioIndex = 0;
-    private float[] ratios;
-    private String[] ratioLabels;
+    private boolean isCroppingEnabled = false;
+
     private MediaController.MediaPlayerControl MediaPlayerControlImpl = new MediaController.MediaPlayerControl() {
         @Override
         public void start() {
@@ -164,10 +168,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
 
-        String originalRatioLabel = getString(R.string.preview_controls_original_ratio_label);
-        ratioLabels = new String[]{originalRatioLabel, "1:1", "4:3", "16:9"};
-        ratios = new float[]{0f, 1f, 4f / 3f, 16f / 9f};
-
         surfaceView = (SurfaceView) findViewById(R.id.video_preview);
         surfaceView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -186,19 +186,21 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         videoPreviewContainer = (AspectFrameLayout) findViewById(R.id.previewAspectFrameLayout);
         photoPreviewContainer = (FrameLayout) findViewById(R.id.photo_preview_container);
-        imagePreview = (CropperView) findViewById(R.id.image_view);
+        cropperView = (CropperView) findViewById(R.id.crop_image_view);
+        imagePreview = (ImageView) findViewById(R.id.image_view);
         buttonPanel = (ViewGroup) findViewById(R.id.preview_control_panel);
         View confirmMediaResult = findViewById(R.id.confirm_media_result);
         View reTakeMedia = findViewById(R.id.re_take_media);
         View cancelMediaAction = findViewById(R.id.cancel_media_action);
-        cropMediaAction = findViewById(R.id.crop_image);
+        cropMediaAction = (TextView) findViewById(R.id.crop_text);
+        cropIcon = (ImageView) findViewById(R.id.crop_icon);
 
-        if (cropMediaAction != null)
-            cropMediaAction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                }
-            });
+        findViewById(R.id.crop_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleCropView();
+            }
+        });
 
         if (confirmMediaResult != null)
             confirmMediaResult.setOnClickListener(this);
@@ -248,21 +250,45 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void displayImage() {
+        findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
         videoPreviewContainer.setVisibility(View.GONE);
         surfaceView.setVisibility(View.GONE);
-        cropMediaAction.setVisibility(View.GONE);
         showImagePreview();
     }
 
     private void showImagePreview() {
-        cropMediaAction.setVisibility(View.VISIBLE);
+        cropperView.loadNewImage(previewFilePath);
         Glide.with(this)
                 .load(previewFilePath)
-                .into(imagePreview.mImageView);
+                .into(imagePreview);
+        findViewById(R.id.rotate_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropperView.rotateImage();
+            }
+        });
+    }
+
+    private void toggleCropView() {
+        if (isCroppingEnabled) {
+            findViewById(R.id.rotate_button).setVisibility(View.GONE);
+            findViewById(R.id.crop_frame).setVisibility(View.GONE);
+            imagePreview.setVisibility(View.VISIBLE);
+            cropIcon.setImageResource(R.drawable.ic_crop_white_24dp);
+            cropMediaAction.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+            isCroppingEnabled = false;
+        } else {
+            findViewById(R.id.rotate_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.crop_frame).setVisibility(View.VISIBLE);
+            imagePreview.setVisibility(View.GONE);
+            cropIcon.setImageResource(R.drawable.ic_crop_orange);
+            cropMediaAction.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_light));
+            isCroppingEnabled = true;
+        }
     }
 
     private void displayVideo(Bundle savedInstanceState) {
-        cropMediaAction.setVisibility(View.GONE);
+        findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
         if (savedInstanceState != null) {
             loadVideoParams(savedInstanceState);
         }

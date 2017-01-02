@@ -4,10 +4,17 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Arpit Gandhi (arpitgandhi9)
@@ -17,6 +24,8 @@ public class CropperView extends FrameLayout {
     private static final String TAG = "CropperView";
     public CropperImageView mImageView;
     private CropperGridView mGridView;
+    private Bitmap mBitmap;
+    private boolean isSnappedToCenter = false;
 
     private boolean gestureEnabled = true;
 
@@ -45,7 +54,6 @@ public class CropperView extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
         int orientation = getContext().getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_PORTRAIT ||
@@ -62,7 +70,6 @@ public class CropperView extends FrameLayout {
             setMeasuredDimension(width, height);
 
         }
-
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -175,5 +182,68 @@ public class CropperView extends FrameLayout {
         public void onGestureCompleted() {
             mGridView.setShowGrid(false);
         }
+    }
+
+    public void loadNewImage(String filePath) {
+        Log.i(TAG, "load image: " + filePath);
+        mBitmap = BitmapFactory.decodeFile(filePath);
+        Log.i(TAG, "bitmap: " + mBitmap.getWidth() + " " + mBitmap.getHeight());
+
+        int maxP = Math.max(mBitmap.getWidth(), mBitmap.getHeight());
+        float scale1280 = (float) maxP / 1280;
+
+        if (mImageView.getWidth() != 0) {
+            mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+        } else {
+
+            ViewTreeObserver vto = mImageView.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+                    return true;
+                }
+            });
+
+        }
+
+        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) (mBitmap.getWidth() / scale1280),
+                (int) (mBitmap.getHeight() / scale1280), true);
+        mImageView.setImageBitmap(mBitmap);
+    }
+
+    public void cropImage() {
+
+        Bitmap bitmap = mImageView.getCroppedBitmap();
+
+        if (bitmap != null) {
+
+            try {
+                BitmapUtils.writeBitmapToFile(bitmap, new File(Environment.getExternalStorageDirectory() + "/crop_test.jpg"), 90);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void rotateImage() {
+        if (mBitmap == null) {
+            Log.e(TAG, "bitmap is not loaded yet");
+            return;
+        }
+
+        mBitmap = BitmapUtils.rotateBitmap(mBitmap, 90);
+        mImageView.setImageBitmap(mBitmap);
+    }
+
+    public void snapImage() {
+        if (isSnappedToCenter) {
+            mImageView.cropToCenter();
+        } else {
+            mImageView.fitToCenter();
+        }
+
+        isSnappedToCenter = !isSnappedToCenter;
     }
 }

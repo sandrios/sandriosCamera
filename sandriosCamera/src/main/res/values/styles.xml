@@ -5,9 +5,10 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:padding">8dp</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:textSize">10dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:clickable">true</item>
         <item name="android:textColor">#fafafa</item>
     </style>
@@ -18,10 +19,10 @@
     </style>
 
     <declare-styleable name="CropperView">
-        <attr name="grid_color" format="color"/>
-        <attr name="grid_thickness" format="dimension"/>
-        <attr name="grid_opacity" format="float"/>
-        <attr name="padding_color" format="color"/>
-        <attr name="add_padding_to_make_square" format="boolean"/>
+        <attr name="grid_color" format="color" />
+        <attr name="grid_thickness" format="dimension" />
+        <attr name="grid_opacity" format="float" />
+        <attr name="padding_color" format="color" />
+        <attr name="add_padding_to_make_square" format="boolean" />
     </declare-styleable>
 </resources>
