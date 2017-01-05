@@ -192,7 +192,7 @@ public class CropperView extends FrameLayout {
         float scale1280 = (float) maxP / 1280;
 
         if (mImageView.getWidth() != 0) {
-            mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+            mImageView.setMaxZoom(mImageView.getWidth() / 120f);
         } else {
 
             ViewTreeObserver vto = mImageView.getViewTreeObserver();
@@ -200,7 +200,7 @@ public class CropperView extends FrameLayout {
                 @Override
                 public boolean onPreDraw() {
                     mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+                    mImageView.setMaxZoom(mImageView.getWidth() / 120f);
                     return true;
                 }
             });
