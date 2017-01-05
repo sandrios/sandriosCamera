@@ -86,7 +86,7 @@ Please check the sample project included for more examples:
   private void launchCamera() {
       new SandriosCamera(activity, CAPTURE_MEDIA)
                                   .setShowPicker(showImagePicker)
-                                  .setVideoFileSize(10) //File Size in MB: Default is no limit
+                                  .setVideoFileSize(15) //File Size in MB: Default is no limit
                                   .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO) // default is CameraConfiguration.MEDIA_ACTION_BOTH
                                   .launchCamera();
   }
