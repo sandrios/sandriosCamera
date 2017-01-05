@@ -188,7 +188,6 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
             @Override
             public void run() {
                 if (context == null || configurationProvider == null) {
-                    Log.e(TAG, "openCamera: ");
                     if (cameraOpenListener != null) {
                         uiHandler.post(new Runnable() {
                             @Override
@@ -203,7 +202,6 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
                 try {
                     manager.openCamera(currentCameraId, stateCallback, backgroundHandler);
                 } catch (Exception e) {
-                    Log.e(TAG, "openCamera: ", e);
                     if (cameraOpenListener != null) {
                         uiHandler.post(new Runnable() {
                             @Override

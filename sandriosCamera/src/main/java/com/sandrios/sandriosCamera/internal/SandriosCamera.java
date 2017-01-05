@@ -26,7 +26,7 @@ public class SandriosCamera {
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
     private boolean enableImageCrop = false;
-    private int videoSize = -1;
+    private long videoSize = -1;
 
     /***
      * Creates SandriosCamera instance with default configuration set to both.
