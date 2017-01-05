@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.withPicker:
                     new SandriosCamera(activity, CAPTURE_MEDIA)
                             .setShowPicker(true)
+                            .setVideoFileSize(10)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
                             .enableImageCropping(true)
                             .launchCamera();

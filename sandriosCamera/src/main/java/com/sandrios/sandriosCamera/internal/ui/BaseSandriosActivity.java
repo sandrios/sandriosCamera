@@ -44,7 +44,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     @CameraConfiguration.MediaAction
     protected int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     @CameraConfiguration.MediaQuality
-    protected int mediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
+    protected int mediaQuality = CameraConfiguration.MEDIA_QUALITY_AUTO;
     @CameraConfiguration.MediaQuality
     protected int passedMediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
     protected CharSequence[] videoQualities;
