@@ -29,7 +29,8 @@
             android:id="@+id/crop_frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:visibility="gone">
 
             <com.sandrios.sandriosCamera.internal.imageCropper.CropperView
                 android:id="@+id/crop_image_view"
@@ -69,7 +70,7 @@
             android:layout_height="match_parent"
             android:background="#ff282828"
             android:scaleType="centerInside"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </FrameLayout>
 
     <LinearLayout

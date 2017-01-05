@@ -232,17 +232,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
                 displayImage();
             } else finish();
         }
-
-        if (showCrop)
-            findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
-        else findViewById(R.id.crop_image).setVisibility(View.GONE);
-
-        findViewById(R.id.snap_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cropperView.snapImage();
-            }
-        });
     }
 
     @Override
@@ -265,7 +254,10 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void displayImage() {
-        findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
+        if (showCrop)
+            findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
+        else findViewById(R.id.crop_image).setVisibility(View.GONE);
+
         videoPreviewContainer.setVisibility(View.GONE);
         surfaceView.setVisibility(View.GONE);
         showImagePreview();
@@ -280,6 +272,13 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 cropperView.rotateImage();
+            }
+        });
+
+        findViewById(R.id.snap_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropperView.snapImage();
             }
         });
     }

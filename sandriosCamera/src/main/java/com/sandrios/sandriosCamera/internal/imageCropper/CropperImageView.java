@@ -760,7 +760,6 @@ public class CropperImageView extends ImageView {
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        protected boolean mScaled = false;
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
