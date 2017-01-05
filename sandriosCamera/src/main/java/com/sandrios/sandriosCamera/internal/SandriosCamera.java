@@ -25,6 +25,7 @@ public class SandriosCamera {
     private int requestCode;
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
+    private boolean enableImageCrop = false;
 
     /***
      * Creates SandriosCamera instance with default configuration set to both.
@@ -45,6 +46,11 @@ public class SandriosCamera {
 
     public SandriosCamera setMediaAction(int mediaAction) {
         this.mediaAction = mediaAction;
+        return mInstance;
+    }
+
+    public SandriosCamera enableImageCropping(boolean enableImageCrop) {
+        this.enableImageCrop = enableImageCrop;
         return mInstance;
     }
 
@@ -79,6 +85,7 @@ public class SandriosCamera {
             cameraIntent.putExtra(CameraConfiguration.Arguments.REQUEST_CODE, requestCode);
             cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
             cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
+            cameraIntent.putExtra(CameraConfiguration.Arguments.ENABLE_CROP, enableImageCrop);
             mActivity.startActivityForResult(cameraIntent, requestCode);
         }
     }

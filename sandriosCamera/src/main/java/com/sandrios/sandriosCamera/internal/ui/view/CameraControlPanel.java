@@ -60,6 +60,7 @@ public class CameraControlPanel extends RelativeLayout
     @MediaActionSwitchView.MediaActionState
     int mediaActionState;
     private int mediaAction;
+    private boolean showImageCrop = false;
     private FileObserver fileObserver;
 
     public CameraControlPanel(Context context) {
@@ -74,7 +75,6 @@ public class CameraControlPanel extends RelativeLayout
 
     private void init() {
         hasFlash = context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-//        hasFlash = false;
 
         LayoutInflater.from(context).inflate(R.layout.camera_control_panel_layout, this);
         setBackgroundColor(Color.TRANSPARENT);
@@ -264,6 +264,14 @@ public class CameraControlPanel extends RelativeLayout
         recyclerView.setVisibility(isShown ? VISIBLE : GONE);
     }
 
+    public boolean showCrop() {
+        return showImageCrop;
+    }
+
+    public void shouldShowCrop(boolean showImageCrop) {
+        this.showImageCrop = showImageCrop;
+    }
+
     public void allowCameraSwitching(boolean isAllowed) {
         cameraSwitchView.setVisibility(isAllowed ? VISIBLE : GONE);
     }
@@ -285,7 +293,6 @@ public class CameraControlPanel extends RelativeLayout
 
     @Override
     public void onStartRecordingButtonPressed() {
-
         cameraSwitchView.setVisibility(View.GONE);
         mediaActionSwitchView.setVisibility(GONE);
         settingsButton.setVisibility(GONE);

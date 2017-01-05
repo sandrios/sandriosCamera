@@ -49,6 +49,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int passedMediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
     protected CharSequence[] videoQualities;
     protected CharSequence[] photoQualities;
+    protected boolean enableImageCrop = false;
     protected int videoDuration = -1;
     protected long videoFileSize = -1;
     protected int minimumVideoDuration = -1;
@@ -159,9 +160,11 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (bundle.containsKey(CameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION))
                 minimumVideoDuration = bundle.getInt(CameraConfiguration.Arguments.MINIMUM_VIDEO_DURATION);
 
-            if (bundle.containsKey(CameraConfiguration.Arguments.SHOW_PICKER)) {
+            if (bundle.containsKey(CameraConfiguration.Arguments.SHOW_PICKER))
                 showPicker = bundle.getBoolean(CameraConfiguration.Arguments.SHOW_PICKER);
-            }
+
+            if (bundle.containsKey(CameraConfiguration.Arguments.ENABLE_CROP))
+                enableImageCrop = bundle.getBoolean(CameraConfiguration.Arguments.ENABLE_CROP);
 
             if (bundle.containsKey(CameraConfiguration.Arguments.FLASH_MODE))
                 switch (bundle.getInt(CameraConfiguration.Arguments.FLASH_MODE)) {
@@ -208,8 +211,8 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             cameraControlPanel.setMaxVideoFileSize(getVideoFileSize());
             cameraControlPanel.setSettingsClickListener(this);
             cameraControlPanel.setPickerItemClickListener(this);
+            cameraControlPanel.shouldShowCrop(enableImageCrop);
         }
-
         return cameraControlPanel;
     }
 
@@ -407,7 +410,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     private void startPreviewActivity() {
         Intent intent = PreviewActivity.newIntent(this,
-                getMediaAction(), getCameraController().getOutputFile().toString());
+                getMediaAction(), getCameraController().getOutputFile().toString(), cameraControlPanel.showCrop());
         startActivityForResult(intent, REQUEST_PREVIEW_CODE);
     }
 

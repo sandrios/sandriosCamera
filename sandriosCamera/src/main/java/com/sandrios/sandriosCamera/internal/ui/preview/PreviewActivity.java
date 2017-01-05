@@ -37,6 +37,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final String TAG = "PreviewActivity";
 
+    private final static String SHOW_CROP = "show_crop";
     private final static String MEDIA_ACTION_ARG = "media_action_arg";
     private final static String FILE_PATH_ARG = "file_path_arg";
     private final static String RESPONSE_CODE_ARG = "response_code_arg";
@@ -62,6 +63,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private int currentPlaybackPosition = 0;
     private boolean isVideoPlaying = true;
+    private boolean showCrop = false;
 
     private boolean isCroppingEnabled = false;
 
@@ -140,10 +142,11 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     public static Intent newIntent(Context context,
                                    @CameraConfiguration.MediaAction int mediaAction,
-                                   String filePath) {
+                                   String filePath, boolean showImageCrop) {
 
         return new Intent(context, PreviewActivity.class)
                 .putExtra(MEDIA_ACTION_ARG, mediaAction)
+                .putExtra(SHOW_CROP, showImageCrop)
                 .putExtra(FILE_PATH_ARG, filePath);
     }
 
@@ -215,6 +218,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         mediaAction = args.getInt(MEDIA_ACTION_ARG);
         previewFilePath = args.getString(FILE_PATH_ARG);
+        showCrop = args.getBoolean(SHOW_CROP);
 
         if (mediaAction == CameraConfiguration.MEDIA_ACTION_VIDEO) {
             displayVideo(savedInstanceState);
@@ -228,6 +232,11 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
                 displayImage();
             } else finish();
         }
+
+        if (showCrop)
+            findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
+        else findViewById(R.id.crop_image).setVisibility(View.GONE);
+
     }
 
     @Override

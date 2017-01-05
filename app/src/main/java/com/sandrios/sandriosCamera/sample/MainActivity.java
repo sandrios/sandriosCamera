@@ -28,12 +28,14 @@ public class MainActivity extends AppCompatActivity {
                     new SandriosCamera(activity, CAPTURE_MEDIA)
                             .setShowPicker(true)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
+                            .enableImageCropping(true)
                             .launchCamera();
                     break;
                 case R.id.withoutPicker:
                     new SandriosCamera(activity, CAPTURE_MEDIA)
                             .setShowPicker(false)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
+                            .enableImageCropping(false)
                             .launchCamera();
                     break;
             }
