@@ -237,6 +237,12 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             findViewById(R.id.crop_image).setVisibility(View.VISIBLE);
         else findViewById(R.id.crop_image).setVisibility(View.GONE);
 
+        findViewById(R.id.snap_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropperView.snapImage();
+            }
+        });
     }
 
     @Override
