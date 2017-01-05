@@ -398,5 +398,4 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         File mediaFile = new File(previewFilePath);
         return mediaFile.delete();
     }
-
 }

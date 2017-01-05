@@ -57,17 +57,13 @@ public class CropperView extends FrameLayout {
 
         if (orientation == Configuration.ORIENTATION_PORTRAIT ||
                 orientation == Configuration.ORIENTATION_UNDEFINED) {
-
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
             setMeasuredDimension(width, height);
-
         } else {
-
             int height = MeasureSpec.getSize(heightMeasureSpec);
             int width = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
             setMeasuredDimension(width, height);
-
         }
     }
 
@@ -184,9 +180,7 @@ public class CropperView extends FrameLayout {
     }
 
     public void loadNewImage(String filePath) {
-        Log.i(TAG, "load image: " + filePath);
         mBitmap = BitmapFactory.decodeFile(filePath);
-        Log.i(TAG, "bitmap: " + mBitmap.getWidth() + " " + mBitmap.getHeight());
 
         int maxP = Math.max(mBitmap.getWidth(), mBitmap.getHeight());
         float scale1280 = (float) maxP / 1280;
@@ -194,7 +188,6 @@ public class CropperView extends FrameLayout {
         if (mImageView.getWidth() != 0) {
             mImageView.setMaxZoom(mImageView.getWidth() / 120f);
         } else {
-
             ViewTreeObserver vto = mImageView.getViewTreeObserver();
             vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
@@ -204,7 +197,6 @@ public class CropperView extends FrameLayout {
                     return true;
                 }
             });
-
         }
 
         mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) (mBitmap.getWidth() / scale1280),
