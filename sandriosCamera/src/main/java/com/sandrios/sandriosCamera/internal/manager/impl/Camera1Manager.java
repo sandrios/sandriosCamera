@@ -211,10 +211,10 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
     @Override
     protected void prepareCameraOutputs() {
         try {
-//            if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_AUTO) {
+            if (configurationProvider.getMediaQuality() == CameraConfiguration.MEDIA_QUALITY_AUTO) {
                 camcorderProfile = CameraHelper.getCamcorderProfile(currentCameraId, configurationProvider.getVideoFileSize(), configurationProvider.getMinimumVideoDuration());
-//            } else
-//                camcorderProfile = CameraHelper.getCamcorderProfile(configurationProvider.getMediaQuality(), currentCameraId);
+            } else
+                camcorderProfile = CameraHelper.getCamcorderProfile(configurationProvider.getMediaQuality(), currentCameraId);
 
             List<Size> previewSizes = Size.fromList(camera.getParameters().getSupportedPreviewSizes());
             List<Size> pictureSizes = Size.fromList(camera.getParameters().getSupportedPictureSizes());
