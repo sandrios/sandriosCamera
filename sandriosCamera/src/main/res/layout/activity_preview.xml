@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/preview_activity_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,44 +24,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true">
 
-        <FrameLayout
-            android:id="@+id/crop_frame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone">
-
-            <com.sandrios.sandriosCamera.internal.imageCropper.CropperView
-                android:id="@+id/crop_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ff282828" />
-
-            <ImageView
-                android:id="@+id/rotate_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end|top"
-                android:layout_margin="16dp"
-                android:background="@drawable/circle_frame_background_dark"
-                android:padding="8dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_rotate_left_white" />
-
-            <ImageView
-                android:id="@+id/snap_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="16dp"
-                android:background="@drawable/circle_frame_background_dark"
-                android:padding="8dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_crop_free_white" />
-
-        </FrameLayout>
-
-        <ImageView
+        <com.yalantis.ucrop.view.UCropView
             android:id="@+id/image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
