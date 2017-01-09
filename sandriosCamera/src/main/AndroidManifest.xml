@@ -25,6 +25,11 @@
             android:name=".internal.ui.BaseSandriosActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullscreen" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullscreen.Crop" />
     </application>
 
 </manifest>

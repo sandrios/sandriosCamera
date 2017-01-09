@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.sandrios.android:sandriosCamera:1.0.7'
+  compile 'com.sandrios.android:sandriosCamera:1.0.8'
 }
 ```
 
@@ -36,7 +36,7 @@ Or Maven:
 <dependency>
   <groupId>com.sandrios.android</groupId>
   <artifactId>sandriosCamera</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <type>pom</type>
 </dependency>
 ```
@@ -66,6 +66,9 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
   public *;
 }
 
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
 
 -keepattributes *Annotation*
 -keepclassmembers class ** {
@@ -134,6 +137,7 @@ Thanks
 ------
 * **Glide** for the [Image Loading Framework][6]
 * **Ted Permission** for the [Permission Management][7] in Android 23+
+* **uCrop** for the [Image Cropping][10]
 * Everyone who has contributed code and reported issues!
 
 Author
@@ -157,3 +161,4 @@ This is not an official Google product.
 [7]: https://github.com/ParkSangGwon/TedPermission
 [8]: https://github.com/sandrios/sandriosCamera/blob/master/static/sandrios_studios.png
 [9]: https://github.com/sandrios/sandriosCamera/blob/master/LICENSE
+[10]: https://github.com/Yalantis/uCrop

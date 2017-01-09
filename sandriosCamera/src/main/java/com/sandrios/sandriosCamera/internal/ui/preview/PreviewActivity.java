@@ -2,8 +2,11 @@ package com.sandrios.sandriosCamera.internal.ui.preview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,19 +19,20 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
-import com.sandrios.sandriosCamera.internal.imageCropper.CropperView;
 import com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity;
 import com.sandrios.sandriosCamera.internal.ui.view.AspectFrameLayout;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.view.UCropView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 
 /**
  * Created by Arpit Gandhi on 7/6/16.
@@ -48,15 +52,12 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private int mediaAction;
     private String previewFilePath;
-
+    private PreviewActivity mContext;
     private SurfaceView surfaceView;
     private FrameLayout photoPreviewContainer;
-    private ImageView imagePreview;
-    private CropperView cropperView;
+    private UCropView imagePreview;
     private ViewGroup buttonPanel;
     private AspectFrameLayout videoPreviewContainer;
-    private TextView cropMediaAction;
-    private ImageView cropIcon;
 
     private MediaController mediaController;
     private MediaPlayer mediaPlayer;
@@ -64,8 +65,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     private int currentPlaybackPosition = 0;
     private boolean isVideoPlaying = true;
     private boolean showCrop = false;
-
-    private boolean isCroppingEnabled = false;
 
     private MediaController.MediaPlayerControl MediaPlayerControlImpl = new MediaController.MediaPlayerControl() {
         @Override
@@ -170,7 +169,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
-
+        mContext = this;
         surfaceView = (SurfaceView) findViewById(R.id.video_preview);
         surfaceView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -189,19 +188,22 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         videoPreviewContainer = (AspectFrameLayout) findViewById(R.id.previewAspectFrameLayout);
         photoPreviewContainer = (FrameLayout) findViewById(R.id.photo_preview_container);
-        cropperView = (CropperView) findViewById(R.id.crop_image_view);
-        imagePreview = (ImageView) findViewById(R.id.image_view);
+        imagePreview = (UCropView) findViewById(R.id.image_view);
         buttonPanel = (ViewGroup) findViewById(R.id.preview_control_panel);
         View confirmMediaResult = findViewById(R.id.confirm_media_result);
         View reTakeMedia = findViewById(R.id.re_take_media);
         View cancelMediaAction = findViewById(R.id.cancel_media_action);
-        cropMediaAction = (TextView) findViewById(R.id.crop_text);
-        cropIcon = (ImageView) findViewById(R.id.crop_icon);
 
         findViewById(R.id.crop_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleCropView();
+                UCrop.Options options = new UCrop.Options();
+                options.setToolbarColor(ContextCompat.getColor(mContext, android.R.color.black));
+                options.setStatusBarColor(ContextCompat.getColor(mContext, android.R.color.black));
+                Uri uri = Uri.fromFile(new File(previewFilePath));
+                UCrop.of(uri, uri)
+                        .withOptions(options)
+                        .start(mContext);
             }
         });
 
@@ -241,6 +243,13 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            showImagePreview();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mediaPlayer != null) {
@@ -264,40 +273,19 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showImagePreview() {
-        cropperView.loadNewImage(previewFilePath);
-        Glide.with(this)
-                .load(previewFilePath)
-                .into(imagePreview);
-        findViewById(R.id.rotate_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cropperView.rotateImage();
-            }
-        });
+        try {
+            Uri uri = Uri.fromFile(new File(previewFilePath));
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(new File(uri.getPath()).getAbsolutePath(), options);
 
-        findViewById(R.id.snap_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cropperView.snapImage();
-            }
-        });
-    }
-
-    private void toggleCropView() {
-        if (isCroppingEnabled) {
-            findViewById(R.id.rotate_button).setVisibility(View.GONE);
-            findViewById(R.id.crop_frame).setVisibility(View.GONE);
-            imagePreview.setVisibility(View.VISIBLE);
-            cropIcon.setImageResource(R.drawable.ic_crop_white_24dp);
-            cropMediaAction.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-            isCroppingEnabled = false;
-        } else {
-            findViewById(R.id.rotate_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.crop_frame).setVisibility(View.VISIBLE);
-            imagePreview.setVisibility(View.GONE);
-            cropIcon.setImageResource(R.drawable.ic_crop_orange);
-            cropMediaAction.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_light));
-            isCroppingEnabled = true;
+            imagePreview.getCropImageView().setImageUri(uri, null);
+            imagePreview.getOverlayView().setShowCropFrame(false);
+            imagePreview.getOverlayView().setShowCropGrid(false);
+            imagePreview.getCropImageView().setRotateEnabled(false);
+            imagePreview.getOverlayView().setDimmedColor(Color.TRANSPARENT);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -319,7 +307,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    mediaController = new MediaController(PreviewActivity.this);
+                    mediaController = new MediaController(mContext);
                     mediaController.setAnchorView(surfaceView);
                     mediaController.setMediaPlayer(MediaPlayerControlImpl);
 
@@ -349,6 +337,21 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private void saveCroppedImage(Uri croppedFileUri) {
+        try {
+            File saveFile = new File(previewFilePath);
+            FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
+            FileOutputStream outStream = new FileOutputStream(saveFile);
+            FileChannel inChannel = inStream.getChannel();
+            FileChannel outChannel = outStream.getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            inStream.close();
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void saveVideoParams(Bundle outState) {
         if (mediaPlayer != null) {
             outState.putInt(VIDEO_POSITION_ARG, mediaPlayer.getCurrentPosition());
@@ -373,8 +376,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         Intent resultIntent = new Intent();
         if (view.getId() == R.id.confirm_media_result) {
-            if (isCroppingEnabled)
-                cropperView.cropImage(previewFilePath);
             resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_CONFIRM);
             resultIntent.putExtra(FILE_PATH_ARG, previewFilePath);
         } else if (view.getId() == R.id.re_take_media) {

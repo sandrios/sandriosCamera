@@ -13,13 +13,13 @@ buildscript {
 }
 
 group = 'com.sandrios.android'
-version = '1.0.7'
+version = '1.0.8'
 
 ext {
     PUBLISH_GROUP_ID = 'com.sandrios.android'
     PUBLISH_ARTIFACT_ID = 'sandriosCamera'
-    PUBLISH_VERSION = '1.0.7'
-    PUBLISH_CODE = 8
+    PUBLISH_VERSION = '1.0.8'
+    PUBLISH_CODE = 9
 }
 
 android {
@@ -127,6 +127,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.yalantis:ucrop:2.2.0'
     compile 'gun0912.ted:tedpermission:1.0.2'
 }
 

@@ -13,6 +13,10 @@
         <item name="android:textColor">#fafafa</item>
     </style>
 
+    <style name="ThemeFullscreen.Crop">
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+    </style>
 
     <style name="ThemeFullscreen" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowFullscreen">true</item>
