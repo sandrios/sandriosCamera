@@ -91,6 +91,7 @@ Please check the sample project included for more examples:
                                   .setShowPicker(showImagePicker)
                                   .setVideoFileSize(15) //File Size in MB: Default is no limit
                                   .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO) // default is CameraConfiguration.MEDIA_ACTION_BOTH
+                                  .enableImageCropping(true) // Default is false.
                                   .launchCamera();
   }
 
@@ -109,7 +110,6 @@ Status
 ------
 
 - Video file size limit
-- Image crop added
 - Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!
@@ -127,7 +127,7 @@ You may also find precompiled aar on the [releases page][1].
 Getting Help
 ------------
 To report a specific problem or feature request, [open a new issue on Github][4]. For questions, suggestions, or
-anything else, email mailto:github@sandrios.com
+anything else -- github@sandrios.com
 
 Contributing
 ------------
