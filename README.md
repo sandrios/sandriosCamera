@@ -135,7 +135,7 @@ Before submitting pull requests, contributors must sign Google's [individual con
 
 Thanks
 ------
-* [**Glide**][6] for the [Image Loading Framework]
+* [**Glide**][6] for the Image Loading Framework
 * [**Ted Permission**][7] for the Permission Management in Android 23+
 * [**uCrop**][10] for the Image Cropping
 * Everyone who has contributed code and reported issues!
