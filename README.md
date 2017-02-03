@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.sandrios.android:sandriosCamera:1.0.8'
+  compile 'com.sandrios.android:sandriosCamera:1.0.9'
 }
 ```
 
@@ -35,7 +35,7 @@ Or Maven:
 <dependency>
   <groupId>com.sandrios.android</groupId>
   <artifactId>sandriosCamera</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <type>pom</type>
 </dependency>
 ```
@@ -108,7 +108,6 @@ Please check the sample project included for more examples:
 Status
 ------
 
-- Video file size limit
 - Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!
