@@ -127,9 +127,6 @@ Getting Help
 To report a specific problem or feature request, [open a new issue on Github][4]. For questions, suggestions, or
 anything else -- github@sandrios.com
 
-Contributing
-------------
-Before submitting pull requests, contributors must sign Google's [individual contributor license agreement][5].
 
 Thanks
 ------
@@ -146,9 +143,6 @@ License
 -------
 MIT. See the [LICENSE][9] file for details.
 
-Disclaimer
----------
-This is not an official Google product.
 
 [3]: https://www.sandrios.com
 [1]: https://github.com/sandrios/sandriosCamera/releases
