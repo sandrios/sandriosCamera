@@ -81,10 +81,11 @@ How do I use Sandrios Camera?
 
 Please check the sample project included for more examples:
 
-```java
+```
   private static final int CAPTURE_MEDIA = 368;
 
   // showImagePicker is boolean value: Default is true
+  // setAutoRecord() to start recording the video automatically if media action is set to video.
   private void launchCamera() {
       new SandriosCamera(activity, CAPTURE_MEDIA)
                                   .setShowPicker(showImagePicker)

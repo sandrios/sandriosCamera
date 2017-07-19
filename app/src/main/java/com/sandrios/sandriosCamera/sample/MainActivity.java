@@ -35,9 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.withoutPicker:
                     new SandriosCamera(activity, CAPTURE_MEDIA)
                             .setShowPicker(false)
-                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO)
+                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
                             .enableImageCropping(false)
-                            .setAutoRecord()
                             .launchCamera();
                     break;
             }
