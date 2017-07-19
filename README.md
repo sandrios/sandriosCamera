@@ -99,7 +99,7 @@ Please check the sample project included for more examples:
          super.onActivityResult(requestCode, resultCode, data);
 
          if (requestCode == CAPTURE_MEDIA && resultCode == RESULT_OK) {
-             Log.e("File", "" + data.getStringExtra(SandriosCameraConfiguration.Arguments.FILE_PATH));
+             Log.e("File", "" + data.getStringExtra(CameraConfiguration.Arguments.FILE_PATH));
              Toast.makeText(this, "Media captured.", Toast.LENGTH_SHORT).show();
          }
      }

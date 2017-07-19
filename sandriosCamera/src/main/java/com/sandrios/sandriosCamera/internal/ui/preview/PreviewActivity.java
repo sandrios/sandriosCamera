@@ -2,11 +2,15 @@ package com.sandrios.sandriosCamera.internal.ui.preview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.media.AudioManager;
+import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +36,8 @@ import com.yalantis.ucrop.view.UCropView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
 
 /**
@@ -378,6 +384,11 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         if (view.getId() == R.id.confirm_media_result) {
             resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_CONFIRM);
             resultIntent.putExtra(FILE_PATH_ARG, previewFilePath);
+            try {
+                rotateImageIfRequired(previewFilePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else if (view.getId() == R.id.re_take_media) {
             deleteMediaFile();
             resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_RETAKE);
@@ -387,6 +398,44 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         }
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    /**
+     * Rotate an image if required.
+     *
+     * @param selectedImage Image URI
+     * @return The resulted Bitmap after manipulation
+     */
+    private Bitmap rotateImageIfRequired(String selectedImage) throws IOException {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(selectedImage, bmOptions);
+
+        InputStream input = getContentResolver().openInputStream(Uri.fromFile(new File(selectedImage)));
+        ExifInterface ei;
+        if (Build.VERSION.SDK_INT > 23)
+            ei = new ExifInterface(input);
+        else
+            ei = new ExifInterface(selectedImage);
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(bitmap, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(bitmap, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(bitmap, 270);
+            default:
+                return bitmap;
+        }
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     @Override
