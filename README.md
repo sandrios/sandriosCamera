@@ -89,6 +89,7 @@ Please check the sample project included for more examples:
   private void launchCamera() {
       new SandriosCamera(activity, CAPTURE_MEDIA)
                                   .setShowPicker(showImagePicker)
+                                  .setShowPickerType(CameraConfiguration.VIDEO) // Either Photo and Video available
                                   .setVideoFileSize(15) //File Size in MB: Default is no limit
                                   .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO) // default is CameraConfiguration.MEDIA_ACTION_BOTH
                                   .enableImageCropping(true) // Default is false.

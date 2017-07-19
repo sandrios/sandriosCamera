@@ -2,6 +2,7 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.FileObserver;
@@ -80,8 +81,6 @@ public class CameraControlPanel extends RelativeLayout
 
         LayoutInflater.from(context).inflate(R.layout.camera_control_panel_layout, this);
         setBackgroundColor(Color.TRANSPARENT);
-        imageGalleryAdapter = new ImageGalleryAdapter(context);
-
         settingsButton = (ImageButton) findViewById(R.id.settings_view);
         cameraSwitchView = (CameraSwitchView) findViewById(R.id.front_back_camera_switcher);
         mediaActionSwitchView = (MediaActionSwitchView) findViewById(R.id.photo_video_camera_switcher);
@@ -91,7 +90,6 @@ public class CameraControlPanel extends RelativeLayout
         recordSizeText = (TextView) findViewById(R.id.record_size_mb_text);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(imageGalleryAdapter);
         cameraSwitchView.setOnCameraTypeChangeListener(onCameraTypeChangeListener);
         mediaActionSwitchView.setOnMediaActionStateChangeListener(this);
 
@@ -113,7 +111,14 @@ public class CameraControlPanel extends RelativeLayout
         else flashSwitchView.setVisibility(GONE);
 
         countDownTimer = new TimerTask(recordDurationText);
+    }
 
+    public void postInit(int mediatype){
+        if(mediatype != 0 && mediatype == CameraConfiguration.VIDEO)
+            imageGalleryAdapter = new ImageGalleryAdapter(context,CameraConfiguration.VIDEO);
+        else
+            imageGalleryAdapter = new ImageGalleryAdapter(context);
+        recyclerView.setAdapter(imageGalleryAdapter);
         imageGalleryAdapter.setOnItemClickListener(new ImageGalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -313,6 +318,9 @@ public class CameraControlPanel extends RelativeLayout
         setMediaActionState(mediaActionState);
         if (onMediaActionStateChangeListener != null)
             onMediaActionStateChangeListener.onMediaActionChanged(this.mediaActionState);
+    }
+
+    public void setMediaType(int type) {
     }
 
     public void startRecording() {

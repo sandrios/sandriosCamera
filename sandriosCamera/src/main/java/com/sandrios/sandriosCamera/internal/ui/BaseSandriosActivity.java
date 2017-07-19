@@ -58,6 +58,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected boolean autoRecord = false;
     protected int minimumVideoDuration = -1;
     protected boolean showPicker = true;
+    protected int type;
     @MediaActionSwitchView.MediaActionState
     protected int currentMediaActionState;
     @CameraSwitchView.CameraType
@@ -166,6 +167,9 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (bundle.containsKey(CameraConfiguration.Arguments.SHOW_PICKER))
                 showPicker = bundle.getBoolean(CameraConfiguration.Arguments.SHOW_PICKER);
 
+            if (bundle.containsKey(CameraConfiguration.Arguments.PICKER_TYPE))
+                type = bundle.getInt(CameraConfiguration.Arguments.PICKER_TYPE);
+
             if (bundle.containsKey(CameraConfiguration.Arguments.ENABLE_CROP))
                 enableImageCrop = bundle.getBoolean(CameraConfiguration.Arguments.ENABLE_CROP);
 
@@ -195,6 +199,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     @Override
     View getUserContentView(LayoutInflater layoutInflater, ViewGroup parent) {
         cameraControlPanel = (CameraControlPanel) layoutInflater.inflate(R.layout.user_control_layout, parent, false);
+        cameraControlPanel.postInit(type);
 
         if (cameraControlPanel != null) {
             cameraControlPanel.setup(getMediaAction());
