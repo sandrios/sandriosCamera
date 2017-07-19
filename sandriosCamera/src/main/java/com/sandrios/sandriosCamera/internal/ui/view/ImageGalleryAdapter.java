@@ -2,6 +2,8 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -14,19 +16,78 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
+import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import static android.provider.MediaStore.Video.Thumbnails.MINI_KIND;
 
 /**
  * Created by TedPark on 2016. 8. 30..
  */
 public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.GalleryViewHolder> {
 
-
     ArrayList<PickerTile> pickerTiles;
     Context context;
     OnItemClickListener onItemClickListener;
+
+    public ImageGalleryAdapter(Context context, int type) {
+
+        this.context = context;
+
+        pickerTiles = new ArrayList<>();
+
+        if (type == CameraConfiguration.VIDEO) {
+            Cursor videoCursor = null;
+            try {
+                final String[] columns = {MediaStore.Video.VideoColumns.DATA};
+                final String orderBy = MediaStore.Video.Media.DATE_ADDED + " DESC";
+
+                videoCursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+                if (videoCursor != null) {
+                    int count = 0;
+                    while (videoCursor.moveToNext()) {
+                        String videoLocation;
+                        videoLocation = videoCursor.getString(videoCursor.getColumnIndex(MediaStore.Video.Media.DATA));
+                        File videoFile = new File(videoLocation);
+                        pickerTiles.add(new PickerTile(Uri.fromFile(videoFile)));
+                        count++;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (videoCursor != null && !videoCursor.isClosed()) {
+                    videoCursor.close();
+                }
+            }
+        } else {
+            Cursor imageCursor = null;
+            try {
+                final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.ImageColumns.ORIENTATION};
+                final String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
+
+                imageCursor = context.getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+                if (imageCursor != null) {
+                    int count = 0;
+                    while (imageCursor.moveToNext()) {
+                        String imageLocation = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                        File imageFile = new File(imageLocation);
+                        pickerTiles.add(new PickerTile(Uri.fromFile(imageFile)));
+                        count++;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (imageCursor != null && !imageCursor.isClosed()) {
+                    imageCursor.close();
+                }
+            }
+
+        }
+    }
 
     public ImageGalleryAdapter(Context context) {
 

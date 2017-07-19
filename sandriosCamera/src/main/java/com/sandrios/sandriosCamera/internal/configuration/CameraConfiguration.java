@@ -42,6 +42,9 @@ public final class CameraConfiguration {
     public static final int FLASH_MODE_OFF = 2;
     public static final int FLASH_MODE_AUTO = 3;
 
+    public static final int VIDEO = 501;
+    public static final int PHOTO = 502;
+
     public interface Arguments {
         String REQUEST_CODE = "com.sandrios.sandriosCamera.request_code";
         String MEDIA_ACTION = "com.sandrios.sandriosCamera.media_action";
@@ -52,6 +55,7 @@ public final class CameraConfiguration {
         String FILE_PATH = "com.sandrios.sandriosCamera.camera_video_file_path";
         String FLASH_MODE = "com.sandrios.sandriosCamera.camera_flash_mode";
         String SHOW_PICKER = "com.sandrios.sandriosCamera.show_picker";
+        String PICKER_TYPE = "com.sandrios.sandriosCamera.picker_type";
         String ENABLE_CROP = "com.sandrios.sandriosCamera.enable_crop";
     }
 
