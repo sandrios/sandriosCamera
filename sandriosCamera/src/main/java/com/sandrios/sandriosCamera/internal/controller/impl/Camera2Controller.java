@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.TextureView;
 
-import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.controller.CameraController;
 import com.sandrios.sandriosCamera.internal.controller.view.CameraView;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;

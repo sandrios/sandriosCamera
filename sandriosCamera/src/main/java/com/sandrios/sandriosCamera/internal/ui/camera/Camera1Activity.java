@@ -1,9 +1,10 @@
 package com.sandrios.sandriosCamera.internal.ui.camera;
 
 import android.media.CamcorderProfile;
+import android.support.annotation.RestrictTo;
 
-import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.controller.CameraController;
 import com.sandrios.sandriosCamera.internal.controller.impl.Camera1Controller;
 import com.sandrios.sandriosCamera.internal.controller.view.CameraView;
@@ -19,6 +20,7 @@ import java.util.List;
  * Created by Arpit Gandhi on 7/6/16.
  */
 @SuppressWarnings("deprecation")
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Camera1Activity extends BaseSandriosActivity<Integer> {
 
     @Override

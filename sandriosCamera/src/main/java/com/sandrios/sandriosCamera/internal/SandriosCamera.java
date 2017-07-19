@@ -3,7 +3,6 @@ package com.sandrios.sandriosCamera.internal;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.IntRange;
 
 import com.gun0912.tedpermission.PermissionListener;

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class CameraControlPanel extends RelativeLayout
         implements RecordButton.RecordButtonListener,
         MediaActionSwitchView.OnMediaActionStateChangeListener {

@@ -2,8 +2,8 @@ package com.sandrios.sandriosCamera.internal.manager;
 
 import android.content.Context;
 
-import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraCloseListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraOpenListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraPhotoListener;

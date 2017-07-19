@@ -10,8 +10,8 @@ import android.os.Looper;
 import android.os.Process;
 import android.util.Log;
 
-import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 

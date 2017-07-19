@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RestrictTo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import com.sandrios.sandriosCamera.internal.utils.Utils;
  * Created by Arpit Gandhi on 12/1/16.
  */
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActivity<CameraId>
         implements
         RecordButton.RecordButtonListener,
@@ -62,11 +64,10 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int currentCameraType = CameraSwitchView.CAMERA_TYPE_REAR;
     @CameraConfiguration.MediaQuality
     protected int newQuality = -1;
-    private CameraControlPanel cameraControlPanel;
-    private AlertDialog settingsDialog;
-
     @CameraConfiguration.FlashMode
     protected int flashMode = CameraConfiguration.FLASH_MODE_AUTO;
+    private CameraControlPanel cameraControlPanel;
+    private AlertDialog settingsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

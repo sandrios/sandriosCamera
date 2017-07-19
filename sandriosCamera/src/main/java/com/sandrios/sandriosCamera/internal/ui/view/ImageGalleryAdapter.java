@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,8 +20,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by TedPark on 2016. 8. 30..
+ * Created by Arpit Gandhi
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.GalleryViewHolder> {
 
 

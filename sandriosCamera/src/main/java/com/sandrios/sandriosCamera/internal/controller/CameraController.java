@@ -1,6 +1,7 @@
 package com.sandrios.sandriosCamera.internal.controller;
 
 import android.os.Bundle;
+import android.support.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;
@@ -10,6 +11,7 @@ import java.io.File;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public interface CameraController<CameraId> {
 
     void onCreate(Bundle savedInstanceState);

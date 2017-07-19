@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.IntDef;
+import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatImageButton;
@@ -19,6 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 6/24/16.
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class CameraSwitchView extends AppCompatImageButton {
 
     public static final int CAMERA_TYPE_FRONT = 0;

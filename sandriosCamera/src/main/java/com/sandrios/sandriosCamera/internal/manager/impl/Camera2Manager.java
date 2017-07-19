@@ -27,8 +27,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.WindowManager;
 
-import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraCloseListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraOpenListener;
 import com.sandrios.sandriosCamera.internal.manager.listener.CameraPhotoListener;

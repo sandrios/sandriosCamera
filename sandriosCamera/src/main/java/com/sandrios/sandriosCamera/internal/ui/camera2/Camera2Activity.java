@@ -3,6 +3,7 @@ package com.sandrios.sandriosCamera.internal.ui.camera2;
 import android.annotation.TargetApi;
 import android.media.CamcorderProfile;
 import android.os.Build;
+import android.support.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
@@ -22,6 +23,7 @@ import java.util.List;
  * Created by Arpit Gandhi on 7/6/16.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Camera2Activity extends BaseSandriosActivity<String> {
 
     @Override

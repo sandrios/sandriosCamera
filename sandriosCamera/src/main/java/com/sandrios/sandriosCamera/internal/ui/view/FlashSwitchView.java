@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class FlashSwitchView extends ImageButton {
 
     public static final int FLASH_ON = 0;
