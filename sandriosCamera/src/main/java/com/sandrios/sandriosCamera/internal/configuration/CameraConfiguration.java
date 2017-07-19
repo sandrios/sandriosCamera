@@ -53,6 +53,7 @@ public final class CameraConfiguration {
         String FLASH_MODE = "com.sandrios.sandriosCamera.camera_flash_mode";
         String SHOW_PICKER = "com.sandrios.sandriosCamera.show_picker";
         String ENABLE_CROP = "com.sandrios.sandriosCamera.enable_crop";
+        String AUTO_RECORD = "com.sandrios.sandriosCamera.auto_record";
     }
 
     @IntDef({MEDIA_QUALITY_AUTO, MEDIA_QUALITY_LOWEST, MEDIA_QUALITY_LOW, MEDIA_QUALITY_MEDIUM, MEDIA_QUALITY_HIGH, MEDIA_QUALITY_HIGHEST})

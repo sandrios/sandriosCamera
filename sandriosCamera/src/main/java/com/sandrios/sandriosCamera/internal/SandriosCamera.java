@@ -3,6 +3,7 @@ package com.sandrios.sandriosCamera.internal;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.IntRange;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -25,6 +26,7 @@ public class SandriosCamera {
     private int requestCode;
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
+    private boolean autoRecord = false;
     private boolean enableImageCrop = false;
     private long videoSize = -1;
 
@@ -45,7 +47,7 @@ public class SandriosCamera {
         return mInstance;
     }
 
-    public SandriosCamera setMediaAction(int mediaAction) {
+    public SandriosCamera setMediaAction(@CameraConfiguration.MediaAction int mediaAction) {
         this.mediaAction = mediaAction;
         return mInstance;
     }
@@ -57,6 +59,14 @@ public class SandriosCamera {
 
     public SandriosCamera setVideoFileSize(int fileSize) {
         this.videoSize = fileSize;
+        return mInstance;
+    }
+
+    /**
+     * Only works if Media Action is set to Video
+     */
+    public SandriosCamera setAutoRecord() {
+        autoRecord = true;
         return mInstance;
     }
 
@@ -92,6 +102,8 @@ public class SandriosCamera {
             cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
             cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
             cameraIntent.putExtra(CameraConfiguration.Arguments.ENABLE_CROP, enableImageCrop);
+            cameraIntent.putExtra(CameraConfiguration.Arguments.AUTO_RECORD, autoRecord);
+
             if (videoSize > 0) {
                 cameraIntent.putExtra(CameraConfiguration.Arguments.VIDEO_FILE_SIZE, videoSize * 1024 * 1024);
             }

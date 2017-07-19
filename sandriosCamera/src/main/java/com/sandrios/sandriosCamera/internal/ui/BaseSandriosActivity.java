@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected boolean enableImageCrop = false;
     protected int videoDuration = -1;
     protected long videoFileSize = -1;
+    protected boolean autoRecord = false;
     protected int minimumVideoDuration = -1;
     protected boolean showPicker = true;
     @MediaActionSwitchView.MediaActionState
@@ -181,6 +183,11 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
                         flashMode = CameraConfiguration.FLASH_MODE_AUTO;
                         break;
                 }
+            if (bundle.containsKey(CameraConfiguration.Arguments.AUTO_RECORD)) {
+                if (mediaAction == CameraConfiguration.MEDIA_ACTION_VIDEO) {
+                    autoRecord = bundle.getBoolean(CameraConfiguration.Arguments.AUTO_RECORD);
+                }
+            }
         }
     }
 
@@ -212,6 +219,15 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             cameraControlPanel.setSettingsClickListener(this);
             cameraControlPanel.setPickerItemClickListener(this);
             cameraControlPanel.shouldShowCrop(enableImageCrop);
+
+            if (autoRecord) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cameraControlPanel.startRecording();
+                    }
+                }, 1500);
+            }
         }
         return cameraControlPanel;
     }
