@@ -333,7 +333,8 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
             if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO
                     || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH)
                 turnPhotoCameraFeaturesOn(camera, parameters);
-            else if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO)
+            else if (configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_PHOTO
+                    || configurationProvider.getMediaAction() == CameraConfiguration.MEDIA_ACTION_BOTH)
                 turnVideoCameraFeaturesOn(camera, parameters);
 
             int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
