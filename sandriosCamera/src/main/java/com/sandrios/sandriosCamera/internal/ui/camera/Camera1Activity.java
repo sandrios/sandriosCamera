@@ -20,7 +20,6 @@ import java.util.List;
  * Created by Arpit Gandhi on 7/6/16.
  */
 @SuppressWarnings("deprecation")
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Camera1Activity extends BaseSandriosActivity<Integer> {
 
     @Override

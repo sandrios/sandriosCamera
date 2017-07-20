@@ -20,7 +20,6 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 6/24/16.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class CameraSwitchView extends AppCompatImageButton {
 
     public static final int CAMERA_TYPE_FRONT = 0;

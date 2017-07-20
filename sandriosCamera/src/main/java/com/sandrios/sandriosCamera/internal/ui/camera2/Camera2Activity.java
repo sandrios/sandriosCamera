@@ -23,7 +23,6 @@ import java.util.List;
  * Created by Arpit Gandhi on 7/6/16.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Camera2Activity extends BaseSandriosActivity<String> {
 
     @Override

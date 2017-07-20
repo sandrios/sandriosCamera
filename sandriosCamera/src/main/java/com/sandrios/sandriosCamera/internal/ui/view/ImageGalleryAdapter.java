@@ -27,7 +27,6 @@ import static android.provider.MediaStore.Video.Thumbnails.MINI_KIND;
 /**
  * Created by Arpit Gandhi
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.GalleryViewHolder> {
 
     ArrayList<PickerTile> pickerTiles;

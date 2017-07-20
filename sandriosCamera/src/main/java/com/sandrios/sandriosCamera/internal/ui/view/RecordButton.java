@@ -23,7 +23,6 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class RecordButton extends ImageButton {
 
     public static final int TAKE_PHOTO_STATE = 0;

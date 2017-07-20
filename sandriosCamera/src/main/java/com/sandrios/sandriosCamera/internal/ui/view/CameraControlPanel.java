@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class CameraControlPanel extends RelativeLayout
         implements RecordButton.RecordButtonListener,
         MediaActionSwitchView.OnMediaActionStateChangeListener {

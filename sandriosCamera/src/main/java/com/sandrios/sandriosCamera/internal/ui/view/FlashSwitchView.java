@@ -21,7 +21,6 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class FlashSwitchView extends ImageButton {
 
     public static final int FLASH_ON = 0;
