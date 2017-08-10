@@ -1,3 +1,31 @@
+# Why this fork exist
+
+I made this fork to fix crash caused by old and unmaintained permission requester lib. I replaced it with dexter, so now this camera library works as expected. Also I updated all other dependancies and stuff like that. 
+
+Before using this fork, first check the original lib as it might have accepted my patch and released the update. If version of original lib is higher that 1.1.0 (hint: it's [ ![Download](https://api.bintray.com/packages/sandriosstudios/android/sandriosCamera/images/download.svg) ](https://bintray.com/sandriosstudios/android/sandriosCamera/_latestVersion) right now) then please don't use this fork as it might be outdated. 
+
+## how to connect the fork to your project:
+
+1. add jitpack repo to your repositories list, if you haven't yet:
+
+```
+repositories {
+      ...
+      maven { url 'https://jitpack.io' }
+}
+```
+
+2. reference lib dependency:
+
+```
+compile 'com.github.MrBIMC:sandriosCamera:1.1.0'
+```
+
+3. that's it :smile:
+
+------------
+
+
 ![8]
 
 # sandriosCamera 
