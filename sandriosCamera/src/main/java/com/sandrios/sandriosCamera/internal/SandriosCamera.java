@@ -5,14 +5,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.IntRange;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.ui.camera.Camera1Activity;
 import com.sandrios.sandriosCamera.internal.ui.camera2.Camera2Activity;
 import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sandrios Camera Builder Class
@@ -67,23 +70,27 @@ public class SandriosCamera {
     }
 
     public void launchCamera() {
-        new TedPermission(mActivity)
-                .setPermissionListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted() {
-                        launchIntent();
-                    }
 
-                    @Override
-                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+        MultiplePermissionsListener listener = new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if(report.areAllPermissionsGranted()) {
+                    launchIntent();
+                }
+            }
 
-                    }
-                })
-                .setPermissions(
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(mActivity)
+                .withPermissions(
                         Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.RECORD_AUDIO)
-                .check();
+                .withListener(listener).check();
     }
 
     private void launchIntent() {
