@@ -126,7 +126,7 @@ Please check the sample project included for more examples:
             @Override
             public void onComplete(CameraOutputModel model) {
                 Log.e("File", "" + model.getPath());
-                Log.e("Type", "" + model.getType());
+                Log.e("Type", "" + model.getType()); //Check SandriosCamera.MediaType
                 Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
             }
         });  
