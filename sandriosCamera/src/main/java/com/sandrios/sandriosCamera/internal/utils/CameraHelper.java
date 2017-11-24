@@ -7,7 +7,6 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.media.CamcorderProfile;
 import android.os.Build;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 

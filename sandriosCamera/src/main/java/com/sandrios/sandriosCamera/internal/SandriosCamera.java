@@ -35,13 +35,8 @@ public class SandriosCamera {
     private boolean enableImageCrop = false;
     private long videoSize = -1;
 
-    public class MediaType {
-        public static final int PHOTO = 0;
-        public static final int VIDEO = 1;
-    }
-
     public static SandriosCamera with(Activity activity) {
-        if (mInstance == null){
+        if (mInstance == null) {
             mInstance = new SandriosCamera();
         }
         mActivity = activity;
@@ -109,7 +104,7 @@ public class SandriosCamera {
                             CameraOutputModel outputModel = (CameraOutputModel) o;
                             if (cameraCallback != null) {
                                 cameraCallback.onComplete(outputModel);
-                                mInstance =null;
+                                mInstance = null;
                             }
                             SandriosBus.complete();
                         }
@@ -140,5 +135,10 @@ public class SandriosCamera {
 
     public interface CameraCallback {
         void onComplete(CameraOutputModel cameraOutputModel);
+    }
+
+    public class MediaType {
+        public static final int PHOTO = 0;
+        public static final int VIDEO = 1;
     }
 }
