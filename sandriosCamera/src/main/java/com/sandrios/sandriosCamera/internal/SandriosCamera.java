@@ -16,7 +16,6 @@ import com.sandrios.sandriosCamera.internal.ui.camera2.Camera2Activity;
 import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
 import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -27,8 +26,8 @@ import io.reactivex.functions.Consumer;
  */
 public class SandriosCamera {
 
-    private SandriosCamera mInstance = null;
-    private Activity mActivity;
+    private static SandriosCamera mInstance = null;
+    private static Activity mActivity;
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
     private boolean autoRecord = false;
@@ -36,18 +35,17 @@ public class SandriosCamera {
     private boolean enableImageCrop = false;
     private long videoSize = -1;
 
-    public class MediaType{
+    public class MediaType {
         public static final int PHOTO = 0;
         public static final int VIDEO = 1;
     }
-    /***
-     * Creates SandriosCamera instance with default configuration set to both.
-     *
-     * @param activity - fromList which request was invoked
-     */
-    public SandriosCamera(Activity activity) {
-        mInstance = this;
+
+    public static SandriosCamera with(Activity activity) {
+        if (mInstance == null){
+            mInstance = new SandriosCamera();
+        }
         mActivity = activity;
+        return mInstance;
     }
 
     public SandriosCamera setShowPickerType(int type) {
@@ -111,6 +109,7 @@ public class SandriosCamera {
                             CameraOutputModel outputModel = (CameraOutputModel) o;
                             if (cameraCallback != null) {
                                 cameraCallback.onComplete(outputModel);
+                                mInstance =null;
                             }
                             SandriosBus.complete();
                         }

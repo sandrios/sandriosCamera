@@ -59,12 +59,14 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
 
 -dontwarn android.support.**
 
+#Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
 }
 
+#uCrop
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
@@ -74,6 +76,32 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
     @com.squareup.otto.Subscribe public *;
     @com.squareup.otto.Produce public *;
 }
+
+#RxJava
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+-keep class com.google.**
+-dontwarn com.google.**
+-dontwarn sun.misc.**
+
 ```
 
 How do I use Sandrios Camera?
@@ -87,36 +115,32 @@ Please check the sample project included for more examples:
   // showImagePicker is boolean value: Default is true
   // setAutoRecord() to start recording the video automatically if media action is set to video.
   private void launchCamera() {
-      new SandriosCamera(activity, CAPTURE_MEDIA)
-                                  .setShowPicker(showImagePicker)
-                                  .setShowPickerType(CameraConfiguration.VIDEO) // Either Photo and Video available
-                                  .setVideoFileSize(15) //File Size in MB: Default is no limit
-                                  .setMediaAction(CameraConfiguration.MEDIA_ACTION_VIDEO) // default is CameraConfiguration.MEDIA_ACTION_BOTH
-                                  .enableImageCropping(true) // Default is false.
-                                  .launchCamera();
-  }
-
-  @Override
-     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-         super.onActivityResult(requestCode, resultCode, data);
-
-         if (requestCode == CAPTURE_MEDIA && resultCode == RESULT_OK) {
-             Log.e("File", "" + data.getStringExtra(CameraConfiguration.Arguments.FILE_PATH));
-             Toast.makeText(this, "Media captured.", Toast.LENGTH_SHORT).show();
-         }
-     }
+     SandriosCamera
+        .with(activity)
+        .setShowPicker(true)
+        .setShowPickerType(CameraConfiguration.VIDEO)
+        .setVideoFileSize(20)
+        .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
+        .enableImageCropping(true)
+        .launchCamera(new SandriosCamera.CameraCallback() {
+            @Override
+            public void onComplete(CameraOutputModel model) {
+                Log.e("File", "" + model.getPath());
+                Log.e("Type", "" + model.getType());
+                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+            }
+        });  
+    }
 ```
 
 Status
 ------
-
 - Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!
 
 Compatibility
 -------------
-
  * **Android SDK**: Sandrios Camera requires a minimum API level of 14.
 
 Download
@@ -129,11 +153,10 @@ Getting Help
 To report a specific problem or feature request, [open a new issue on Github][4]. For questions, suggestions, or
 anything else -- github@sandrios.com
 
-
 Thanks
 ------
 * [**Glide**][6] for the Image Loading Framework
-* [**Ted Permission**][7] for the Permission Management in Android 23+
+* [**Dexter**][7] for the Permission Management in Android 23+
 * [**uCrop**][10] for the Image Cropping
 * Everyone who has contributed code and reported issues!
 
@@ -152,7 +175,7 @@ MIT. See the [LICENSE][9] file for details.
 [4]: https://github.com/sandrios/sandriosCamera/issues
 [5]: https://developers.google.com/open-source/cla/individual
 [6]: https://github.com/bumptech/glide
-[7]: https://github.com/ParkSangGwon/TedPermission
+[7]: https://github.com/Karumi/Dexter
 [8]: https://github.com/sandrios/sandriosCamera/blob/master/static/sandrios_studios.png
 [9]: https://github.com/sandrios/sandriosCamera/blob/master/LICENSE
 [10]: https://github.com/Yalantis/uCrop
