@@ -2,13 +2,11 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -112,9 +110,9 @@ public class CameraControlPanel extends RelativeLayout
         countDownTimer = new TimerTask(recordDurationText);
     }
 
-    public void postInit(int mediatype){
-        if(mediatype != 0 && mediatype == CameraConfiguration.VIDEO)
-            imageGalleryAdapter = new ImageGalleryAdapter(context,CameraConfiguration.VIDEO);
+    public void postInit(int mediatype) {
+        if (mediatype != 0 && mediatype == CameraConfiguration.VIDEO)
+            imageGalleryAdapter = new ImageGalleryAdapter(context, CameraConfiguration.VIDEO);
         else
             imageGalleryAdapter = new ImageGalleryAdapter(context);
         recyclerView.setAdapter(imageGalleryAdapter);

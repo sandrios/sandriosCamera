@@ -1,7 +1,6 @@
 package com.sandrios.sandriosCamera.internal.ui.camera;
 
 import android.media.CamcorderProfile;
-import android.support.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;

@@ -1,7 +1,6 @@
 package com.sandrios.sandriosCamera.internal.controller;
 
 import android.os.Bundle;
-import android.support.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.CameraManager;

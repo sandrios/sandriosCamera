@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.0"
 
     defaultConfig {
         applicationId "com.sandrios.sandriosCamera.sample"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 11
         versionName '1.1.0'
     }
@@ -24,10 +24,10 @@ android {
 
 repositories {
     jcenter()
+    google()
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:25.3.1"
-    compile project(':sandriosCamera')
+    implementation project(':sandriosCamera')
+    implementation "com.android.support:appcompat-v7:27.0.1"
 }

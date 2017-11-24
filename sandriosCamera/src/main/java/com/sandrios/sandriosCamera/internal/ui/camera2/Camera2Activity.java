@@ -3,7 +3,6 @@ package com.sandrios.sandriosCamera.internal.ui.camera2;
 import android.annotation.TargetApi;
 import android.media.CamcorderProfile;
 import android.os.Build;
-import android.support.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;

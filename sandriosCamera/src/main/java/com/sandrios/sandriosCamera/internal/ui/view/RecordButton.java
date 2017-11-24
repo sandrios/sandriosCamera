@@ -7,7 +7,6 @@ import android.media.MediaActionSound;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
