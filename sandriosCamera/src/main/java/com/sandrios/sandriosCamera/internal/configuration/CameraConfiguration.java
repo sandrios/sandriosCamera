@@ -46,7 +46,6 @@ public final class CameraConfiguration {
     public static final int PHOTO = 502;
 
     public interface Arguments {
-        String REQUEST_CODE = "com.sandrios.sandriosCamera.request_code";
         String MEDIA_ACTION = "com.sandrios.sandriosCamera.media_action";
         String MEDIA_QUALITY = "com.sandrios.sandriosCamera.camera_media_quality";
         String VIDEO_DURATION = "com.sandrios.sandriosCamera.video_duration";

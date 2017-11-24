@@ -41,6 +41,7 @@ import java.io.InputStream;
 import java.nio.channels.FileChannel;
 
 /**
+ * PreviewActivity to preview the image captured by sandrios camera
  * Created by Arpit Gandhi on 7/6/16.
  */
 public class PreviewActivity extends AppCompatActivity implements View.OnClickListener {

@@ -10,14 +10,16 @@ import android.widget.Toast;
 
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
+
+import java.util.ArrayList;
 
 /**
+ * Sample for Sandrios Camera library
  * Created by Arpit Gandhi on 11/8/16.
  */
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int CAPTURE_MEDIA = 368;
 
     private Activity activity;
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -25,20 +27,34 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.withPicker:
-                    new SandriosCamera(activity, CAPTURE_MEDIA)
+                    new SandriosCamera(activity)
                             .setShowPicker(true)
                             .setShowPickerType(CameraConfiguration.VIDEO)
                             .setVideoFileSize(20)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
                             .enableImageCropping(true)
-                            .launchCamera();
+                            .launchCamera(new SandriosCamera.CameraCallback() {
+                                @Override
+                                public void onComplete(CameraOutputModel model) {
+                                    Log.e("File", "" + model.getPath());
+                                    Log.e("Type", "" + model.getType());
+                                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                     break;
                 case R.id.withoutPicker:
-                    new SandriosCamera(activity, CAPTURE_MEDIA)
+                    new SandriosCamera(activity)
                             .setShowPicker(false)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
                             .enableImageCropping(false)
-                            .launchCamera();
+                            .launchCamera(new SandriosCamera.CameraCallback() {
+                                @Override
+                                public void onComplete(CameraOutputModel model) {
+                                    Log.e("File", "" + model.getPath());
+                                    Log.e("Type", "" + model.getType());
+                                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                     break;
             }
         }
@@ -54,13 +70,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.withoutPicker).setOnClickListener(onClickListener);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void processResult(ArrayList<String> paths){
 
-        if (requestCode == CAPTURE_MEDIA && resultCode == RESULT_OK) {
-            Log.e("File", "" + data.getStringExtra(CameraConfiguration.Arguments.FILE_PATH));
-            Toast.makeText(this, "Media captured.", Toast.LENGTH_SHORT).show();
-        }
     }
 }

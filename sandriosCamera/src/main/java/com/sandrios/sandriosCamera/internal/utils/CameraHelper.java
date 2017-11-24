@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Arpit Gandhi on 7/6/16.
@@ -73,8 +74,7 @@ public final class CameraHelper {
     }
 
     public static File getOutputMediaFile(Context context, @CameraConfiguration.MediaAction int mediaAction) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), context.getPackageName());
+        File mediaStorageDir = context.getFilesDir();
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -83,7 +83,8 @@ public final class CameraHelper {
             }
         }
 
-        String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.ENGLISH)
+                .format(new Date());
         File mediaFile;
         if (mediaAction == CameraConfiguration.MEDIA_ACTION_PHOTO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +

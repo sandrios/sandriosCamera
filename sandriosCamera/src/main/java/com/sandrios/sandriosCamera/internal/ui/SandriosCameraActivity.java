@@ -23,6 +23,7 @@ import com.sandrios.sandriosCamera.internal.utils.Size;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 /**
+ * Main sandrioscamera activity handling all the transactions
  * Created by Arpit Gandhi on 12/1/16.
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)

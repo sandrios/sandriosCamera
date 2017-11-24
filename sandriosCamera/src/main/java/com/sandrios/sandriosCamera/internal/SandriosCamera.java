@@ -3,7 +3,6 @@ package com.sandrios.sandriosCamera.internal;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.IntRange;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -11,11 +10,16 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 import com.sandrios.sandriosCamera.internal.ui.camera.Camera1Activity;
 import com.sandrios.sandriosCamera.internal.ui.camera2.Camera2Activity;
 import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
+import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Sandrios Camera Builder Class
@@ -25,7 +29,6 @@ public class SandriosCamera {
 
     private SandriosCamera mInstance = null;
     private Activity mActivity;
-    private int requestCode;
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
     private boolean autoRecord = false;
@@ -33,16 +36,18 @@ public class SandriosCamera {
     private boolean enableImageCrop = false;
     private long videoSize = -1;
 
+    public class MediaType{
+        public static final int PHOTO = 0;
+        public static final int VIDEO = 1;
+    }
     /***
      * Creates SandriosCamera instance with default configuration set to both.
      *
      * @param activity - fromList which request was invoked
-     * @param code     - request code which will return in onActivityForResult
      */
-    public SandriosCamera(Activity activity, @IntRange(from = 0) int code) {
+    public SandriosCamera(Activity activity) {
         mInstance = this;
         mActivity = activity;
-        requestCode = code;
     }
 
     public SandriosCamera setShowPickerType(int type) {
@@ -65,6 +70,7 @@ public class SandriosCamera {
         return mInstance;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public SandriosCamera setVideoFileSize(int fileSize) {
         this.videoSize = fileSize;
         return mInstance;
@@ -78,7 +84,7 @@ public class SandriosCamera {
         return mInstance;
     }
 
-    public void launchCamera() {
+    public void launchCamera(final CameraCallback cameraCallback) {
         Dexter.withActivity(mActivity)
                 .withPermissions(
                         Manifest.permission.CAMERA,
@@ -95,6 +101,21 @@ public class SandriosCamera {
 
                     }
                 }).check();
+
+        SandriosBus.getBus()
+                .toObserverable()
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        if (o instanceof CameraOutputModel) {
+                            CameraOutputModel outputModel = (CameraOutputModel) o;
+                            if (cameraCallback != null) {
+                                cameraCallback.onComplete(outputModel);
+                            }
+                            SandriosBus.complete();
+                        }
+                    }
+                });
     }
 
     private void launchIntent() {
@@ -105,7 +126,6 @@ public class SandriosCamera {
             } else {
                 cameraIntent = new Intent(mActivity, Camera1Activity.class);
             }
-            cameraIntent.putExtra(CameraConfiguration.Arguments.REQUEST_CODE, requestCode);
             cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
             cameraIntent.putExtra(CameraConfiguration.Arguments.PICKER_TYPE, type);
             cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
@@ -115,7 +135,11 @@ public class SandriosCamera {
             if (videoSize > 0) {
                 cameraIntent.putExtra(CameraConfiguration.Arguments.VIDEO_FILE_SIZE, videoSize * 1024 * 1024);
             }
-            mActivity.startActivityForResult(cameraIntent, requestCode);
+            mActivity.startActivity(cameraIntent);
         }
+    }
+
+    public interface CameraCallback {
+        void onComplete(CameraOutputModel cameraOutputModel);
     }
 }

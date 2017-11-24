@@ -5,8 +5,6 @@ package com.sandrios.sandriosCamera.internal.configuration;
  */
 public interface ConfigurationProvider {
 
-    int getRequestCode();
-
     @CameraConfiguration.MediaAction
     int getMediaAction();
 
