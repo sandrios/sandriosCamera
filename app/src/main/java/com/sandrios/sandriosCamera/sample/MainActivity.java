@@ -70,8 +70,4 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.withPicker).setOnClickListener(onClickListener);
         findViewById(R.id.withoutPicker).setOnClickListener(onClickListener);
     }
-
-    private void processResult(ArrayList<String> paths) {
-
-    }
 }

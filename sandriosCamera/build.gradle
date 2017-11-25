@@ -112,7 +112,7 @@ bintray {
         version {
             name = PUBLISH_VERSION
             vcsTag = PUBLISH_VERSION
-            desc = 'Minor fixes.'
+            desc = 'Swipe up Gallery added'
             released = new Date()
         }
     }
@@ -127,6 +127,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.0.1'
     implementation 'com.android.support:appcompat-v7:27.0.1'
     implementation 'com.android.support:recyclerview-v7:27.0.1'
+    implementation 'com.android.support:design:27.0.1'
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
     implementation "io.reactivex.rxjava2:rxjava:2.1.5"
     implementation 'com.github.bumptech.glide:glide:3.8.0'

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -285,7 +286,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     @Override
     public void onItemClick(Uri filePath) {
-        int mimeType = getMimeType(filePath.toString());
+        int mimeType = getMimeType(getActivity(), filePath.toString());
         SandriosBus.getBus().send(new CameraOutputModel(mimeType, filePath.toString()));
         this.finish();
     }
@@ -438,7 +439,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (requestCode == REQUEST_PREVIEW_CODE) {
                 if (PreviewActivity.isResultConfirm(data)) {
                     String path = PreviewActivity.getMediaFilePatch(data);
-                    int mimeType = getMimeType(path);
+                    int mimeType = getMimeType(getActivity(), path);
                     SandriosBus.getBus().send(new CameraOutputModel(mimeType, path));
                     this.finish();
                 } else if (PreviewActivity.isResultCancel(data)) {
@@ -450,14 +451,14 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         }
     }
 
-    private int getMimeType(String path) {
+    public static int getMimeType(Context context, String path) {
         Uri uri = Uri.fromFile(new File(path));
         String extension;
         //Check uri format to avoid null
         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
             //If scheme is a content
             final MimeTypeMap mime = MimeTypeMap.getSingleton();
-            extension = mime.getExtensionFromMimeType(getContentResolver().getType(uri));
+            extension = mime.getExtensionFromMimeType(context.getContentResolver().getType(uri));
         } else {
             //If scheme is a File
             //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.

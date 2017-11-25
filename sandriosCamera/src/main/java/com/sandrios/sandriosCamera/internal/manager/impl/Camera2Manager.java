@@ -20,6 +20,7 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.RestrictTo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -49,6 +50,7 @@ import java.util.Objects;
 /**
  * Created by Arpit Gandhi on 8/9/16.
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public final class Camera2Manager extends BaseCameraManager<String, TextureView.SurfaceTextureListener>
         implements ImageReader.OnImageAvailableListener, TextureView.SurfaceTextureListener {

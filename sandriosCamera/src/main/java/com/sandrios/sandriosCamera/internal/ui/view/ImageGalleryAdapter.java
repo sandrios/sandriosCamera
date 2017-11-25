@@ -14,7 +14,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
+import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -129,22 +131,30 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         PickerTile pickerTile = getItem(position);
 
         Uri uri = pickerTile.getImageUri();
-        Glide.with(context)
-                .load(uri)
-                .thumbnail(0.1f)
-                .dontAnimate()
-                .centerCrop()
-                .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_gallery))
-                .error(ContextCompat.getDrawable(context, R.drawable.ic_error))
-                .into(holder.iv_thumbnail);
+        if (uri != null) {
+            int type = BaseSandriosActivity.getMimeType(context, uri.toString());
+            if (type == SandriosCamera.MediaType.PHOTO) {
+                holder.videoIndicator.setVisibility(View.GONE);
+            } else {
+                holder.videoIndicator.setVisibility(View.VISIBLE);
+            }
+            Glide.with(context)
+                    .load(uri)
+                    .thumbnail(0.1f)
+                    .dontAnimate()
+                    .centerCrop()
+                    .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_gallery))
+                    .error(ContextCompat.getDrawable(context, R.drawable.ic_error))
+                    .into(holder.iv_thumbnail);
 
-        if (onItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemClickListener.onItemClick(holder.itemView, position);
-                }
-            });
+            if (onItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onItemClickListener.onItemClick(holder.itemView, position);
+                    }
+                });
+            }
         }
     }
 
@@ -169,7 +179,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
     public static class PickerTile {
 
-        protected final Uri imageUri;
+        final Uri imageUri;
 
         PickerTile(@NonNull Uri imageUri) {
             this.imageUri = imageUri;
@@ -188,12 +198,13 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
     }
 
     class GalleryViewHolder extends RecyclerView.ViewHolder {
-
+        View videoIndicator;
         ImageView iv_thumbnail;
 
-        public GalleryViewHolder(View view) {
+        GalleryViewHolder(View view) {
             super(view);
-            iv_thumbnail = (ImageView) view.findViewById(R.id.image);
+            videoIndicator = view.findViewById(R.id.video_indicator);
+            iv_thumbnail = view.findViewById(R.id.image);
         }
     }
 }
