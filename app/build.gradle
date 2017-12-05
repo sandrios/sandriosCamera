@@ -29,5 +29,5 @@ repositories {
 
 dependencies {
     implementation project(':sandriosCamera')
-    implementation "com.android.support:appcompat-v7:27.0.1"
+    implementation "com.android.support:appcompat-v7:27.0.2"
 }

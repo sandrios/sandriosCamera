@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -141,10 +142,10 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             Glide.with(context)
                     .load(uri)
                     .thumbnail(0.1f)
-                    .dontAnimate()
-                    .centerCrop()
-                    .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_gallery))
-                    .error(ContextCompat.getDrawable(context, R.drawable.ic_error))
+                    .apply(RequestOptions.centerCropTransform()
+                        .dontAnimate()
+                        .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_gallery))
+                        .error(ContextCompat.getDrawable(context, R.drawable.ic_error)))
                     .into(holder.iv_thumbnail);
 
             if (onItemClickListener != null) {
