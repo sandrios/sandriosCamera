@@ -41,6 +41,35 @@ Or Maven:
 ```
 
 
+How do I use Sandrios Camera?
+-------------------
+
+Please check the sample project included for more examples:
+
+```
+  private static final int CAPTURE_MEDIA = 368;
+
+  // showImagePicker is boolean value: Default is true
+  // setAutoRecord() to start recording the video automatically if media action is set to video.
+  private void launchCamera() {
+     SandriosCamera
+        .with(activity)
+        .setShowPicker(true)
+        .setShowPickerType(CameraConfiguration.VIDEO)
+        .setVideoFileSize(20)
+        .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
+        .enableImageCropping(true)
+        .launchCamera(new SandriosCamera.CameraCallback() {
+            @Override
+            public void onComplete(CameraOutputModel model) {
+                Log.e("File", "" + model.getPath());
+                Log.e("Type", "" + model.getType()); //Check SandriosCamera.MediaType
+                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+            }
+        });  
+    }
+```
+
 ProGuard
 --------
 Depending on your ProGuard (DexGuard) config and usage, you may need to include the following lines in your proguard.cfg
@@ -104,40 +133,12 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
 
 ```
 
-How do I use Sandrios Camera?
--------------------
-
-Please check the sample project included for more examples:
-
-```
-  private static final int CAPTURE_MEDIA = 368;
-
-  // showImagePicker is boolean value: Default is true
-  // setAutoRecord() to start recording the video automatically if media action is set to video.
-  private void launchCamera() {
-     SandriosCamera
-        .with(activity)
-        .setShowPicker(true)
-        .setShowPickerType(CameraConfiguration.VIDEO)
-        .setVideoFileSize(20)
-        .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
-        .enableImageCropping(true)
-        .launchCamera(new SandriosCamera.CameraCallback() {
-            @Override
-            public void onComplete(CameraOutputModel model) {
-                Log.e("File", "" + model.getPath());
-                Log.e("Type", "" + model.getType()); //Check SandriosCamera.MediaType
-                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
-            }
-        });  
-    }
-```
-
 Status
 ------
 - Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!
+Please use develop branch for pull requests.
 
 Compatibility
 -------------

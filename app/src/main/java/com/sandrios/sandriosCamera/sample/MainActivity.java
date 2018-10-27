@@ -11,8 +11,6 @@ import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 
-import java.util.ArrayList;
-
 /**
  * Sample for Sandrios Camera library
  * Created by Arpit Gandhi on 11/8/16.
@@ -29,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
                     SandriosCamera
                             .with(activity)
                             .setShowPicker(true)
-                            .setShowPickerType(CameraConfiguration.VIDEO)
                             .setVideoFileSize(20)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
                             .enableImageCropping(true)
@@ -69,9 +66,5 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.withPicker).setOnClickListener(onClickListener);
         findViewById(R.id.withoutPicker).setOnClickListener(onClickListener);
-    }
-
-    private void processResult(ArrayList<String> paths) {
-
     }
 }

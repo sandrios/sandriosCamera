@@ -51,10 +51,8 @@ public final class CameraConfiguration {
         String VIDEO_DURATION = "com.sandrios.sandriosCamera.video_duration";
         String MINIMUM_VIDEO_DURATION = "com.sandrios.sandriosCamera.minimum.video_duration";
         String VIDEO_FILE_SIZE = "com.sandrios.sandriosCamera.camera_video_file_size";
-        String FILE_PATH = "com.sandrios.sandriosCamera.camera_video_file_path";
         String FLASH_MODE = "com.sandrios.sandriosCamera.camera_flash_mode";
         String SHOW_PICKER = "com.sandrios.sandriosCamera.show_picker";
-        String PICKER_TYPE = "com.sandrios.sandriosCamera.picker_type";
         String ENABLE_CROP = "com.sandrios.sandriosCamera.enable_crop";
         String AUTO_RECORD = "com.sandrios.sandriosCamera.auto_record";
     }

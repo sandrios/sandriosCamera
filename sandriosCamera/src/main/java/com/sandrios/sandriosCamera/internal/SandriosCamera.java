@@ -31,7 +31,6 @@ public class SandriosCamera {
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
     private boolean autoRecord = false;
-    private int type = 501;
     private boolean enableImageCrop = false;
     private long videoSize = -1;
 
@@ -40,11 +39,6 @@ public class SandriosCamera {
             mInstance = new SandriosCamera();
         }
         mActivity = activity;
-        return mInstance;
-    }
-
-    public SandriosCamera setShowPickerType(int type) {
-        this.type = type;
         return mInstance;
     }
 
@@ -121,7 +115,6 @@ public class SandriosCamera {
                 cameraIntent = new Intent(mActivity, Camera1Activity.class);
             }
             cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
-            cameraIntent.putExtra(CameraConfiguration.Arguments.PICKER_TYPE, type);
             cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
             cameraIntent.putExtra(CameraConfiguration.Arguments.ENABLE_CROP, enableImageCrop);
             cameraIntent.putExtra(CameraConfiguration.Arguments.AUTO_RECORD, autoRecord);

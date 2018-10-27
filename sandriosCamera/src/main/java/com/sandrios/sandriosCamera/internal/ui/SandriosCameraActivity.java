@@ -64,8 +64,8 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
 
         setContentView(R.layout.generic_camera_layout);
 
-        previewContainer = (AspectFrameLayout) findViewById(R.id.previewContainer);
-        userContainer = (ViewGroup) findViewById(R.id.userContainer);
+        previewContainer = findViewById(R.id.previewContainer);
+        userContainer = findViewById(R.id.userContainer);
 
         onProcessBundle(savedInstanceState);
         setUserContent();
