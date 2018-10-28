@@ -10,9 +10,9 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
-import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 import com.sandrios.sandriosCamera.internal.ui.camera.Camera1Activity;
 import com.sandrios.sandriosCamera.internal.ui.camera2.Camera2Activity;
+import com.sandrios.sandriosCamera.internal.ui.model.Media;
 import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
 import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
 
@@ -94,8 +94,8 @@ public class SandriosCamera {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        if (o instanceof CameraOutputModel) {
-                            CameraOutputModel outputModel = (CameraOutputModel) o;
+                        if (o instanceof Media) {
+                            Media outputModel = (Media) o;
                             if (cameraCallback != null) {
                                 cameraCallback.onComplete(outputModel);
                                 mInstance = null;
@@ -127,7 +127,7 @@ public class SandriosCamera {
     }
 
     public interface CameraCallback {
-        void onComplete(CameraOutputModel cameraOutputModel);
+        void onComplete(Media media);
     }
 
     public class MediaType {

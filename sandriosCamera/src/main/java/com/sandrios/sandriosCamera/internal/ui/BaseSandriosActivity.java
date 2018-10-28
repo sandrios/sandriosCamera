@@ -21,7 +21,6 @@ import android.webkit.MimeTypeMap;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
-import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 import com.sandrios.sandriosCamera.internal.ui.model.Media;
 import com.sandrios.sandriosCamera.internal.ui.model.PhotoQualityOption;
 import com.sandrios.sandriosCamera.internal.ui.model.VideoQualityOption;
@@ -301,7 +300,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     public void onItemClick(View view, int position) {
         String filePath = mediaList.get(position).getPath();
         int mimeType = getMimeType(filePath);
-        SandriosBus.getBus().send(new CameraOutputModel(mimeType, filePath));
+        SandriosBus.getBus().send(new Media(mimeType, filePath));
         this.finish();
     }
 
@@ -454,10 +453,11 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
                 if (PreviewActivity.isResultConfirm(data)) {
                     String path = PreviewActivity.getMediaFilePatch(data);
                     int mimeType = getMimeType(path);
-                    SandriosBus.getBus().send(new CameraOutputModel(mimeType, path));
+                    SandriosBus.getBus().send(new Media(mimeType, path));
                     this.finish();
                 } else if (PreviewActivity.isResultCancel(data)) {
-                    this.finish();
+                    //ignore, just proceed the camera
+//                    this.finish();
                 } else if (PreviewActivity.isResultRetake(data)) {
                     //ignore, just proceed the camera
                 }

@@ -8,6 +8,12 @@ import java.io.Serializable;
 
 public class Media implements Serializable {
     private int type;
+
+    public Media(int type, String path) {
+        this.type = type;
+        this.path = path;
+    }
+
     private String path;
 
     public Media() {
@@ -23,6 +29,7 @@ public class Media implements Serializable {
 
     /**
      * User media type @link{MediaType}
+     *
      * @return
      */
     public int getType() {

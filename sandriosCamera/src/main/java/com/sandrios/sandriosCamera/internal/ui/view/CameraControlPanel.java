@@ -3,7 +3,6 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,7 +28,6 @@ import com.sandrios.sandriosCamera.internal.utils.RecyclerItemClickListener;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -55,9 +53,8 @@ public class CameraControlPanel extends RelativeLayout
     private View fullGalleryView;
     private View slidingGalleryView;
     private View sheetCloseButton;
+    private View upButton;
     private BottomSheetBehavior gallerySheetBehaviour;
-    private List<Media> mediaList = new ArrayList<>();
-    private GalleryAdapter galleryAdapter;
 
     private RecordButton.RecordButtonListener recordButtonListener;
     private MediaActionSwitchView.OnMediaActionStateChangeListener onMediaActionStateChangeListener;
@@ -98,15 +95,18 @@ public class CameraControlPanel extends RelativeLayout
         flashSwitchView = findViewById(R.id.flash_switch_view);
         recordDurationText = findViewById(R.id.record_duration_text);
         recordSizeText = findViewById(R.id.record_size_mb_text);
+        upButton = findViewById(R.id.up_button);
         slidingGalleryList = findViewById(R.id.horizontal_gallery_list);
         fullGalleryList = findViewById(R.id.grid_gallery_list);
         fullGalleryView = findViewById(R.id.full_gallery);
         slidingGalleryView = findViewById(R.id.sliding_gallery);
         sheetCloseButton = findViewById(R.id.close_button);
+
         View bottomSheetView = findViewById(R.id.gallery);
         gallerySheetBehaviour = BottomSheetBehavior.from(bottomSheetView);
         setupGallerySheet();
-        fullGalleryList.setLayoutManager(new GridLayoutManager(context, 4));
+
+        fullGalleryList.setLayoutManager(new GridLayoutManager(context, 3));
         slidingGalleryList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         cameraSwitchView.setOnCameraTypeChangeListener(onCameraTypeChangeListener);
         mediaActionSwitchView.setOnMediaActionStateChangeListener(this);
@@ -163,26 +163,32 @@ public class CameraControlPanel extends RelativeLayout
     }
 
     public void setMediaList(List<Media> mediaList) {
-        this.mediaList = mediaList;
-        galleryAdapter = new GalleryAdapter(context, mediaList);
-        slidingGalleryList.setAdapter(galleryAdapter);
-        fullGalleryList.setAdapter(galleryAdapter);
+        upButton.setVisibility(VISIBLE);
+        upButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
+        slidingGalleryList.setAdapter(new GalleryAdapter(context, GalleryAdapter.SMALL, mediaList));
+        fullGalleryList.setAdapter(new GalleryAdapter(context, GalleryAdapter.LARGE, mediaList));
         fullGalleryList.addOnItemTouchListener(new RecyclerItemClickListener(context, pickerItemClickListener));
         slidingGalleryList.addOnItemTouchListener(new RecyclerItemClickListener(context, pickerItemClickListener));
     }
 
     public void lockControls() {
-        cameraSwitchView.setEnabled(false);
-        recordButton.setEnabled(false);
-        settingsButton.setEnabled(false);
-        flashSwitchView.setEnabled(false);
+        toggleControls(false);
     }
 
     public void unLockControls() {
-        cameraSwitchView.setEnabled(true);
-        recordButton.setEnabled(true);
-        settingsButton.setEnabled(true);
-        flashSwitchView.setEnabled(true);
+        toggleControls(true);
+    }
+
+    private void toggleControls(boolean isVisible) {
+        cameraSwitchView.setEnabled(isVisible);
+        recordButton.setEnabled(isVisible);
+        settingsButton.setEnabled(isVisible);
+        flashSwitchView.setEnabled(isVisible);
     }
 
     public void setup(int mediaAction) {
@@ -373,10 +379,6 @@ public class CameraControlPanel extends RelativeLayout
 
     public interface SettingsClickListener {
         void onSettingsClick();
-    }
-
-    public interface PickerItemClickListener {
-        void onItemClick(Uri filePath);
     }
 
     abstract class TimerTaskBase {

@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
-import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
+import com.sandrios.sandriosCamera.internal.ui.model.Media;
 
 /**
  * Sample for Sandrios Camera library
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                             .enableImageCropping(true)
                             .launchCamera(new SandriosCamera.CameraCallback() {
                                 @Override
-                                public void onComplete(CameraOutputModel model) {
+                                public void onComplete(Media model) {
                                     Log.e("File", "" + model.getPath());
                                     Log.e("Type", "" + model.getType());
                                     Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                             .enableImageCropping(false)
                             .launchCamera(new SandriosCamera.CameraCallback() {
                                 @Override
-                                public void onComplete(CameraOutputModel model) {
+                                public void onComplete(Media model) {
                                     Log.e("File", "" + model.getPath());
                                     Log.e("Type", "" + model.getType());
                                     Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
