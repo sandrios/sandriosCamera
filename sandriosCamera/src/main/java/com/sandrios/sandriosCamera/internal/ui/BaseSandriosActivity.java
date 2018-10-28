@@ -95,6 +95,8 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         super.onCreate(savedInstanceState);
         if (showPicker) {
             fetchMediaList();
+        } else {
+            cameraControlPanel.hideSlider();
         }
     }
 
@@ -291,8 +293,8 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         settingsDialog.show();
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(settingsDialog.getWindow().getAttributes());
-        layoutParams.width = Utils.convertDipToPixels(this, 350);
-        layoutParams.height = Utils.convertDipToPixels(this, 350);
+        layoutParams.width = Utils.convertDpToPixel(350);
+        layoutParams.height = Utils.convertDpToPixel(350);
         settingsDialog.getWindow().setAttributes(layoutParams);
     }
 

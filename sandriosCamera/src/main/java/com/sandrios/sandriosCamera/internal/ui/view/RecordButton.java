@@ -72,7 +72,7 @@ public class RecordButton extends ImageButton {
     }
 
     private void setIconPadding(int paddingDP) {
-        int padding = Utils.convertDipToPixels(context, paddingDP);
+        int padding = Utils.convertDpToPixel(paddingDP);
         setPadding(padding, padding, padding, padding);
     }
 

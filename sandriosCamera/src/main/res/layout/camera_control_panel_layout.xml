@@ -65,7 +65,8 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF">
 
                     <ImageView
                         android:id="@+id/close_button"
@@ -73,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:padding="12dp"
-                        android:src="@drawable/ic_close_black_24dp" />
+                        android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
                 </FrameLayout>
 
                 <android.support.v7.widget.RecyclerView

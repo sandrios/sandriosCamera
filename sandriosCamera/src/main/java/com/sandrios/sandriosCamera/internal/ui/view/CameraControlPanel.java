@@ -54,6 +54,7 @@ public class CameraControlPanel extends RelativeLayout
     private View slidingGalleryView;
     private View sheetCloseButton;
     private View upButton;
+    private View bottomSheetView;
     private BottomSheetBehavior gallerySheetBehaviour;
 
     private RecordButton.RecordButtonListener recordButtonListener;
@@ -102,7 +103,7 @@ public class CameraControlPanel extends RelativeLayout
         slidingGalleryView = findViewById(R.id.sliding_gallery);
         sheetCloseButton = findViewById(R.id.close_button);
 
-        View bottomSheetView = findViewById(R.id.gallery);
+        bottomSheetView = findViewById(R.id.gallery);
         gallerySheetBehaviour = BottomSheetBehavior.from(bottomSheetView);
         setupGallerySheet();
 
@@ -132,12 +133,14 @@ public class CameraControlPanel extends RelativeLayout
     }
 
     private void setupGallerySheet() {
-        gallerySheetBehaviour.setPeekHeight(Utils.convertDipToPixels(context, 240));
+        gallerySheetBehaviour.setPeekHeight(Utils.convertDpToPixel(240));
         gallerySheetBehaviour.setHideable(false);
         gallerySheetBehaviour.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
             }
 
             @Override
@@ -175,6 +178,12 @@ public class CameraControlPanel extends RelativeLayout
         fullGalleryList.addOnItemTouchListener(new RecyclerItemClickListener(context, pickerItemClickListener));
         slidingGalleryList.addOnItemTouchListener(new RecyclerItemClickListener(context, pickerItemClickListener));
     }
+
+    public void hideSlider() {
+        fullGalleryList.setVisibility(GONE);
+        gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
 
     public void lockControls() {
         toggleControls(false);

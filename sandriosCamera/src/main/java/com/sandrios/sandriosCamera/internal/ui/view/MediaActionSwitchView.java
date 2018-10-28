@@ -58,7 +58,7 @@ public class MediaActionSwitchView extends ImageButton {
 
         setOnClickListener(new MediaActionClickListener());
         setIcons();
-        padding = Utils.convertDipToPixels(context, padding);
+        padding = Utils.convertDpToPixel(padding);
         setPadding(padding, padding, padding, padding);
     }
 
