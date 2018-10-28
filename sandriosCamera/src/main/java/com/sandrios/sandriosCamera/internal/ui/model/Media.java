@@ -1,7 +1,5 @@
 package com.sandrios.sandriosCamera.internal.ui.model;
 
-import android.net.Uri;
-
 import java.io.Serializable;
 
 /**
@@ -10,19 +8,23 @@ import java.io.Serializable;
 
 public class Media implements Serializable {
     private int type;
-    private Uri uri;
+    private String path;
 
     public Media() {
     }
 
-    public Uri getUri() {
-        return uri;
+    public String getPath() {
+        return path;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setPath(String path) {
+        this.path = path;
     }
 
+    /**
+     * User media type @link{MediaType}
+     * @return
+     */
     public int getType() {
         return type;
     }

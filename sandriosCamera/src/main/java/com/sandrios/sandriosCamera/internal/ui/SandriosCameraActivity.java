@@ -137,9 +137,12 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
                         degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 0 : 90;
                     } else if (sensorEvent.values[1] < 0) {
                         // UP SIDE DOWN
-                        sensorPosition = CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN;
-                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 180 : 270;
+//                        sensorPosition = CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN;
+//                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 180 : 270;
                     }
+                    // Disable reverse portrait
+                    sensorPosition = CameraConfiguration.SENSOR_POSITION_UP;
+                    degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 0 : 90;
                 } else if (sensorEvent.values[1] < 4 && sensorEvent.values[1] > -4) {
                     if (sensorEvent.values[0] > 0) {
                         // LEFT

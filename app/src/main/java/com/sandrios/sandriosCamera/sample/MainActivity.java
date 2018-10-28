@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                             .with(activity)
                             .setShowPicker(true)
                             .setVideoFileSize(20)
-                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
+                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
                             .enableImageCropping(true)
                             .launchCamera(new SandriosCamera.CameraCallback() {
                                 @Override

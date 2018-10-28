@@ -416,9 +416,6 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
             case CameraConfiguration.SENSOR_POSITION_LEFT:
                 degrees = 90;
                 break; // Landscape left
-            case CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN:
-                degrees = 180;
-                break;// Upside down
             case CameraConfiguration.SENSOR_POSITION_RIGHT:
                 degrees = 270;
                 break;// Landscape right

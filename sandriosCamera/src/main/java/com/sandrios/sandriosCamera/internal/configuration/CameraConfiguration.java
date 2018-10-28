@@ -25,15 +25,14 @@ public final class CameraConfiguration {
     public static final int CAMERA_FACE_REAR = 0x7;
 
     public static final int SENSOR_POSITION_UP = 90;
-    public static final int SENSOR_POSITION_UP_SIDE_DOWN = 270;
     public static final int SENSOR_POSITION_LEFT = 0;
     public static final int SENSOR_POSITION_RIGHT = 180;
     public static final int SENSOR_POSITION_UNSPECIFIED = -1;
 
-    public static final int DISPLAY_ROTATION_0 = 0;
-    public static final int DISPLAY_ROTATION_90 = 90;
-    public static final int DISPLAY_ROTATION_180 = 180;
-    public static final int DISPLAY_ROTATION_270 = 270;
+    static final int DISPLAY_ROTATION_0 = 0;
+    static final int DISPLAY_ROTATION_90 = 90;
+    static final int DISPLAY_ROTATION_180 = 180;
+    static final int DISPLAY_ROTATION_270 = 270;
 
     public static final int ORIENTATION_PORTRAIT = 0x111;
     public static final int ORIENTATION_LANDSCAPE = 0x222;
@@ -41,9 +40,6 @@ public final class CameraConfiguration {
     public static final int FLASH_MODE_ON = 1;
     public static final int FLASH_MODE_OFF = 2;
     public static final int FLASH_MODE_AUTO = 3;
-
-    public static final int VIDEO = 501;
-    public static final int PHOTO = 502;
 
     public interface Arguments {
         String MEDIA_ACTION = "com.sandrios.sandriosCamera.media_action";
@@ -72,7 +68,7 @@ public final class CameraConfiguration {
     public @interface CameraFace {
     }
 
-    @IntDef({SENSOR_POSITION_UP, SENSOR_POSITION_UP_SIDE_DOWN, SENSOR_POSITION_LEFT, SENSOR_POSITION_RIGHT, SENSOR_POSITION_UNSPECIFIED})
+    @IntDef({SENSOR_POSITION_UP, SENSOR_POSITION_LEFT, SENSOR_POSITION_RIGHT, SENSOR_POSITION_UNSPECIFIED})
     @Retention(RetentionPolicy.SOURCE)
     public @interface SensorPosition {
     }

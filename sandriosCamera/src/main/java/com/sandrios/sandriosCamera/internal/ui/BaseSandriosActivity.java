@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -33,6 +32,7 @@ import com.sandrios.sandriosCamera.internal.ui.view.FlashSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.MediaActionSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.RecordButton;
 import com.sandrios.sandriosCamera.internal.utils.RecyclerItemClickListener;
+import com.sandrios.sandriosCamera.internal.utils.RxCursorIterable;
 import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
@@ -40,6 +40,11 @@ import com.sandrios.sandriosCamera.internal.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Arpit Gandhi on 12/1/16.
@@ -84,11 +89,14 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int flashMode = CameraConfiguration.FLASH_MODE_AUTO;
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FetchMediaFromStore.execute();
+        if (showPicker) {
+            fetchMediaList();
+        }
     }
 
     @Override
@@ -291,7 +299,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     @Override
     public void onItemClick(View view, int position) {
-        String filePath = mediaList.get(position).getUri().toString();
+        String filePath = mediaList.get(position).getPath();
         int mimeType = getMimeType(filePath);
         SandriosBus.getBus().send(new CameraOutputModel(mimeType, filePath));
         this.finish();
@@ -533,82 +541,86 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         };
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private AsyncTask<Void, Void, Void> FetchMediaFromStore = new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            switch (mediaAction) {
-                case CameraConfiguration.MEDIA_ACTION_PHOTO:
-                    addPhotosToList();
-                    break;
-                case CameraConfiguration.MEDIA_ACTION_VIDEO:
-                    addVideosToList();
-                    break;
-                default:
-                    addPhotosToList();
-                    addVideosToList();
-                    break;
-            }
-            return null;
+    private void fetchMediaList() {
+        switch (mediaAction) {
+            case CameraConfiguration.MEDIA_ACTION_PHOTO:
+                addPhotosToList();
+                break;
+            case CameraConfiguration.MEDIA_ACTION_VIDEO:
+                addVideosToList();
+                break;
+            case CameraConfiguration.MEDIA_ACTION_BOTH:
+                addPhotosToList();
+                addVideosToList();
+                break;
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            cameraControlPanel.setMediaList(mediaList);
-        }
-    };
+        cameraControlPanel.setMediaList(mediaList);
+    }
 
     private void addPhotosToList() {
-        Cursor imageCursor = null;
-        try {
-            final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.ImageColumns.ORIENTATION};
-            final String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
-
-            imageCursor = getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
-            if (imageCursor != null) {
-                while (imageCursor.moveToNext()) {
-                    String imageLocation = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    File imageFile = new File(imageLocation);
-                    Media media = new Media();
-                    media.setType(SandriosCamera.MediaType.PHOTO);
-                    media.setUri(Uri.fromFile(imageFile));
-                    mediaList.add(media);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (imageCursor != null && !imageCursor.isClosed()) {
-                imageCursor.close();
-            }
-        }
+        Cursor imageCursor;
+        String[] columns = {MediaStore.Images.Media.DATA};
+        String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
+        imageCursor = getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+        addToMediaList(imageCursor, SandriosCamera.MediaType.PHOTO);
     }
 
     private void addVideosToList() {
-        Cursor videoCursor = null;
-        try {
-            final String[] columns = {MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DATE_TAKEN};
-            final String orderBy = MediaStore.Video.Media.DATE_ADDED + " DESC";
+        String[] columns = {MediaStore.Video.VideoColumns.DATA};
+        String orderBy = MediaStore.Video.Media.DATE_ADDED + " DESC";
 
-            videoCursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
-            if (videoCursor != null) {
-                while (videoCursor.moveToNext()) {
-                    String videoLocation;
-                    videoLocation = videoCursor.getString(videoCursor.getColumnIndex(MediaStore.Video.Media.DATA));
-                    File videoFile = new File(videoLocation);
-                    Media media = new Media();
-                    media.setType(SandriosCamera.MediaType.VIDEO);
-                    media.setUri(Uri.fromFile(videoFile));
-                    mediaList.add(media);
-                }
-            }
+        Cursor videoCursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+        addToMediaList(videoCursor, SandriosCamera.MediaType.VIDEO);
+    }
+
+    private void addToMediaList(Cursor cursor, final int type) {
+        try {
+            Disposable d = Observable.fromIterable(RxCursorIterable.from(cursor))
+                    .doAfterNext(new Consumer<Cursor>() {
+                        @Override
+                        public void accept(Cursor cursor) {
+                            if (cursor.getPosition() == cursor.getCount() - 1) {
+                                cursor.close();
+                            }
+                        }
+                    }).subscribe(new Consumer<Cursor>() {
+                        @Override
+                        public void accept(Cursor cursor) {
+                            String imageLocation = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                            Media media = new Media();
+                            media.setType(type);
+                            media.setPath(imageLocation);
+                            mediaList.add(media);
+                        }
+                    });
+            getCompositeDisposable().add(d);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (videoCursor != null && !videoCursor.isClosed()) {
-                videoCursor.close();
-            }
         }
     }
+
+    /**
+     * Get a single instance of {@link CompositeDisposable} maintained within this activity
+     *
+     * @return instance of composit disposable
+     */
+    public CompositeDisposable getCompositeDisposable() {
+        if (compositeDisposable == null || compositeDisposable.isDisposed()) {
+            compositeDisposable = new CompositeDisposable();
+        }
+        return compositeDisposable;
+    }
+
+    /**
+     * Dispose the {@link CompositeDisposable} object
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+    }
+
+
 }
