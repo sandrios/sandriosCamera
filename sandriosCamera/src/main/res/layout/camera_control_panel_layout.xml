@@ -104,7 +104,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/horizontal_gallery_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="64dp"
                     android:orientation="horizontal" />
 
                 <RelativeLayout

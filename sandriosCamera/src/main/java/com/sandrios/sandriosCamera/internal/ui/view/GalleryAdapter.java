@@ -2,13 +2,14 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -48,18 +49,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GalleryViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull final GalleryViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         Media media = pickerTiles.get(position);
         if (media.getType() == SandriosCamera.MediaType.PHOTO) {
             Glide.with(context)
+                    .asBitmap()
                     .load(pickerTiles.get(position).getPath())
+                    .thumbnail(0.1f)
                     .apply(new RequestOptions()
                             .dontAnimate()
                             .centerCrop()
                             .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_gallery))
                             .error(ContextCompat.getDrawable(context, R.drawable.ic_error))
                     )
-                    .thumbnail(0.1f)
                     .into(holder.iv_thumbnail);
         }
     }
