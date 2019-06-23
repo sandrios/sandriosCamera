@@ -49,6 +49,7 @@ public class Utils {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, resources.getDisplayMetrics());
         return (int) px;
     }
+
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *

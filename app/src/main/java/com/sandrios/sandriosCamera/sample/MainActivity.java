@@ -1,11 +1,13 @@
 package com.sandrios.sandriosCamera.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
@@ -26,34 +28,20 @@ public class MainActivity extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.withPicker:
                     SandriosCamera
-                            .with(activity)
+                            .with()
                             .setShowPicker(true)
                             .setVideoFileSize(20)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
                             .enableImageCropping(true)
-                            .launchCamera(new SandriosCamera.CameraCallback() {
-                                @Override
-                                public void onComplete(Media model) {
-                                    Log.e("File", "" + model.getPath());
-                                    Log.e("Type", "" + model.getType());
-                                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            .launchCamera(activity);
                     break;
                 case R.id.withoutPicker:
                     SandriosCamera
-                            .with(activity)
+                            .with()
                             .setShowPicker(false)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
                             .enableImageCropping(false)
-                            .launchCamera(new SandriosCamera.CameraCallback() {
-                                @Override
-                                public void onComplete(Media model) {
-                                    Log.e("File", "" + model.getPath());
-                                    Log.e("Type", "" + model.getType());
-                                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            .launchCamera(activity);
                     break;
             }
         }
@@ -67,5 +55,21 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.withPicker).setOnClickListener(onClickListener);
         findViewById(R.id.withoutPicker).setOnClickListener(onClickListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK
+                && requestCode == SandriosCamera.RESULT_CODE
+                && data != null) {
+            if (data.getSerializableExtra(SandriosCamera.MEDIA) instanceof Media) {
+                Media media = (Media) data.getSerializableExtra(SandriosCamera.MEDIA);
+
+                Log.e("File", "" + media.getPath());
+                Log.e("Type", "" + media.getType());
+                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

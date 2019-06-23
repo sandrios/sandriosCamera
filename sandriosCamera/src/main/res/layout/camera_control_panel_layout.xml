@@ -7,20 +7,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:paddingTop="10dp">
 
         <ImageButton
             android:id="@+id/settings_view"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:background="@drawable/circle_frame_background_dark"
             android:scaleType="center" />
 
@@ -54,8 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@android:color/transparent">
 
         <com.sandrios.sandriosCamera.internal.ui.view.RecordButton
@@ -83,8 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/record_button"
             android:layout_toStartOf="@+id/record_button"
+            android:layout_toLeftOf="@id/record_button"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:visibility="invisible" />

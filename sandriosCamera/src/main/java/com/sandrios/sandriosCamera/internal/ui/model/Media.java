@@ -8,13 +8,12 @@ import java.io.Serializable;
 
 public class Media implements Serializable {
     private int type;
+    private String path;
 
     public Media(int type, String path) {
         this.type = type;
         this.path = path;
     }
-
-    private String path;
 
     public Media() {
     }

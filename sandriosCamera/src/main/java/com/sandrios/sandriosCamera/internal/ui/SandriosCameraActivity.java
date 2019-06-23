@@ -8,7 +8,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.RestrictTo;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

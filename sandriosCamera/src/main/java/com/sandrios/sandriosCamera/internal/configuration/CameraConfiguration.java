@@ -28,18 +28,15 @@ public final class CameraConfiguration {
     public static final int SENSOR_POSITION_LEFT = 0;
     public static final int SENSOR_POSITION_RIGHT = 180;
     public static final int SENSOR_POSITION_UNSPECIFIED = -1;
-
+    public static final int ORIENTATION_PORTRAIT = 0x111;
+    public static final int ORIENTATION_LANDSCAPE = 0x222;
+    public static final int FLASH_MODE_ON = 1;
+    public static final int FLASH_MODE_OFF = 2;
+    public static final int FLASH_MODE_AUTO = 3;
     static final int DISPLAY_ROTATION_0 = 0;
     static final int DISPLAY_ROTATION_90 = 90;
     static final int DISPLAY_ROTATION_180 = 180;
     static final int DISPLAY_ROTATION_270 = 270;
-
-    public static final int ORIENTATION_PORTRAIT = 0x111;
-    public static final int ORIENTATION_LANDSCAPE = 0x222;
-
-    public static final int FLASH_MODE_ON = 1;
-    public static final int FLASH_MODE_OFF = 2;
-    public static final int FLASH_MODE_AUTO = 3;
 
     public interface Arguments {
         String MEDIA_ACTION = "com.sandrios.sandriosCamera.media_action";

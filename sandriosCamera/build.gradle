@@ -13,18 +13,22 @@ buildscript {
 }
 
 group = 'com.sandrios.android'
-version = '1.2.0'
+version = '1.2.3'
 
 ext {
     PUBLISH_GROUP_ID = 'com.sandrios.android'
     PUBLISH_ARTIFACT_ID = 'sandriosCamera'
-    PUBLISH_VERSION = '1.2.0'
-    PUBLISH_CODE = 13
+    PUBLISH_VERSION = '1.2.3'
+    PUBLISH_CODE = 16
 }
 
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
+
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         minSdkVersion 14
@@ -74,7 +78,7 @@ install {
             name PUBLISH_GROUP_ID
             description 'Simple integration of universal camera in android for easy image and video capture.'
             url 'https://github.com/sandrios/sandriosCamera'
-            inceptionYear '2017'
+            inceptionYear '2019'
 
             packaging 'aar'
             version PUBLISH_VERSION

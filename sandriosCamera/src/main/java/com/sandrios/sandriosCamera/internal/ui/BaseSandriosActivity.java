@@ -39,7 +39,6 @@ import com.sandrios.sandriosCamera.internal.ui.view.MediaActionSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.RecordButton;
 import com.sandrios.sandriosCamera.internal.utils.RecyclerItemClickListener;
 import com.sandrios.sandriosCamera.internal.utils.RxCursorIterable;
-import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
@@ -84,7 +83,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected boolean autoRecord = false;
     protected int minimumVideoDuration = -1;
     protected boolean showPicker = true;
-    private List<Media> mediaList = new ArrayList<>();
     @MediaActionSwitchView.MediaActionState
     protected int currentMediaActionState;
     @CameraSwitchView.CameraType
@@ -93,6 +91,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int newQuality = -1;
     @CameraConfiguration.FlashMode
     protected int flashMode = CameraConfiguration.FLASH_MODE_AUTO;
+    private List<Media> mediaList = new ArrayList<>();
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
     private CompositeDisposable compositeDisposable;
@@ -325,7 +324,9 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     public void onItemClick(View view, int position) {
         String filePath = mediaList.get(position).getPath();
         int mimeType = getMimeType(filePath);
-        SandriosBus.getBus().send(new Media(mimeType, filePath));
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(SandriosCamera.MEDIA, new Media(mimeType, filePath));
+        setResult(RESULT_OK, resultIntent);
         this.finish();
     }
 
@@ -476,9 +477,11 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_PREVIEW_CODE) {
                 if (PreviewActivity.isResultConfirm(data)) {
-                    String path = PreviewActivity.getMediaFilePatch(data);
-                    int mimeType = getMimeType(path);
-                    SandriosBus.getBus().send(new Media(mimeType, path));
+                    String filePath = PreviewActivity.getMediaFilePatch(data);
+                    int mimeType = getMimeType(filePath);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(SandriosCamera.MEDIA, new Media(mimeType, filePath));
+                    setResult(RESULT_OK, resultIntent);
                     this.finish();
                 } else if (PreviewActivity.isResultCancel(data)) {
                     //ignore, just proceed the camera

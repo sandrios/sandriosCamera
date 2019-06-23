@@ -36,8 +36,9 @@ public class CameraControlPanel extends RelativeLayout
         implements RecordButton.RecordButtonListener,
         MediaActionSwitchView.OnMediaActionStateChangeListener {
 
+    @MediaActionSwitchView.MediaActionState
+    int mediaActionState;
     private Context context;
-
     private CameraSwitchView cameraSwitchView;
     private RecordButton recordButton;
     private MediaActionSwitchView mediaActionSwitchView;
@@ -46,20 +47,16 @@ public class CameraControlPanel extends RelativeLayout
     private TextView recordSizeText;
     private ImageButton settingsButton;
     private RecyclerView slidingGalleryList;
-
     private RecordButton.RecordButtonListener recordButtonListener;
     private MediaActionSwitchView.OnMediaActionStateChangeListener onMediaActionStateChangeListener;
     private CameraSwitchView.OnCameraTypeChangeListener onCameraTypeChangeListener;
     private FlashSwitchView.FlashModeSwitchListener flashModeSwitchListener;
     private SettingsClickListener settingsClickListener;
     private RecyclerItemClickListener.OnClickListener pickerItemClickListener;
-
     private TimerTaskBase countDownTimer;
     private long maxVideoFileSize = 0;
     private String mediaFilePath;
     private boolean hasFlash = false;
-    @MediaActionSwitchView.MediaActionState
-    int mediaActionState;
     private int mediaAction;
     private boolean showImageCrop = false;
     private FileObserver fileObserver;

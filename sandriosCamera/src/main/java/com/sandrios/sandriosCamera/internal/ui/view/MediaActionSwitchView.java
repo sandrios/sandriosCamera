@@ -3,9 +3,11 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import androidx.annotation.IntDef;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;

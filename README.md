@@ -53,20 +53,30 @@ Please check the sample project included for more examples:
   // setAutoRecord() to start recording the video automatically if media action is set to video.
   private void launchCamera() {
      SandriosCamera
-        .with(activity)
+        .with()
         .setShowPicker(true)
         .setShowPickerType(CameraConfiguration.VIDEO)
         .setVideoFileSize(20)
         .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
         .enableImageCropping(true)
-        .launchCamera(new SandriosCamera.CameraCallback() {
-            @Override
-            public void onComplete(CameraOutputModel model) {
-                Log.e("File", "" + model.getPath());
-                Log.e("Type", "" + model.getType()); //Check SandriosCamera.MediaType
-                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+        .launchCamera(activity); 
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == Activity.RESULT_OK
+                    && requestCode == SandriosCamera.RESULT_CODE
+                    && data != null) {
+                if (data.getSerializableExtra(SandriosCamera.MEDIA) instanceof Media) {
+                    Media media = (Media) data.getSerializableExtra(SandriosCamera.MEDIA);
+    
+                    Log.e("File", "" + media.getPath());
+                    Log.e("Type", "" + media.getType());
+                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                }
             }
-        });  
+        }
+        
     }
 ```
 
