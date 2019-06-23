@@ -16,6 +16,7 @@ import com.sandrios.sandriosCamera.internal.ui.model.Media;
 import com.sandrios.sandriosCamera.internal.utils.CameraHelper;
 import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -72,11 +73,16 @@ public class SandriosCamera {
     }
 
     public void launchCamera(final CameraCallback cameraCallback) {
+        ArrayList<String> permissions = new ArrayList<>();
+
+        permissions.add(Manifest.permission.CAMERA);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (mediaAction != CameraConfiguration.MEDIA_ACTION_PHOTO) {
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
         Dexter.withActivity(mActivity)
-                .withPermissions(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.RECORD_AUDIO)
+                .withPermissions(permissions)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -103,7 +109,7 @@ public class SandriosCamera {
                             SandriosBus.complete();
                         }
                     }
-                });
+                }).dispose();
     }
 
     private void launchIntent() {

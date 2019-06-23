@@ -1,6 +1,6 @@
 package com.sandrios.sandriosCamera.internal.utils;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 /**
  * Global class for Event Bus using Rx Java.
