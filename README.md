@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.sandrios.android:sandriosCamera:1.1.1'
+  implementation 'com.sandrios.android:sandriosCamera:1.2.0'
 }
 ```
 
@@ -35,7 +35,7 @@ Or Maven:
 <dependency>
   <groupId>com.sandrios.android</groupId>
   <artifactId>sandriosCamera</artifactId>
-  <version>1.1.1</version>
+  <version>1.2.0</version>
   <type>pom</type>
 </dependency>
 ```

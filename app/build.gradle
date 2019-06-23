@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 11
-        versionName '1.1.1'
+        versionName '1.2.0'
     }
     buildTypes {
         release {
@@ -30,4 +30,5 @@ repositories {
 dependencies {
     implementation project(':sandriosCamera')
     implementation 'androidx.appcompat:appcompat:1.0.2'
+//    implementation 'com.sandrios.android:sandriosCamera:1.2.0'
 }

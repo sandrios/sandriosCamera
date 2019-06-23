@@ -1,5 +1,6 @@
 package com.sandrios.sandriosCamera.internal.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +20,11 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.RestrictTo;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -92,9 +98,29 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     private CompositeDisposable compositeDisposable;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchMediaList();
+        ArrayList<String> permissions = new ArrayList<>();
+
+        permissions.add(Manifest.permission.CAMERA);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (mediaAction != CameraConfiguration.MEDIA_ACTION_PHOTO) {
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+        Dexter.withActivity(this)
+                .withPermissions(permissions)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        fetchMediaList();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+                    }
+                }).check();
     }
 
     @Override

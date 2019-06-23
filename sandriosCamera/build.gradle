@@ -13,13 +13,13 @@ buildscript {
 }
 
 group = 'com.sandrios.android'
-version = '1.1.1'
+version = '1.2.0'
 
 ext {
     PUBLISH_GROUP_ID = 'com.sandrios.android'
     PUBLISH_ARTIFACT_ID = 'sandriosCamera'
-    PUBLISH_VERSION = '1.1.1'
-    PUBLISH_CODE = 12
+    PUBLISH_VERSION = '1.2.0'
+    PUBLISH_CODE = 13
 }
 
 android {
