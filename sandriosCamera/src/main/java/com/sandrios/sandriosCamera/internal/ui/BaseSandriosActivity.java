@@ -11,12 +11,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import androidx.annotation.RestrictTo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
@@ -93,11 +94,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (showPicker) {
-            fetchMediaList();
-        } else {
-            cameraControlPanel.hideSlider();
-        }
+        fetchMediaList();
     }
 
     @Override

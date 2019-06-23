@@ -6,12 +6,6 @@ import android.graphics.Color;
 import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,12 +14,15 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.ui.model.Media;
 import com.sandrios.sandriosCamera.internal.utils.DateTimeUtils;
 import com.sandrios.sandriosCamera.internal.utils.RecyclerItemClickListener;
-import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.io.File;
 import java.util.List;
@@ -49,13 +46,6 @@ public class CameraControlPanel extends RelativeLayout
     private TextView recordSizeText;
     private ImageButton settingsButton;
     private RecyclerView slidingGalleryList;
-    private RecyclerView fullGalleryList;
-    private View fullGalleryView;
-    private View slidingGalleryView;
-    private View sheetCloseButton;
-    private View upButton;
-    private View bottomSheetView;
-    private BottomSheetBehavior gallerySheetBehaviour;
 
     private RecordButton.RecordButtonListener recordButtonListener;
     private MediaActionSwitchView.OnMediaActionStateChangeListener onMediaActionStateChangeListener;
@@ -96,18 +86,8 @@ public class CameraControlPanel extends RelativeLayout
         flashSwitchView = findViewById(R.id.flash_switch_view);
         recordDurationText = findViewById(R.id.record_duration_text);
         recordSizeText = findViewById(R.id.record_size_mb_text);
-        upButton = findViewById(R.id.up_button);
         slidingGalleryList = findViewById(R.id.horizontal_gallery_list);
-        fullGalleryList = findViewById(R.id.grid_gallery_list);
-        fullGalleryView = findViewById(R.id.full_gallery);
-        slidingGalleryView = findViewById(R.id.sliding_gallery);
-        sheetCloseButton = findViewById(R.id.close_button);
 
-        bottomSheetView = findViewById(R.id.gallery);
-        gallerySheetBehaviour = BottomSheetBehavior.from(bottomSheetView);
-        setupGallerySheet();
-
-        fullGalleryList.setLayoutManager(new GridLayoutManager(context, 3));
         slidingGalleryList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         cameraSwitchView.setOnCameraTypeChangeListener(onCameraTypeChangeListener);
         mediaActionSwitchView.setOnMediaActionStateChangeListener(this);
@@ -132,58 +112,10 @@ public class CameraControlPanel extends RelativeLayout
         countDownTimer = new TimerTask(recordDurationText);
     }
 
-    private void setupGallerySheet() {
-        gallerySheetBehaviour.setPeekHeight(Utils.convertDpToPixel(240));
-        gallerySheetBehaviour.setHideable(false);
-        gallerySheetBehaviour.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                    gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                slidingGalleryView.setVisibility(VISIBLE);
-                fullGalleryView.setVisibility(VISIBLE);
-                slidingGalleryView.setAlpha(1 - slideOffset);
-                fullGalleryView.setAlpha(slideOffset);
-                if (slideOffset == 0) {
-                    fullGalleryView.setVisibility(GONE);
-                } else if (slideOffset == 1) {
-                    slidingGalleryView.setVisibility(GONE);
-                }
-            }
-        });
-
-        sheetCloseButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-        });
-    }
-
     public void setMediaList(List<Media> mediaList) {
-        upButton.setVisibility(VISIBLE);
-        upButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-        });
         slidingGalleryList.setAdapter(new GalleryAdapter(context, GalleryAdapter.SMALL, mediaList));
-        fullGalleryList.setAdapter(new GalleryAdapter(context, GalleryAdapter.LARGE, mediaList));
-        fullGalleryList.addOnItemTouchListener(new RecyclerItemClickListener(context, pickerItemClickListener));
         slidingGalleryList.addOnItemTouchListener(new RecyclerItemClickListener(context, pickerItemClickListener));
     }
-
-    public void hideSlider() {
-        fullGalleryList.setVisibility(GONE);
-        gallerySheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
 
     public void lockControls() {
         toggleControls(false);

@@ -53,7 +53,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         Media media = pickerTiles.get(position);
         if (media.getType() == SandriosCamera.MediaType.PHOTO) {
             Glide.with(context)
-                    .asBitmap()
                     .load(pickerTiles.get(position).getPath())
                     .thumbnail(0.1f)
                     .apply(new RequestOptions()

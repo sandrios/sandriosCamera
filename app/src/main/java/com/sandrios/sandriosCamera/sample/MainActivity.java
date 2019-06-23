@@ -2,10 +2,12 @@ package com.sandrios.sandriosCamera.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                             .with(activity)
                             .setShowPicker(true)
                             .setVideoFileSize(20)
-                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
+                            .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
                             .enableImageCropping(true)
                             .launchCamera(new SandriosCamera.CameraCallback() {
                                 @Override
@@ -58,11 +60,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private ImageView previewImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
         activity = this;
+
+        previewImageView = findViewById(R.id.preview_image_view);
 
         findViewById(R.id.withPicker).setOnClickListener(onClickListener);
         findViewById(R.id.withoutPicker).setOnClickListener(onClickListener);

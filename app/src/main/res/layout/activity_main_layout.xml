@@ -20,4 +20,9 @@
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:text="Start Camera Without Picker" />
+
+    <ImageView
+        android:id="@+id/preview_image_view"
+        android:layout_width="120dp"
+        android:layout_height="120dp" />
 </LinearLayout>
