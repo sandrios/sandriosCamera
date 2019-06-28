@@ -4,25 +4,23 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
-
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageButton;
 
 import com.sandrios.sandriosCamera.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-public class FlashSwitchView extends ImageButton {
+public class FlashSwitchView extends AppCompatImageButton {
 
     public static final int FLASH_ON = 0;
     public static final int FLASH_OFF = 1;

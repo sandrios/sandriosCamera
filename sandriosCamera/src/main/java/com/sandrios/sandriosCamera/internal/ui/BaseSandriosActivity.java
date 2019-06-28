@@ -38,18 +38,12 @@ import com.sandrios.sandriosCamera.internal.ui.view.FlashSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.MediaActionSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.RecordButton;
 import com.sandrios.sandriosCamera.internal.utils.RecyclerItemClickListener;
-import com.sandrios.sandriosCamera.internal.utils.RxCursorIterable;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by Arpit Gandhi on 12/1/16.
@@ -94,7 +88,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     private List<Media> mediaList = new ArrayList<>();
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
-    private CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -286,7 +279,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             builder.setSingleChoiceItems(videoQualities, getVideoOptionCheckedIndex(), getVideoOptionSelectedListener());
             if (getVideoFileSize() > 0)
                 builder.setTitle(String.format(getString(R.string.settings_video_quality_title),
-                        "(Max " + String.valueOf(getVideoFileSize() / (1024 * 1024) + " MB)")));
+                        "(Max " + getVideoFileSize() / (1024 * 1024) + " MB)"));
             else
                 builder.setTitle(String.format(getString(R.string.settings_video_quality_title), ""));
         } else {
@@ -603,52 +596,15 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     private void addToMediaList(Cursor cursor, final int type) {
         try {
-            Disposable d = Observable.fromIterable(RxCursorIterable.from(cursor))
-                    .doAfterNext(new Consumer<Cursor>() {
-                        @Override
-                        public void accept(Cursor cursor) {
-                            if (cursor.getPosition() == cursor.getCount() - 1) {
-                                cursor.close();
-                            }
-                        }
-                    }).subscribe(new Consumer<Cursor>() {
-                        @Override
-                        public void accept(Cursor cursor) {
-                            String imageLocation = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                            Media media = new Media();
-                            media.setType(type);
-                            media.setPath(imageLocation);
-                            mediaList.add(media);
-                        }
-                    });
-            getCompositeDisposable().add(d);
-        } catch (Exception e) {
-            e.printStackTrace();
+            while (cursor.moveToNext()) {
+                String imageLocation = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                Media media = new Media();
+                media.setType(type);
+                media.setPath(imageLocation);
+                mediaList.add(media);
+            }
+        } finally {
+            cursor.close();
         }
     }
-
-    /**
-     * Get a single instance of {@link CompositeDisposable} maintained within this activity
-     *
-     * @return instance of composit disposable
-     */
-    public CompositeDisposable getCompositeDisposable() {
-        if (compositeDisposable == null || compositeDisposable.isDisposed()) {
-            compositeDisposable = new CompositeDisposable();
-        }
-        return compositeDisposable;
-    }
-
-    /**
-     * Dispose the {@link CompositeDisposable} object
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
-            compositeDisposable.dispose();
-        }
-    }
-
-
 }

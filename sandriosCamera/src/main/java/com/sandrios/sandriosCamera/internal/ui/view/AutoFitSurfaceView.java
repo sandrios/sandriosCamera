@@ -2,11 +2,10 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Arpit Gandhi on 7/6/16.

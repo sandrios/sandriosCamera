@@ -10,10 +10,6 @@
 -dontwarn com.google.android.material.**
 -dontnote com.google.android.material.**
 
--dontwarn androidx.**
--keep class androidx.** { *; }
--keep interface androidx.** { *; }
-
 -keep public class * extends android.support.v4.view.ActionProvider {
     public <init>(android.content.Context);
 }

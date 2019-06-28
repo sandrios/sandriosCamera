@@ -1,6 +1,5 @@
 package com.sandrios.sandriosCamera.internal.ui;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,12 +7,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RestrictTo;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -28,8 +26,7 @@ import com.sandrios.sandriosCamera.internal.utils.Utils;
  * Main sandrioscamera activity handling all the transactions
  * Created by Arpit Gandhi on 12/1/16.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract public class SandriosCameraActivity<CameraId> extends Activity
+abstract public class SandriosCameraActivity<CameraId> extends AppCompatActivity
         implements ConfigurationProvider, CameraView, SensorEventListener {
 
     protected AspectFrameLayout previewContainer;

@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="?android:attr/listPreferredItemHeight"
-        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_width="?attr/listPreferredItemHeight"
+        android:layout_height="?attr/listPreferredItemHeight"
         android:layout_margin="2dp" />
 </LinearLayout>

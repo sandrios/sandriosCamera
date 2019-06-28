@@ -2,14 +2,13 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-
-import androidx.annotation.IntDef;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.appcompat.widget.AppCompatImageButton;
-
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.IntDef;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.utils.Utils;

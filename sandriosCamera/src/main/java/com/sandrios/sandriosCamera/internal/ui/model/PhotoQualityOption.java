@@ -16,7 +16,7 @@ public class PhotoQualityOption implements CharSequence {
     public PhotoQualityOption(@CameraConfiguration.MediaQuality int mediaQuality, Size size) {
         this.mediaQuality = mediaQuality;
 
-        title = String.valueOf(size.getWidth()) + " x " + String.valueOf(size.getHeight());
+        title = size.getWidth() + " x " + size.getHeight();
     }
 
     @CameraConfiguration.MediaQuality

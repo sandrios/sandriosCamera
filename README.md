@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.sandrios.android:sandriosCamera:1.2.0'
+  implementation 'com.sandrios.android:sandriosCamera:1.2.6'
 }
 ```
 
@@ -35,7 +35,7 @@ Or Maven:
 <dependency>
   <groupId>com.sandrios.android</groupId>
   <artifactId>sandriosCamera</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.6</version>
   <type>pom</type>
 </dependency>
 ```
@@ -116,27 +116,6 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
     @com.squareup.otto.Produce public *;
 }
 
-#RxJava
--keep class rx.schedulers.Schedulers {
-    public static <methods>;
-}
--keep class rx.schedulers.ImmediateScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.TestScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.Schedulers {
-    public static ** test();
-}
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
 -keep class com.google.**
 -dontwarn com.google.**
 -dontwarn sun.misc.**
@@ -145,6 +124,7 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
 
 Status
 ------
+- Migration to AndroidX
 - Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!

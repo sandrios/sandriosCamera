@@ -1,12 +1,11 @@
 package com.sandrios.sandriosCamera.internal.utils;
 
 import android.content.Context;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Wrapper to add {@link View.OnClickListener} on {@link RecyclerView} item.

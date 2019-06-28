@@ -5,14 +5,13 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.MediaActionSound;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
-
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageButton;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -24,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-public class RecordButton extends ImageButton {
+public class RecordButton extends AppCompatImageButton {
 
     public static final int TAKE_PHOTO_STATE = 0;
     public static final int READY_FOR_RECORD_STATE = 1;

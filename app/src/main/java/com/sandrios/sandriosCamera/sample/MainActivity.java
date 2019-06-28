@@ -3,12 +3,10 @@ package com.sandrios.sandriosCamera.sample;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -21,7 +19,7 @@ import com.sandrios.sandriosCamera.internal.ui.model.Media;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Activity activity;
+    private AppCompatActivity activity;
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK
                 && requestCode == SandriosCamera.RESULT_CODE

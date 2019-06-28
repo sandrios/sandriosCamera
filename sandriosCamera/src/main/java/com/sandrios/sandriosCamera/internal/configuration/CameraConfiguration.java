@@ -1,5 +1,6 @@
 package com.sandrios.sandriosCamera.internal.configuration;
 
+
 import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
