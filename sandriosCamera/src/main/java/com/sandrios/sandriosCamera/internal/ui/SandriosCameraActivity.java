@@ -1,6 +1,5 @@
 package com.sandrios.sandriosCamera.internal.ui;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,10 +7,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RestrictTo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -26,8 +26,7 @@ import com.sandrios.sandriosCamera.internal.utils.Utils;
  * Main sandrioscamera activity handling all the transactions
  * Created by Arpit Gandhi on 12/1/16.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract public class SandriosCameraActivity<CameraId> extends Activity
+abstract public class SandriosCameraActivity<CameraId> extends AppCompatActivity
         implements ConfigurationProvider, CameraView, SensorEventListener {
 
     protected AspectFrameLayout previewContainer;
@@ -64,8 +63,8 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
 
         setContentView(R.layout.generic_camera_layout);
 
-        previewContainer = (AspectFrameLayout) findViewById(R.id.previewContainer);
-        userContainer = (ViewGroup) findViewById(R.id.userContainer);
+        previewContainer = findViewById(R.id.previewContainer);
+        userContainer = findViewById(R.id.userContainer);
 
         onProcessBundle(savedInstanceState);
         setUserContent();
@@ -137,9 +136,12 @@ abstract public class SandriosCameraActivity<CameraId> extends Activity
                         degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 0 : 90;
                     } else if (sensorEvent.values[1] < 0) {
                         // UP SIDE DOWN
-                        sensorPosition = CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN;
-                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 180 : 270;
+//                        sensorPosition = CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN;
+//                        degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 180 : 270;
                     }
+                    // Disable reverse portrait
+                    sensorPosition = CameraConfiguration.SENSOR_POSITION_UP;
+                    degrees = deviceDefaultOrientation == CameraConfiguration.ORIENTATION_PORTRAIT ? 0 : 90;
                 } else if (sensorEvent.values[1] < 4 && sensorEvent.values[1] > -4) {
                     if (sensorEvent.values[0] > 0) {
                         // LEFT

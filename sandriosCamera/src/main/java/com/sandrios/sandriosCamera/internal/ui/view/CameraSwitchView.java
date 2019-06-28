@@ -2,13 +2,13 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.IntDef;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.IntDef;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
@@ -58,7 +58,7 @@ public class CameraSwitchView extends AppCompatImageButton {
         setBackgroundResource(R.drawable.circle_frame_background_dark);
         setOnClickListener(new CameraTypeClickListener());
         setIcons();
-        padding = Utils.convertDipToPixels(context, padding);
+        padding = Utils.convertDpToPixel(padding);
         setPadding(padding, padding, padding, padding);
     }
 
@@ -71,12 +71,10 @@ public class CameraSwitchView extends AppCompatImageButton {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        if (Build.VERSION.SDK_INT > 10) {
-            if (enabled) {
-                setAlpha(1f);
-            } else {
-                setAlpha(0.5f);
-            }
+        if (enabled) {
+            setAlpha(1f);
+        } else {
+            setAlpha(0.5f);
         }
     }
 

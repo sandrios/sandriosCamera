@@ -1,5 +1,6 @@
 package com.sandrios.sandriosCamera.internal.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,20 +8,28 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.RestrictTo;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.RestrictTo;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
-import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
+import com.sandrios.sandriosCamera.internal.ui.model.Media;
 import com.sandrios.sandriosCamera.internal.ui.model.PhotoQualityOption;
 import com.sandrios.sandriosCamera.internal.ui.model.VideoQualityOption;
 import com.sandrios.sandriosCamera.internal.ui.preview.PreviewActivity;
@@ -29,11 +38,13 @@ import com.sandrios.sandriosCamera.internal.ui.view.CameraSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.FlashSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.MediaActionSwitchView;
 import com.sandrios.sandriosCamera.internal.ui.view.RecordButton;
-import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
+import com.sandrios.sandriosCamera.internal.utils.RecyclerItemClickListener;
 import com.sandrios.sandriosCamera.internal.utils.Size;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Arpit Gandhi on 12/1/16.
@@ -45,7 +56,9 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         RecordButton.RecordButtonListener,
         FlashSwitchView.FlashModeSwitchListener,
         MediaActionSwitchView.OnMediaActionStateChangeListener,
-        CameraSwitchView.OnCameraTypeChangeListener, CameraControlPanel.SettingsClickListener, CameraControlPanel.PickerItemClickListener {
+        CameraSwitchView.OnCameraTypeChangeListener,
+        CameraControlPanel.SettingsClickListener,
+        RecyclerItemClickListener.OnClickListener {
 
     public static final int ACTION_CONFIRM = 900;
     public static final int ACTION_RETAKE = 901;
@@ -65,7 +78,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected boolean autoRecord = false;
     protected int minimumVideoDuration = -1;
     protected boolean showPicker = true;
-    protected int type;
     @MediaActionSwitchView.MediaActionState
     protected int currentMediaActionState;
     @CameraSwitchView.CameraType
@@ -74,12 +86,34 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int newQuality = -1;
     @CameraConfiguration.FlashMode
     protected int flashMode = CameraConfiguration.FLASH_MODE_AUTO;
+    private List<Media> mediaList = new ArrayList<>();
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ArrayList<String> permissions = new ArrayList<>();
+
+        permissions.add(Manifest.permission.CAMERA);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (mediaAction != CameraConfiguration.MEDIA_ACTION_PHOTO) {
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+        Dexter.withActivity(this)
+                .withPermissions(permissions)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        fetchMediaList();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+                    }
+                }).check();
     }
 
     @Override
@@ -171,9 +205,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (bundle.containsKey(CameraConfiguration.Arguments.SHOW_PICKER))
                 showPicker = bundle.getBoolean(CameraConfiguration.Arguments.SHOW_PICKER);
 
-            if (bundle.containsKey(CameraConfiguration.Arguments.PICKER_TYPE))
-                type = bundle.getInt(CameraConfiguration.Arguments.PICKER_TYPE);
-
             if (bundle.containsKey(CameraConfiguration.Arguments.ENABLE_CROP))
                 enableImageCrop = bundle.getBoolean(CameraConfiguration.Arguments.ENABLE_CROP);
 
@@ -203,7 +234,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     @Override
     View getUserContentView(LayoutInflater layoutInflater, ViewGroup parent) {
         cameraControlPanel = (CameraControlPanel) layoutInflater.inflate(R.layout.user_control_layout, parent, false);
-        cameraControlPanel.postInit(type);
 
         if (cameraControlPanel != null) {
             cameraControlPanel.setup(getMediaAction());
@@ -250,7 +280,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             builder.setSingleChoiceItems(videoQualities, getVideoOptionCheckedIndex(), getVideoOptionSelectedListener());
             if (getVideoFileSize() > 0)
                 builder.setTitle(String.format(getString(R.string.settings_video_quality_title),
-                        "(Max " + String.valueOf(getVideoFileSize() / (1024 * 1024) + " MB)")));
+                        "(Max " + getVideoFileSize() / (1024 * 1024) + " MB)"));
             else
                 builder.setTitle(String.format(getString(R.string.settings_video_quality_title), ""));
         } else {
@@ -279,15 +309,18 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         settingsDialog.show();
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(settingsDialog.getWindow().getAttributes());
-        layoutParams.width = Utils.convertDipToPixels(this, 350);
-        layoutParams.height = Utils.convertDipToPixels(this, 350);
+        layoutParams.width = Utils.convertDpToPixel(350);
+        layoutParams.height = Utils.convertDpToPixel(350);
         settingsDialog.getWindow().setAttributes(layoutParams);
     }
 
     @Override
-    public void onItemClick(Uri filePath) {
-        int mimeType = getMimeType(getActivity(), filePath.toString());
-        SandriosBus.getBus().send(new CameraOutputModel(mimeType, filePath.toString()));
+    public void onItemClick(View view, int position) {
+        String filePath = mediaList.get(position).getPath();
+        int mimeType = getMimeType(getApplicationContext(), filePath);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(SandriosCamera.MEDIA, new Media(mimeType, filePath));
+        setResult(RESULT_OK, resultIntent);
         this.finish();
     }
 
@@ -438,12 +471,15 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_PREVIEW_CODE) {
                 if (PreviewActivity.isResultConfirm(data)) {
-                    String path = PreviewActivity.getMediaFilePatch(data);
-                    int mimeType = getMimeType(getActivity(), path);
-                    SandriosBus.getBus().send(new CameraOutputModel(mimeType, path));
+                    String filePath = PreviewActivity.getMediaFilePatch(data);
+                    int mimeType = getMimeType(getApplicationContext(), filePath);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(SandriosCamera.MEDIA, new Media(mimeType, filePath));
+                    setResult(RESULT_OK, resultIntent);
                     this.finish();
                 } else if (PreviewActivity.isResultCancel(data)) {
-                    this.finish();
+                    //ignore, just proceed the camera
+//                    this.finish();
                 } else if (PreviewActivity.isResultRetake(data)) {
                     //ignore, just proceed the camera
                 }
@@ -525,5 +561,51 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
                 newQuality = ((PhotoQualityOption) photoQualities[index]).getMediaQuality();
             }
         };
+    }
+
+    private void fetchMediaList() {
+        switch (mediaAction) {
+            case CameraConfiguration.MEDIA_ACTION_PHOTO:
+                addPhotosToList();
+                break;
+            case CameraConfiguration.MEDIA_ACTION_VIDEO:
+                addVideosToList();
+                break;
+            case CameraConfiguration.MEDIA_ACTION_BOTH:
+                addPhotosToList();
+                addVideosToList();
+                break;
+        }
+        cameraControlPanel.setMediaList(mediaList);
+    }
+
+    private void addPhotosToList() {
+        Cursor imageCursor;
+        String[] columns = {MediaStore.Images.Media.DATA};
+        String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
+        imageCursor = getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+        addToMediaList(imageCursor, SandriosCamera.MediaType.PHOTO);
+    }
+
+    private void addVideosToList() {
+        String[] columns = {MediaStore.Video.VideoColumns.DATA};
+        String orderBy = MediaStore.Video.Media.DATE_ADDED + " DESC";
+
+        Cursor videoCursor = getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+        addToMediaList(videoCursor, SandriosCamera.MediaType.VIDEO);
+    }
+
+    private void addToMediaList(Cursor cursor, final int type) {
+        try {
+            while (cursor.moveToNext()) {
+                String imageLocation = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                Media media = new Media();
+                media.setType(type);
+                media.setPath(imageLocation);
+                mediaList.add(media);
+            }
+        } finally {
+            cursor.close();
+        }
     }
 }

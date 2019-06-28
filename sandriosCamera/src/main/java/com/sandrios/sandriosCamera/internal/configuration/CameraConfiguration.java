@@ -1,6 +1,7 @@
 package com.sandrios.sandriosCamera.internal.configuration;
 
-import android.support.annotation.IntDef;
+
+import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,25 +26,18 @@ public final class CameraConfiguration {
     public static final int CAMERA_FACE_REAR = 0x7;
 
     public static final int SENSOR_POSITION_UP = 90;
-    public static final int SENSOR_POSITION_UP_SIDE_DOWN = 270;
     public static final int SENSOR_POSITION_LEFT = 0;
     public static final int SENSOR_POSITION_RIGHT = 180;
     public static final int SENSOR_POSITION_UNSPECIFIED = -1;
-
-    public static final int DISPLAY_ROTATION_0 = 0;
-    public static final int DISPLAY_ROTATION_90 = 90;
-    public static final int DISPLAY_ROTATION_180 = 180;
-    public static final int DISPLAY_ROTATION_270 = 270;
-
     public static final int ORIENTATION_PORTRAIT = 0x111;
     public static final int ORIENTATION_LANDSCAPE = 0x222;
-
     public static final int FLASH_MODE_ON = 1;
     public static final int FLASH_MODE_OFF = 2;
     public static final int FLASH_MODE_AUTO = 3;
-
-    public static final int VIDEO = 501;
-    public static final int PHOTO = 502;
+    static final int DISPLAY_ROTATION_0 = 0;
+    static final int DISPLAY_ROTATION_90 = 90;
+    static final int DISPLAY_ROTATION_180 = 180;
+    static final int DISPLAY_ROTATION_270 = 270;
 
     public interface Arguments {
         String MEDIA_ACTION = "com.sandrios.sandriosCamera.media_action";
@@ -51,10 +45,8 @@ public final class CameraConfiguration {
         String VIDEO_DURATION = "com.sandrios.sandriosCamera.video_duration";
         String MINIMUM_VIDEO_DURATION = "com.sandrios.sandriosCamera.minimum.video_duration";
         String VIDEO_FILE_SIZE = "com.sandrios.sandriosCamera.camera_video_file_size";
-        String FILE_PATH = "com.sandrios.sandriosCamera.camera_video_file_path";
         String FLASH_MODE = "com.sandrios.sandriosCamera.camera_flash_mode";
         String SHOW_PICKER = "com.sandrios.sandriosCamera.show_picker";
-        String PICKER_TYPE = "com.sandrios.sandriosCamera.picker_type";
         String ENABLE_CROP = "com.sandrios.sandriosCamera.enable_crop";
         String AUTO_RECORD = "com.sandrios.sandriosCamera.auto_record";
     }
@@ -74,7 +66,7 @@ public final class CameraConfiguration {
     public @interface CameraFace {
     }
 
-    @IntDef({SENSOR_POSITION_UP, SENSOR_POSITION_UP_SIDE_DOWN, SENSOR_POSITION_LEFT, SENSOR_POSITION_RIGHT, SENSOR_POSITION_UNSPECIFIED})
+    @IntDef({SENSOR_POSITION_UP, SENSOR_POSITION_LEFT, SENSOR_POSITION_RIGHT, SENSOR_POSITION_UNSPECIFIED})
     @Retention(RetentionPolicy.SOURCE)
     public @interface SensorPosition {
     }

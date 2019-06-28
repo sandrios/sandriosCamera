@@ -18,15 +18,15 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.WindowManager;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
@@ -418,9 +418,6 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
             case CameraConfiguration.SENSOR_POSITION_LEFT:
                 degrees = 90;
                 break; // Landscape left
-            case CameraConfiguration.SENSOR_POSITION_UP_SIDE_DOWN:
-                degrees = 180;
-                break;// Upside down
             case CameraConfiguration.SENSOR_POSITION_RIGHT:
                 degrees = 270;
                 break;// Landscape right

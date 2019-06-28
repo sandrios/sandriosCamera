@@ -3,8 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <ImageView
@@ -18,7 +16,7 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="?android:attr/listPreferredItemHeight"
-        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_width="?attr/listPreferredItemHeight"
+        android:layout_height="?attr/listPreferredItemHeight"
         android:layout_margin="2dp" />
 </FrameLayout>

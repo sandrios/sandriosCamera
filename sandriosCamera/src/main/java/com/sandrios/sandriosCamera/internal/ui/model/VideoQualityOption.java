@@ -26,8 +26,8 @@ public class VideoQualityOption implements CharSequence {
         if (mediaQuality == CameraConfiguration.MEDIA_QUALITY_AUTO) {
             title = "Auto " + ", (" + (minutes > 10 ? minutes : ("0" + minutes)) + ":" + (seconds > 10 ? seconds : ("0" + seconds)) + " min)";
         } else {
-            title = String.valueOf(camcorderProfile.videoFrameWidth)
-                    + " x " + String.valueOf(camcorderProfile.videoFrameHeight)
+            title = camcorderProfile.videoFrameWidth
+                    + " x " + camcorderProfile.videoFrameHeight
                     + (videoDuration <= 0 ? "" : ", (" + (minutes > 10 ? minutes : ("0" + minutes)) + ":" + (seconds > 10 ? seconds : ("0" + seconds)) + " min)");
         }
     }

@@ -13,22 +13,22 @@ buildscript {
 }
 
 group = 'com.sandrios.android'
-version = '1.1.0'
+version = '1.2.6'
 
 ext {
     PUBLISH_GROUP_ID = 'com.sandrios.android'
     PUBLISH_ARTIFACT_ID = 'sandriosCamera'
-    PUBLISH_VERSION = '1.1.0'
-    PUBLISH_CODE = 11
+    PUBLISH_VERSION = version
+    PUBLISH_CODE = 17
 }
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.0"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode PUBLISH_CODE
         versionName PUBLISH_VERSION
     }
@@ -39,33 +39,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
     }
-}
 
-task generateSourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier 'sources'
-}
-
-task generateJavadocs(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath()
-            .join(File.pathSeparator))
-}
-
-task generateJavadocsJar(type: Jar) {
-    from generateJavadocs.destinationDir
-    classifier 'javadoc'
-}
-
-generateJavadocsJar.dependsOn generateJavadocs
-
-artifacts {
-    archives generateSourcesJar
-    archives generateJavadocsJar
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 install {
@@ -74,7 +56,7 @@ install {
             name PUBLISH_GROUP_ID
             description 'Simple integration of universal camera in android for easy image and video capture.'
             url 'https://github.com/sandrios/sandriosCamera'
-            inceptionYear '2017'
+            inceptionYear '2019'
 
             packaging 'aar'
             version PUBLISH_VERSION
@@ -88,6 +70,29 @@ install {
                 developer {
                     name 'arpitgandhi9'
                 }
+            }
+        }
+
+        pom.withXml {
+            def dependenciesNode = asNode().appendNode('dependencies')
+
+            project.configurations.implementation.allDependencies.each {
+                def groupId = it.group
+                def artifactId = it.name
+                // If we specify an artifact id that differs from the project name, it won't
+                // match. To avoid that, we look up the artifact id (and group) by property
+                // for any project dependencies.
+                // TODO: there must be a neater way to do this.
+                if (it instanceof ProjectDependency) {
+                    def properties = it.getDependencyProject().getProperties()
+                    groupId = properties.get("GROUP")
+                    artifactId = properties.get("POM_ARTIFACT_ID")
+                }
+                def dependencyNode = dependenciesNode.appendNode('dependency')
+                dependencyNode.appendNode('groupId', groupId)
+                dependencyNode.appendNode('artifactId', artifactId)
+                dependencyNode.appendNode('version', it.version)
+                dependencyNode.appendNode('scope', 'compile')
             }
         }
     }
@@ -112,7 +117,7 @@ bintray {
         version {
             name = PUBLISH_VERSION
             vcsTag = PUBLISH_VERSION
-            desc = 'Swipe up Gallery added'
+            desc = 'WIP'
             released = new Date()
         }
     }
@@ -124,14 +129,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:27.0.1'
-    implementation 'com.android.support:appcompat-v7:27.0.1'
-    implementation 'com.android.support:recyclerview-v7:27.0.1'
-    implementation 'com.android.support:design:27.0.1'
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
-    implementation "io.reactivex.rxjava2:rxjava:2.1.5"
-    implementation 'com.github.bumptech.glide:glide:3.8.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'com.yalantis:ucrop:2.2.0'
-    implementation 'com.karumi:dexter:4.2.0'
+    implementation 'com.karumi:dexter:5.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 }
 

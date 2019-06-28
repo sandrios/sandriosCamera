@@ -12,10 +12,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -24,6 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -57,7 +58,6 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     private final static String MIME_TYPE_VIDEO = "video";
     private final static String MIME_TYPE_IMAGE = "image";
 
-    private int mediaAction;
     private String previewFilePath;
     private PreviewActivity mContext;
     private SurfaceView surfaceView;
@@ -177,7 +177,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
         mContext = this;
-        surfaceView = (SurfaceView) findViewById(R.id.video_preview);
+        surfaceView = findViewById(R.id.video_preview);
         surfaceView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -193,10 +193,10 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        videoPreviewContainer = (AspectFrameLayout) findViewById(R.id.previewAspectFrameLayout);
-        photoPreviewContainer = (FrameLayout) findViewById(R.id.photo_preview_container);
-        imagePreview = (UCropView) findViewById(R.id.image_view);
-        buttonPanel = (ViewGroup) findViewById(R.id.preview_control_panel);
+        videoPreviewContainer = findViewById(R.id.previewAspectFrameLayout);
+        photoPreviewContainer = findViewById(R.id.photo_preview_container);
+        imagePreview = findViewById(R.id.image_view);
+        buttonPanel = findViewById(R.id.preview_control_panel);
         View confirmMediaResult = findViewById(R.id.confirm_media_result);
         View reTakeMedia = findViewById(R.id.re_take_media);
         View cancelMediaAction = findViewById(R.id.cancel_media_action);
@@ -225,7 +225,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         Bundle args = getIntent().getExtras();
 
-        mediaAction = args.getInt(MEDIA_ACTION_ARG);
+        int mediaAction = args.getInt(MEDIA_ACTION_ARG);
         previewFilePath = args.getString(FILE_PATH_ARG);
         showCrop = args.getBoolean(SHOW_CROP);
 

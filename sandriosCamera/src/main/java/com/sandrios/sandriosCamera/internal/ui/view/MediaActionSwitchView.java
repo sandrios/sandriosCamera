@@ -3,12 +3,13 @@ package com.sandrios.sandriosCamera.internal.ui.view;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.IntDef;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageButton;
+
+import androidx.annotation.IntDef;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
@@ -19,7 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 6/24/16.
  */
-public class MediaActionSwitchView extends ImageButton {
+public class MediaActionSwitchView extends AppCompatImageButton {
 
     public final static int ACTION_PHOTO = 0;
     public final static int ACTION_VIDEO = 1;
@@ -58,7 +59,7 @@ public class MediaActionSwitchView extends ImageButton {
 
         setOnClickListener(new MediaActionClickListener());
         setIcons();
-        padding = Utils.convertDipToPixels(context, padding);
+        padding = Utils.convertDpToPixel(padding);
         setPadding(padding, padding, padding, padding);
     }
 

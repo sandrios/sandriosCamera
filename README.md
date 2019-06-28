@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.sandrios.android:sandriosCamera:1.1.0'
+  implementation 'com.sandrios.android:sandriosCamera:1.2.6'
 }
 ```
 
@@ -35,13 +35,52 @@ Or Maven:
 <dependency>
   <groupId>com.sandrios.android</groupId>
   <artifactId>sandriosCamera</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.6</version>
   <type>pom</type>
 </dependency>
 ```
 
 If you are planning to include the library as a module, then you will have to upgrade to Android Studio 3.0
 
+
+How do I use Sandrios Camera?
+-------------------
+
+Please check the sample project included for more examples:
+
+```
+  private static final int CAPTURE_MEDIA = 368;
+
+  // showImagePicker is boolean value: Default is true
+  // setAutoRecord() to start recording the video automatically if media action is set to video.
+  private void launchCamera() {
+     SandriosCamera
+        .with()
+        .setShowPicker(true)
+        .setShowPickerType(CameraConfiguration.VIDEO)
+        .setVideoFileSize(20)
+        .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
+        .enableImageCropping(true)
+        .launchCamera(activity); 
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == Activity.RESULT_OK
+                    && requestCode == SandriosCamera.RESULT_CODE
+                    && data != null) {
+                if (data.getSerializableExtra(SandriosCamera.MEDIA) instanceof Media) {
+                    Media media = (Media) data.getSerializableExtra(SandriosCamera.MEDIA);
+    
+                    Log.e("File", "" + media.getPath());
+                    Log.e("Type", "" + media.getType());
+                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        
+    }
+```
 
 ProGuard
 --------
@@ -79,67 +118,19 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
     @com.squareup.otto.Produce public *;
 }
 
-#RxJava
--keep class rx.schedulers.Schedulers {
-    public static <methods>;
-}
--keep class rx.schedulers.ImmediateScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.TestScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.Schedulers {
-    public static ** test();
-}
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
 -keep class com.google.**
 -dontwarn com.google.**
 -dontwarn sun.misc.**
 
 ```
 
-How do I use Sandrios Camera?
--------------------
-
-Please check the sample project included for more examples:
-
-```
-  private static final int CAPTURE_MEDIA = 368;
-
-  // showImagePicker is boolean value: Default is true
-  // setAutoRecord() to start recording the video automatically if media action is set to video.
-  private void launchCamera() {
-     SandriosCamera
-        .with(activity)
-        .setShowPicker(true)
-        .setShowPickerType(CameraConfiguration.VIDEO)
-        .setVideoFileSize(20)
-        .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
-        .enableImageCropping(true)
-        .launchCamera(new SandriosCamera.CameraCallback() {
-            @Override
-            public void onComplete(CameraOutputModel model) {
-                Log.e("File", "" + model.getPath());
-                Log.e("Type", "" + model.getType()); //Check SandriosCamera.MediaType
-                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
-            }
-        });  
-    }
-```
-
 Status
 ------
+- Migration to AndroidX
 - Flash Mode (Testing Needed)
 
 Comments/bugs/questions/pull requests are always welcome!
+Please use develop branch for pull requests.
 
 Compatibility
 -------------
