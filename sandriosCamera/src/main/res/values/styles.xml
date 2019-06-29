@@ -18,7 +18,7 @@
         <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
 
-    <style name="ThemeFullscreen" parent="Theme.AppCompat.NoActionBar">
+    <style name="ThemeFullscreen" parent="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

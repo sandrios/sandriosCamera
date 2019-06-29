@@ -6,11 +6,12 @@ import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
+
+import androidx.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;

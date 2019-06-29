@@ -107,11 +107,6 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
   public *;
 }
 
-#uCrop
--dontwarn com.yalantis.ucrop**
--keep class com.yalantis.ucrop** { *; }
--keep interface com.yalantis.ucrop** { *; }
-
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @com.squareup.otto.Subscribe public *;
@@ -149,7 +144,6 @@ anything else -- github@sandrios.com
 Thanks
 ------
 * [**Glide**][6] for the Image Loading Framework
-* [**uCrop**][10] for the Image Cropping
 * Everyone who has contributed code and reported issues!
 
 Author
@@ -169,4 +163,3 @@ MIT. See the [LICENSE][9] file for details.
 [6]: https://github.com/bumptech/glide
 [8]: https://github.com/sandrios/sandriosCamera/blob/master/static/sandrios_studios.png
 [9]: https://github.com/sandrios/sandriosCamera/blob/master/LICENSE
-[10]: https://github.com/Yalantis/uCrop

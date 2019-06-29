@@ -5,9 +5,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.IntDef;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -20,7 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 6/24/16.
  */
-public class MediaActionSwitchView extends AppCompatImageButton {
+public class MediaActionSwitchView extends ImageButton {
 
     public final static int ACTION_PHOTO = 0;
     public final static int ACTION_VIDEO = 1;

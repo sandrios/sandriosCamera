@@ -8,8 +8,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Process;
-import android.support.annotation.RestrictTo;
 import android.util.Log;
+
+import androidx.annotation.RestrictTo;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;

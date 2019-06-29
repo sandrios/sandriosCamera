@@ -45,7 +45,6 @@ public class SandriosCamera {
         return mInstance;
     }
 
-    @SuppressWarnings("SameParameterValue")
     public SandriosCamera setVideoFileSize(int fileSize) {
         this.videoSize = fileSize;
         return mInstance;
