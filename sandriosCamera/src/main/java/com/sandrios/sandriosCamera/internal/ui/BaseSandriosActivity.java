@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,13 +19,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.core.app.ActivityCompat;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -63,6 +61,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     public static final int ACTION_RETAKE = 901;
     public static final int ACTION_CANCEL = 902;
     protected static final int REQUEST_PREVIEW_CODE = 1001;
+
     @CameraConfiguration.MediaAction
     protected int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     @CameraConfiguration.MediaQuality
@@ -89,30 +88,76 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
 
+    private static ArrayList<String> permissionsCamera = new ArrayList<>();
+    private static int CAMERA_PERMISSION_CODE = 781;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<String> permissions = new ArrayList<>();
-
-        permissions.add(Manifest.permission.CAMERA);
-        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissionsCamera.add(Manifest.permission.CAMERA);
+        permissionsCamera.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (mediaAction != CameraConfiguration.MEDIA_ACTION_PHOTO) {
-            permissions.add(Manifest.permission.RECORD_AUDIO);
+            permissionsCamera.add(Manifest.permission.RECORD_AUDIO);
         }
-        Dexter.withActivity(this)
-                .withPermissions(permissions)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        fetchMediaList();
-                    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+        boolean isGranted = true;
+        for (String permission : permissionsCamera) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                isGranted = false;
+                break;
+            }
+        }
 
-                    }
-                }).check();
+        if (isGranted) {
+            fetchMediaList();
+        } else {
+            requestCameraPermissions();
+        }
+    }
+
+    private void requestCameraPermissions() {
+        if (check(Manifest.permission.CAMERA) ||
+                check(Manifest.permission.RECORD_AUDIO) ||
+                check(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            setResult(Activity.RESULT_CANCELED);
+            this.finish();
+        } else {
+            // Contact permissions have not been granted yet. Request them directly.
+            ActivityCompat.requestPermissions(this, permissionsCamera.toArray(new String[0]), CAMERA_PERMISSION_CODE);
+        }
+    }
+
+    private boolean check(String permission) {
+        return ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (verifyPermissions(grantResults)) {
+                fetchMediaList();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    boolean verifyPermissions(int[] grantResults) {
+        // At least one result must be checked.
+        if (grantResults.length < 1) {
+            return false;
+        }
+
+        // Verify that each required permission has been granted, otherwise return false.
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
