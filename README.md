@@ -60,7 +60,6 @@ Please check the sample project included for more examples:
         .setShowPickerType(CameraConfiguration.VIDEO)
         .setVideoFileSize(20)
         .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
-        .enableImageCropping(true)
         .launchCamera(activity); 
 
         @Override

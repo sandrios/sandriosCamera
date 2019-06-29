@@ -16,11 +16,11 @@ public class SandriosCamera {
 
     public static int RESULT_CODE = 956;
     public static String MEDIA = "media";
+    public static String ERROR = "error";
     private static SandriosCamera mInstance = null;
     private int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     private boolean showPicker = true;
     private boolean autoRecord = false;
-    private boolean enableImageCrop = false;
     private long videoSize = -1;
 
     public static SandriosCamera with() {
@@ -37,11 +37,6 @@ public class SandriosCamera {
 
     public SandriosCamera setMediaAction(int mediaAction) {
         this.mediaAction = mediaAction;
-        return mInstance;
-    }
-
-    public SandriosCamera enableImageCropping(boolean enableImageCrop) {
-        this.enableImageCrop = enableImageCrop;
         return mInstance;
     }
 
@@ -68,7 +63,6 @@ public class SandriosCamera {
             }
             cameraIntent.putExtra(CameraConfiguration.Arguments.SHOW_PICKER, showPicker);
             cameraIntent.putExtra(CameraConfiguration.Arguments.MEDIA_ACTION, mediaAction);
-            cameraIntent.putExtra(CameraConfiguration.Arguments.ENABLE_CROP, enableImageCrop);
             cameraIntent.putExtra(CameraConfiguration.Arguments.AUTO_RECORD, autoRecord);
 
             if (videoSize > 0) {

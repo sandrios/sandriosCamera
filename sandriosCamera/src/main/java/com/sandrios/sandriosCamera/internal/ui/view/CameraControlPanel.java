@@ -58,7 +58,6 @@ public class CameraControlPanel extends RelativeLayout
     private String mediaFilePath;
     private boolean hasFlash = false;
     private int mediaAction;
-    private boolean showImageCrop = false;
     private FileObserver fileObserver;
 
     public CameraControlPanel(Context context) {
@@ -257,14 +256,6 @@ public class CameraControlPanel extends RelativeLayout
 
         }
         slidingGalleryList.setVisibility(isShown ? VISIBLE : GONE);
-    }
-
-    public boolean showCrop() {
-        return showImageCrop;
-    }
-
-    public void shouldShowCrop(boolean showImageCrop) {
-        this.showImageCrop = showImageCrop;
     }
 
     public void allowCameraSwitching(boolean isAllowed) {

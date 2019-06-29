@@ -44,10 +44,9 @@ abstract class BaseCameraManager<CameraId, SurfaceListener>
     Size videoSize;
     Size previewSize;
     Size windowSize;
-
-    HandlerThread backgroundThread;
     Handler backgroundHandler;
     Handler uiHandler = new Handler(Looper.getMainLooper());
+    private HandlerThread backgroundThread;
 
     @Override
     public void initializeCameraManager(ConfigurationProvider configurationProvider, Context context) {

@@ -46,7 +46,7 @@ public class Camera2ControllerAPI24 implements CameraController<String>,
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        camera2Manager = Camera1Manager.getInstance();
+        camera2Manager = new Camera1Manager();
         camera2Manager.initializeCameraManager(configurationProvider, cameraView.getActivity());
         currentCameraId = String.valueOf(camera2Manager.getFaceBackCameraId());
     }

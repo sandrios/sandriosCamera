@@ -1,5 +1,6 @@
 package com.sandrios.sandriosCamera.internal.manager.impl;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.ImageFormat;
@@ -62,7 +63,6 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     private static final int STATE_WAITING_PRE_CAPTURE = 2;
     private static final int STATE_WAITING_NON_PRE_CAPTURE = 3;
     private static final int STATE_PICTURE_TAKEN = 4;
-    private static Camera2Manager currentInstance;
     private CameraOpenListener<String, TextureView.SurfaceTextureListener> cameraOpenListener;
     private CameraPhotoListener cameraPhotoListener;
     private CameraVideoListener cameraVideoListener;
@@ -84,13 +84,13 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     private CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
-            currentInstance.cameraDevice = cameraDevice;
+            Camera2Manager.this.cameraDevice = cameraDevice;
             if (cameraOpenListener != null) {
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (!TextUtils.isEmpty(currentCameraId) && previewSize != null && currentInstance != null)
-                            cameraOpenListener.onCameraOpened(currentCameraId, previewSize, currentInstance);
+                        if (!TextUtils.isEmpty(currentCameraId) && previewSize != null)
+                            cameraOpenListener.onCameraOpened(currentCameraId, previewSize, Camera2Manager.this);
                     }
                 });
             }
@@ -99,7 +99,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
         @Override
         public void onDisconnected(@NonNull CameraDevice cameraDevice) {
             cameraDevice.close();
-            currentInstance.cameraDevice = null;
+            Camera2Manager.this.cameraDevice = null;
 
             uiHandler.post(new Runnable() {
                 @Override
@@ -112,7 +112,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int error) {
             cameraDevice.close();
-            currentInstance.cameraDevice = null;
+            Camera2Manager.this.cameraDevice = null;
 
             uiHandler.post(new Runnable() {
                 @Override
@@ -141,12 +141,8 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
 
     };
 
-    private Camera2Manager() {
-    }
+    public Camera2Manager() {
 
-    public static Camera2Manager getInstance() {
-        if (currentInstance == null) currentInstance = new Camera2Manager();
-        return currentInstance;
     }
 
     @Override
@@ -188,6 +184,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
         this.currentCameraId = cameraId;
         this.cameraOpenListener = cameraOpenListener;
         backgroundHandler.post(new Runnable() {
+            @SuppressLint("MissingPermission")
             @Override
             public void run() {
                 if (context == null || configurationProvider == null) {
@@ -275,7 +272,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
                     closePreviewSession();
                     if (prepareVideoRecorder()) {
 
-                        SurfaceTexture texture = currentInstance.texture;
+                        SurfaceTexture texture = Camera2Manager.this.texture;
                         texture.setDefaultBufferSize(videoSize.getWidth(), videoSize.getHeight());
 
                         try {

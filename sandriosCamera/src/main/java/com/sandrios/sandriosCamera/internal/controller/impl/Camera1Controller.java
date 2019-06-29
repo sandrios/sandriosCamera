@@ -44,7 +44,7 @@ public class Camera1Controller implements CameraController<Integer>,
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        cameraManager = Camera1Manager.getInstance();
+        cameraManager = new Camera1Manager();
         cameraManager.initializeCameraManager(configurationProvider, cameraView.getActivity());
         currentCameraId = cameraManager.getFaceBackCameraId();
     }

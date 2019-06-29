@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.AudioManager;
-import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -24,6 +23,7 @@ import android.widget.MediaController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.exifinterface.media.ExifInterface;
 
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -32,11 +32,8 @@ import com.sandrios.sandriosCamera.internal.ui.view.AspectFrameLayout;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
 
 /**
  * PreviewActivity to preview the image captured by sandrios camera
@@ -46,7 +43,6 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "PreviewActivity";
 
-    private final static String SHOW_CROP = "show_crop";
     private final static String MEDIA_ACTION_ARG = "media_action_arg";
     private final static String FILE_PATH_ARG = "file_path_arg";
     private final static String RESPONSE_CODE_ARG = "response_code_arg";
@@ -68,7 +64,6 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
 
     private int currentPlaybackPosition = 0;
     private boolean isVideoPlaying = true;
-    private boolean showCrop = false;
 
     private MediaController.MediaPlayerControl MediaPlayerControlImpl = new MediaController.MediaPlayerControl() {
         @Override
@@ -145,11 +140,10 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
 
     public static Intent newIntent(Context context,
                                    @CameraConfiguration.MediaAction int mediaAction,
-                                   String filePath, boolean showImageCrop) {
+                                   String filePath) {
 
         return new Intent(context, PreviewActivity.class)
                 .putExtra(MEDIA_ACTION_ARG, mediaAction)
-                .putExtra(SHOW_CROP, showImageCrop)
                 .putExtra(FILE_PATH_ARG, filePath);
     }
 
@@ -211,7 +205,6 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
 
         int mediaAction = args.getInt(MEDIA_ACTION_ARG);
         previewFilePath = args.getString(FILE_PATH_ARG);
-        showCrop = args.getBoolean(SHOW_CROP);
 
         if (mediaAction == CameraConfiguration.MEDIA_ACTION_VIDEO) {
             displayVideo(savedInstanceState);
@@ -247,8 +240,6 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
     }
 
     private void displayImage() {
-        findViewById(R.id.crop_icon).setVisibility(showCrop ? View.VISIBLE : View.GONE);
-
         videoPreviewContainer.setVisibility(View.GONE);
         surfaceView.setVisibility(View.GONE);
         showImagePreview();
@@ -264,7 +255,6 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
     }
 
     private void displayVideo(Bundle savedInstanceState) {
-        findViewById(R.id.crop_icon).setVisibility(View.GONE);
         if (savedInstanceState != null) {
             loadVideoParams(savedInstanceState);
         }
@@ -308,21 +298,6 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
         } catch (Exception e) {
             Log.e(TAG, "Error media player playing video.");
             finish();
-        }
-    }
-
-    private void saveCroppedImage(Uri croppedFileUri) {
-        try {
-            File saveFile = new File(previewFilePath);
-            FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
-            FileOutputStream outStream = new FileOutputStream(saveFile);
-            FileChannel inChannel = inStream.getChannel();
-            FileChannel outChannel = outStream.getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-            inStream.close();
-            outStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -374,7 +349,7 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
      * @param selectedImage Image URI
      * @return The resulted Bitmap after manipulation
      */
-    private Bitmap rotateImageIfRequired(String selectedImage) throws IOException {
+    private void rotateImageIfRequired(String selectedImage) throws IOException {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(selectedImage, bmOptions);
 
@@ -389,13 +364,15 @@ public class PreviewActivity extends Activity implements View.OnClickListener {
 
         switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(bitmap, 90);
+                rotateImage(bitmap, 90);
+                return;
             case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(bitmap, 180);
+                rotateImage(bitmap, 180);
+                return;
             case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(bitmap, 270);
+                rotateImage(bitmap, 270);
+                return;
             default:
-                return bitmap;
         }
     }
 
