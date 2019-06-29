@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -30,6 +31,7 @@ import java.util.List;
  * Created by Arpit Gandhi on 8/14/16.
  */
 @SuppressWarnings("deprecation")
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Callback>
         implements SurfaceHolder.Callback, Camera.PictureCallback {
 

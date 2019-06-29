@@ -40,6 +40,8 @@ Or Maven:
 </dependency>
 ```
 
+If you are planning to include the library as a module, then you will have to upgrade to Android Studio 3.0
+
 
 How do I use Sandrios Camera?
 -------------------
