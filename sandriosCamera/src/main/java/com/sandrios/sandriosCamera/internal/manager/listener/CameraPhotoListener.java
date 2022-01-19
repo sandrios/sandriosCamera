@@ -1,6 +1,6 @@
 package com.sandrios.sandriosCamera.internal.manager.listener;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import java.io.File;
 

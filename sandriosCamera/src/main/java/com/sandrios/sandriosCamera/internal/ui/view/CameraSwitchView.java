@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.IntDef;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -19,7 +19,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 6/24/16.
  */
-public class CameraSwitchView extends AppCompatImageButton {
+public class CameraSwitchView extends ImageButton {
 
     public static final int CAMERA_TYPE_FRONT = 0;
     public static final int CAMERA_TYPE_REAR = 1;

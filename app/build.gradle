@@ -49,6 +49,6 @@ repositories {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
-//    implementation project(':sandriosCamera')
-        implementation 'com.sandrios.android:sandriosCamera:1.2.6'
+    implementation project(':sandriosCamera')
+//        implementation 'com.sandrios.android:sandriosCamera:1.2.6'
 }

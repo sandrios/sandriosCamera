@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,13 +20,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.core.app.ActivityCompat;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -64,6 +62,8 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     public static final int ACTION_RETAKE = 901;
     public static final int ACTION_CANCEL = 902;
     protected static final int REQUEST_PREVIEW_CODE = 1001;
+    private static ArrayList<String> permissionsCamera = new ArrayList<>();
+    private static int CAMERA_PERMISSION_CODE = 781;
     @CameraConfiguration.MediaAction
     protected int mediaAction = CameraConfiguration.MEDIA_ACTION_BOTH;
     @CameraConfiguration.MediaQuality
@@ -72,7 +72,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     protected int passedMediaQuality = CameraConfiguration.MEDIA_QUALITY_HIGHEST;
     protected CharSequence[] videoQualities;
     protected CharSequence[] photoQualities;
-    protected boolean enableImageCrop = false;
     protected int videoDuration = -1;
     protected long videoFileSize = -1;
     protected boolean autoRecord = false;
@@ -90,30 +89,97 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
     private CameraControlPanel cameraControlPanel;
     private AlertDialog settingsDialog;
 
+    public static int getMimeType(Context context, String path) {
+        Uri uri = Uri.fromFile(new File(path));
+        String extension;
+        //Check uri format to avoid null
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            //If scheme is a content
+            final MimeTypeMap mime = MimeTypeMap.getSingleton();
+            extension = mime.getExtensionFromMimeType(context.getContentResolver().getType(uri));
+        } else {
+            //If scheme is a File
+            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
+            extension = MimeTypeMap.getFileExtensionFromUrl(path);
+        }
+        String mimeTypeString
+                = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        int mimeType = SandriosCamera.MediaType.PHOTO;
+        if (mimeTypeString != null && mimeTypeString.toLowerCase().contains("video")) {
+            mimeType = SandriosCamera.MediaType.VIDEO;
+        }
+        return mimeType;
+    }
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<String> permissions = new ArrayList<>();
-
-        permissions.add(Manifest.permission.CAMERA);
-        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissionsCamera.add(Manifest.permission.CAMERA);
+        permissionsCamera.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (mediaAction != CameraConfiguration.MEDIA_ACTION_PHOTO) {
-            permissions.add(Manifest.permission.RECORD_AUDIO);
+            permissionsCamera.add(Manifest.permission.RECORD_AUDIO);
         }
-        Dexter.withActivity(this)
-                .withPermissions(permissions)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        fetchMediaList();
-                    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+        boolean isGranted = true;
+        for (String permission : permissionsCamera) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                isGranted = false;
+                break;
+            }
+        }
 
-                    }
-                }).check();
+        if (isGranted) {
+            fetchMediaList();
+        } else {
+            requestCameraPermissions();
+        }
+    }
+
+    private void requestCameraPermissions() {
+        if (check(Manifest.permission.CAMERA) ||
+                check(Manifest.permission.RECORD_AUDIO) ||
+                check(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(SandriosCamera.ERROR, "Permission not granted");
+            setResult(Activity.RESULT_CANCELED);
+            this.finish();
+        } else {
+            // Contact permissions have not been granted yet. Request them directly.
+            ActivityCompat.requestPermissions(this, permissionsCamera.toArray(new String[0]), CAMERA_PERMISSION_CODE);
+        }
+    }
+
+    private boolean check(String permission) {
+        return ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (verifyPermissions(grantResults)) {
+                fetchMediaList();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    boolean verifyPermissions(int[] grantResults) {
+        // At least one result must be checked.
+        if (grantResults.length < 1) {
+            return false;
+        }
+
+        // Verify that each required permission has been granted, otherwise return false.
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -205,9 +271,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             if (bundle.containsKey(CameraConfiguration.Arguments.SHOW_PICKER))
                 showPicker = bundle.getBoolean(CameraConfiguration.Arguments.SHOW_PICKER);
 
-            if (bundle.containsKey(CameraConfiguration.Arguments.ENABLE_CROP))
-                enableImageCrop = bundle.getBoolean(CameraConfiguration.Arguments.ENABLE_CROP);
-
             if (bundle.containsKey(CameraConfiguration.Arguments.FLASH_MODE))
                 switch (bundle.getInt(CameraConfiguration.Arguments.FLASH_MODE)) {
                     case CameraConfiguration.FLASH_MODE_AUTO:
@@ -258,7 +321,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
             cameraControlPanel.setMaxVideoFileSize(getVideoFileSize());
             cameraControlPanel.setSettingsClickListener(this);
             cameraControlPanel.setPickerItemClickListener(this);
-            cameraControlPanel.shouldShowCrop(enableImageCrop);
 
             if (autoRecord) {
                 new Handler().postDelayed(new Runnable() {
@@ -338,7 +400,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         getCameraController().switchCamera(cameraFace);
     }
 
-
     @Override
     public void onFlashModeChanged(@FlashSwitchView.FlashMode int mode) {
         switch (mode) {
@@ -356,7 +417,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
                 break;
         }
     }
-
 
     @Override
     public void onMediaActionChanged(int mediaActionState) {
@@ -462,7 +522,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     private void startPreviewActivity() {
         Intent intent = PreviewActivity.newIntent(this,
-                getMediaAction(), getCameraController().getOutputFile().toString(), cameraControlPanel.showCrop());
+                getMediaAction(), getCameraController().getOutputFile().toString());
         startActivityForResult(intent, REQUEST_PREVIEW_CODE);
     }
 
@@ -485,28 +545,6 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
                 }
             }
         }
-    }
-
-    public static int getMimeType(Context context, String path) {
-        Uri uri = Uri.fromFile(new File(path));
-        String extension;
-        //Check uri format to avoid null
-        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-            //If scheme is a content
-            final MimeTypeMap mime = MimeTypeMap.getSingleton();
-            extension = mime.getExtensionFromMimeType(context.getContentResolver().getType(uri));
-        } else {
-            //If scheme is a File
-            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
-            extension = MimeTypeMap.getFileExtensionFromUrl(path);
-        }
-        String mimeTypeString
-                = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        int mimeType = SandriosCamera.MediaType.PHOTO;
-        if (mimeTypeString.toLowerCase().contains("video")) {
-            mimeType = SandriosCamera.MediaType.VIDEO;
-        }
-        return mimeType;
     }
 
     private void rotateSettingsDialog(int degrees) {

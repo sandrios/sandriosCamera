@@ -62,7 +62,6 @@ Please check the sample project included for more examples:
         .setShowPickerType(CameraConfiguration.VIDEO)
         .setVideoFileSize(20)
         .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
-        .enableImageCropping(true)
         .launchCamera(activity); 
 
         @Override
@@ -109,11 +108,6 @@ Depending on your ProGuard (DexGuard) config and usage, you may need to include 
   public *;
 }
 
-#uCrop
--dontwarn com.yalantis.ucrop**
--keep class com.yalantis.ucrop** { *; }
--keep interface com.yalantis.ucrop** { *; }
-
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @com.squareup.otto.Subscribe public *;
@@ -151,8 +145,6 @@ anything else -- github@sandrios.com
 Thanks
 ------
 * [**Glide**][6] for the Image Loading Framework
-* [**Dexter**][7] for the Permission Management in Android 23+
-* [**uCrop**][10] for the Image Cropping
 * Everyone who has contributed code and reported issues!
 
 Author
@@ -170,7 +162,5 @@ MIT. See the [LICENSE][9] file for details.
 [4]: https://github.com/sandrios/sandriosCamera/issues
 [5]: https://developers.google.com/open-source/cla/individual
 [6]: https://github.com/bumptech/glide
-[7]: https://github.com/Karumi/Dexter
 [8]: https://github.com/sandrios/sandriosCamera/blob/master/static/sandrios_studios.png
 [9]: https://github.com/sandrios/sandriosCamera/blob/master/LICENSE
-[10]: https://github.com/Yalantis/uCrop

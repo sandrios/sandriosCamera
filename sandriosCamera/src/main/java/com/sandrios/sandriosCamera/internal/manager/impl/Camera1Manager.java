@@ -3,14 +3,15 @@ package com.sandrios.sandriosCamera.internal.manager.impl;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.media.ExifInterface;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.support.annotation.RestrictTo;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
+
+import androidx.annotation.RestrictTo;
+import androidx.exifinterface.media.ExifInterface;
 
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.configuration.ConfigurationProvider;
@@ -30,13 +31,11 @@ import java.util.List;
 /**
  * Created by Arpit Gandhi on 8/14/16.
  */
-@SuppressWarnings("deprecation")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Callback>
         implements SurfaceHolder.Callback, Camera.PictureCallback {
 
     private static final String TAG = "Camera1Manager";
-    private static Camera1Manager currentInstance;
     private Camera camera;
     private Surface surface;
     private int orientation;
@@ -47,13 +46,8 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
     private CameraVideoListener videoListener;
     private CameraPhotoListener photoListener;
 
-    private Camera1Manager() {
+    public Camera1Manager() {
 
-    }
-
-    public static Camera1Manager getInstance() {
-        if (currentInstance == null) currentInstance = new Camera1Manager();
-        return currentInstance;
     }
 
     @Override
@@ -70,7 +64,7 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
                         uiHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                cameraOpenListener.onCameraOpened(cameraId, previewSize, currentInstance);
+                                cameraOpenListener.onCameraOpened(cameraId, previewSize, Camera1Manager.this);
                             }
                         });
                     }
@@ -119,7 +113,7 @@ public class Camera1Manager extends BaseCameraManager<Integer, SurfaceHolder.Cal
             public void run() {
                 if (safeToTakePicture) {
                     setCameraPhotoQuality(camera);
-                    camera.takePicture(null, null, currentInstance);
+                    camera.takePicture(null, null, Camera1Manager.this);
                     safeToTakePicture = false;
                 }
             }

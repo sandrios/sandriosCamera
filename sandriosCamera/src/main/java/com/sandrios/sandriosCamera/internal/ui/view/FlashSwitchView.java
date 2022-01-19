@@ -6,10 +6,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 
 import com.sandrios.sandriosCamera.R;
@@ -20,7 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by Arpit Gandhi on 7/6/16.
  */
-public class FlashSwitchView extends AppCompatImageButton {
+public class FlashSwitchView extends ImageButton {
 
     public static final int FLASH_ON = 0;
     public static final int FLASH_OFF = 1;

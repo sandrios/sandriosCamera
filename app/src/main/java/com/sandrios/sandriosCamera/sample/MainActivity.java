@@ -3,10 +3,11 @@ package com.sandrios.sandriosCamera.sample;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
                             .setShowPicker(true)
                             .setVideoFileSize(20)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_BOTH)
-                            .enableImageCropping(true)
                             .launchCamera(activity);
                     break;
                 case R.id.withoutPicker:
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                             .with()
                             .setShowPicker(false)
                             .setMediaAction(CameraConfiguration.MEDIA_ACTION_PHOTO)
-                            .enableImageCropping(false)
                             .launchCamera(activity);
                     break;
             }
@@ -58,15 +57,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == SandriosCamera.RESULT_CODE
-                && data != null) {
-            if (data.getSerializableExtra(SandriosCamera.MEDIA) instanceof Media) {
-                Media media = (Media) data.getSerializableExtra(SandriosCamera.MEDIA);
+        if (data != null) {
+            if (resultCode == Activity.RESULT_OK
+                    && requestCode == SandriosCamera.RESULT_CODE) {
+                if (data.getSerializableExtra(SandriosCamera.MEDIA) instanceof Media) {
+                    Media media = (Media) data.getSerializableExtra(SandriosCamera.MEDIA);
 
-                Log.e("File", "" + media.getPath());
-                Log.e("Type", "" + media.getType());
-                Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                    Log.e("File", "" + media.getPath());
+                    Log.e("Type", "" + media.getType());
+                    Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.e("Error", data.getStringExtra(SandriosCamera.ERROR));
             }
         }
     }
