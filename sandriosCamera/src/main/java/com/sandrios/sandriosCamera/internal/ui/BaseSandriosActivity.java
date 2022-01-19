@@ -105,7 +105,7 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
         String mimeTypeString
                 = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         int mimeType = SandriosCamera.MediaType.PHOTO;
-        if (mimeTypeString.toLowerCase().contains("video")) {
+        if (mimeTypeString != null && mimeTypeString.toLowerCase().contains("video")) {
             mimeType = SandriosCamera.MediaType.VIDEO;
         }
         return mimeType;
